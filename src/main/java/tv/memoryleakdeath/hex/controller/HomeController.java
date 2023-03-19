@@ -14,6 +14,6 @@ public class HomeController {
 	@GetMapping("/")
 	public String view(HttpServletRequest request, Model model) {
 		model.addAttribute("helloMsg", "Hello World!");
-		return "index.html";
+		return "index";
 	}
 }
