@@ -101,9 +101,6 @@
     </dependencies>
     <build>
         <finalName>ROOT-${project.version}</finalName>
-        <filters>
-            <filter>secretkeys.properties</filter>
-        </filters>
         <resources>
             <resource>
                 <directory>src/main/resources_filtered</directory>
@@ -140,4 +137,32 @@
             </plugin>  
         </plugins>        
     </build>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <file>
+                    <exists>secretkeys.properties</exists>
+                </file>
+            </activation>
+            <build>
+                <filters>
+                    <filter>secretkeys.properties</filter>
+                </filters>
+            </build>        
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <file>
+                    <missing>secretkeys.properties</missing>
+                </file>
+            </activation>
+            <build>
+                <filters>
+                    <filter>prod.properties</filter>
+                </filters>
+            </build>        
+        </profile>
+    </profiles>    
 </project>
