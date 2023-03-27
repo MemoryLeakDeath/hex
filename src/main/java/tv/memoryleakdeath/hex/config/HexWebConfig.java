@@ -18,7 +18,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("tv.memoryleakdeath.hex.controller")
+@ComponentScan("tv.memoryleakdeath.hex.frontend")
 public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
 	private ApplicationContext ac;
 

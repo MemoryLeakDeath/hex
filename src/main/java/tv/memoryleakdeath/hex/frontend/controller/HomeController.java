@@ -1,4 +1,4 @@
-package tv.memoryleakdeath.hex.controller;
+package tv.memoryleakdeath.hex.frontend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
