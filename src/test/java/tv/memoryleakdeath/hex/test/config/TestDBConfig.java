@@ -13,6 +13,13 @@ import tv.memoryleakdeath.hex.config.HexDBConfig;
 @Configuration
 public class TestDBConfig extends HexDBConfig {
 
+    private String databaseUsername;
+    private String databasePassword;
+    private String databaseUrl;
+    private String databaseName;
+    private String databaseServer;
+    private int databasePort;
+
     @Override
     public DataSource getDataSource() {
         return null;
@@ -26,6 +33,54 @@ public class TestDBConfig extends HexDBConfig {
     @Bean
     public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
         return Mockito.mock(NamedParameterJdbcTemplate.class);
+    }
+
+    public String getDatabaseUsername() {
+        return databaseUsername;
+    }
+
+    public void setDatabaseUsername(String databaseUsername) {
+        this.databaseUsername = databaseUsername;
+    }
+
+    public String getDatabasePassword() {
+        return databasePassword;
+    }
+
+    public void setDatabasePassword(String databasePassword) {
+        this.databasePassword = databasePassword;
+    }
+
+    public String getDatabaseUrl() {
+        return databaseUrl;
+    }
+
+    public void setDatabaseUrl(String databaseUrl) {
+        this.databaseUrl = databaseUrl;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
+
+    public String getDatabaseServer() {
+        return databaseServer;
+    }
+
+    public void setDatabaseServer(String databaseServer) {
+        this.databaseServer = databaseServer;
+    }
+
+    public int getDatabasePort() {
+        return databasePort;
+    }
+
+    public void setDatabasePort(int databasePort) {
+        this.databasePort = databasePort;
     }
 
 }
