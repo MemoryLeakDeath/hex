@@ -13,19 +13,19 @@ import tv.memoryleakdeath.hex.config.HexDBConfig;
 @Configuration
 public class TestDBConfig extends HexDBConfig {
 
-	@Override
-	public DataSource getDataSource() {
-		return null;
-	}
+    @Override
+    public DataSource getDataSource() {
+        return null;
+    }
 
-	@Bean
-	public JdbcTemplate getJdbcTemplate() {
-		return Mockito.mock(JdbcTemplate.class);
-	}
+    @Bean
+    public JdbcTemplate getJdbcTemplate() {
+        return Mockito.mock(JdbcTemplate.class);
+    }
 
-	@Bean
-	public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
-		return Mockito.mock(NamedParameterJdbcTemplate.class);
-	}
+    @Bean
+    public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
+        return Mockito.mock(NamedParameterJdbcTemplate.class);
+    }
 
 }

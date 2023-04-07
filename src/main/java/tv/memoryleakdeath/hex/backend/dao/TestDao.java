@@ -8,15 +8,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TestDao {
-	private static final Logger logger = LoggerFactory.getLogger(TestDao.class);
+    private static final Logger logger = LoggerFactory.getLogger(TestDao.class);
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-	public boolean testDatabase() {
-		String sql = "select 1";
-		Integer result = jdbcTemplate.queryForObject(sql, Integer.class);
-		logger.info("Database test returned: {}", String.valueOf(result));
-		return result.equals(1);
-	}
+    public boolean testDatabase() {
+        String sql = "select 1";
+        Integer result = jdbcTemplate.queryForObject(sql, Integer.class);
+        logger.info("Database test returned: {}", String.valueOf(result));
+        return result.equals(1);
+    }
 }

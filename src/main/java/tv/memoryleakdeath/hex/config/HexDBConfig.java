@@ -15,45 +15,45 @@ import com.zaxxer.hikari.HikariDataSource;
 @PropertySource("classpath:hex.properties")
 public class HexDBConfig {
 
-	@Value("${databaseUsername}")
-	private String databaseUsername;
+    @Value("${databaseUsername}")
+    private String databaseUsername;
 
-	@Value("${databasePassword}")
-	private String databasePassword;
+    @Value("${databasePassword}")
+    private String databasePassword;
 
-	@Value("${databaseUrl}")
-	private String databaseUrl;
+    @Value("${databaseUrl}")
+    private String databaseUrl;
 
-	@Value("${databaseName}")
-	private String databaseName;
+    @Value("${databaseName}")
+    private String databaseName;
 
-	@Value("${databaseServer}")
-	private String databaseServer;
+    @Value("${databaseServer}")
+    private String databaseServer;
 
-	@Value("${databasePort}")
-	private int databasePort;
+    @Value("${databasePort}")
+    private int databasePort;
 
-	@Bean
-	public DataSource getDataSource() {
-		HikariDataSource ds = new HikariDataSource();
-		ds.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
-		// ds.setJdbcUrl(databaseUrl);
-		ds.setUsername(databaseUsername);
-		ds.setPassword(databasePassword);
-		ds.addDataSourceProperty("applicationName", "hex");
-		ds.addDataSourceProperty("databaseName", databaseName);
-		ds.addDataSourceProperty("serverNames", new String[] { databaseServer });
-		ds.addDataSourceProperty("portNumbers", new int[] { databasePort });
-		return ds;
-	}
+    @Bean
+    public DataSource getDataSource() {
+        HikariDataSource ds = new HikariDataSource();
+        ds.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
+        // ds.setJdbcUrl(databaseUrl);
+        ds.setUsername(databaseUsername);
+        ds.setPassword(databasePassword);
+        ds.addDataSourceProperty("applicationName", "hex");
+        ds.addDataSourceProperty("databaseName", databaseName);
+        ds.addDataSourceProperty("serverNames", new String[] { databaseServer });
+        ds.addDataSourceProperty("portNumbers", new int[] { databasePort });
+        return ds;
+    }
 
-	@Bean
-	public JdbcTemplate getJdbcTemplate() {
-		return new JdbcTemplate(getDataSource());
-	}
+    @Bean
+    public JdbcTemplate getJdbcTemplate() {
+        return new JdbcTemplate(getDataSource());
+    }
 
-	@Bean
-	public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
-		return new NamedParameterJdbcTemplate(getDataSource());
-	}
+    @Bean
+    public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
+        return new NamedParameterJdbcTemplate(getDataSource());
+    }
 }

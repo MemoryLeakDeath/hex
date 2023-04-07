@@ -26,34 +26,33 @@ import tv.memoryleakdeath.hex.config.HexWebConfig;
 import tv.memoryleakdeath.hex.test.config.TestDBConfig;
 
 @ExtendWith(MockitoExtension.class)
-@SpringJUnitWebConfig({ HexWebConfig.class, TestDBConfig.class, HexApplicationConfig.class,
-		HomeControllerTest.Config.class })
+@SpringJUnitWebConfig({ HexWebConfig.class, TestDBConfig.class, HexApplicationConfig.class, HomeControllerTest.Config.class })
 public class HomeControllerTest {
 
-	@Configuration
-	static class Config {
+    @Configuration
+    static class Config {
 
-		@Bean
-		@Primary
-		public TestDao getTestDao() {
-			return Mockito.mock(TestDao.class);
-		}
-	}
+        @Bean
+        @Primary
+        public TestDao getTestDao() {
+            return Mockito.mock(TestDao.class);
+        }
+    }
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Autowired
-	private WebApplicationContext context;
+    @Autowired
+    private WebApplicationContext context;
 
-	@Autowired
-	private TestDao mockTestDao;
+    @Autowired
+    private TestDao mockTestDao;
 
-	@BeforeEach
-	public void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-	}
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
 
-	@Test
+    @Test
 	public void testTestDatabase() throws Exception {
 		when(mockTestDao.testDatabase()).thenReturn(false);
 		

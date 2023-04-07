@@ -13,19 +13,19 @@ import tv.memoryleakdeath.hex.backend.dao.TestDao;
 @RequestMapping("/")
 public class HomeController {
 
-	@Autowired
-	private TestDao testDao;
+    @Autowired
+    private TestDao testDao;
 
-	@GetMapping("/")
-	public String view(HttpServletRequest request, Model model) {
-		model.addAttribute("helloMsg", "Hello World!");
-		return "index";
-	}
+    @GetMapping("/")
+    public String view(HttpServletRequest request, Model model) {
+        model.addAttribute("helloMsg", "Hello World!");
+        return "index";
+    }
 
-	@GetMapping("/test")
-	public String testDatabase(HttpServletRequest request, Model model) {
-		boolean testDatabaseResult = testDao.testDatabase();
-		model.addAttribute("testResults", testDatabaseResult);
-		return "test";
-	}
+    @GetMapping("/test")
+    public String testDatabase(HttpServletRequest request, Model model) {
+        boolean testDatabaseResult = testDao.testDatabase();
+        model.addAttribute("testResults", testDatabaseResult);
+        return "test";
+    }
 }
