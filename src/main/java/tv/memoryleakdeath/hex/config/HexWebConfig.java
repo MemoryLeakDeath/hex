@@ -38,6 +38,7 @@ public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
         templateResolver.setPrefix("/WEB-INF/views/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCacheable(false);
         return templateResolver;
     }
 

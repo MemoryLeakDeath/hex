@@ -4,7 +4,7 @@
 create table users(
     id uuid not null primary key default gen_random_uuid(),
     username varchar(50) not null,
-    password varchar(50) not null,
+    password varchar(100) not null,
     active boolean not null default false
 );
 --rollback drop table if exists users;
@@ -23,3 +23,5 @@ create table authorities (
 create unique index ix_auth_username on authorities (username,authority);
 --rollback drop index if exists ix_auth_username;
 
+
+-- REMEMBER TO CLEAN PROJECT BEFORE RUNNING CHANGED MIGRATIONS!

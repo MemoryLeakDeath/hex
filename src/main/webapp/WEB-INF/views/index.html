@@ -1,8 +1,14 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>Hex</title>
 	</head>
 	<body>
 		<h1 th:text="${helloMsg}"/>
+		
+		<form th:action="@{/logout}" method="POST">
+		  <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+		  <button type="submit">Logout</button>
+		</form>
 	</body>
 </html>

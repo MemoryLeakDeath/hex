@@ -37,7 +37,6 @@ public class HexDBConfig {
     public DataSource getDataSource() {
         HikariDataSource ds = new HikariDataSource();
         ds.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
-        // ds.setJdbcUrl(databaseUrl);
         ds.setUsername(databaseUsername);
         ds.setPassword(databasePassword);
         ds.addDataSourceProperty("applicationName", "hex");
@@ -56,4 +55,5 @@ public class HexDBConfig {
     public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
         return new NamedParameterJdbcTemplate(getDataSource());
     }
+
 }
