@@ -21,6 +21,9 @@
         <mockito.version>5.2.0</mockito.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jsonpath.version>2.8.0</jsonpath.version>
+        <commonslang.version>3.12.0</commonslang.version>
+        <bouncycastlepkix.version>1.73</bouncycastlepkix.version>
+        <totp.version>1.7.1</totp.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -102,6 +105,21 @@
             <artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commonslang.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>${bouncycastlepkix.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>dev.samstevens.totp</groupId>
+          <artifactId>totp</artifactId>
+          <version>${totp.version}</version>
+        </dependency>        
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
