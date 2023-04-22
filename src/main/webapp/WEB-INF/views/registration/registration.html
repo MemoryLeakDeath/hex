@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Hex New User Registration</title>
+    </head>
+    <body>
+        <h1>Hex Sign up</h1>
+        
+        <form th:action="@{/registration/create}" method="POST">
+          <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+          <div>
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" autofocus="autofocus" required="required"/>
+          </div>
+          <div>
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password" required="required"/>
+          </div>
+          <div>
+              <input type="checkbox" id="usetfa" name="useTfa">Use Two Factor Authentication?
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
+    </body>
+</html>

@@ -1,16 +1,23 @@
 package tv.memoryleakdeath.hex.common.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Auth implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     private String id;
     private String username;
     private String password;
     private Boolean active;
     private String[] roles;
+    private Integer failedAttempts;
+    private Boolean emailVerified;
+    private Boolean useTfa;
+    private TfaType tfaType;
+    private String secret;
+    private Date createdDate;
+    private Date lastAttemptedLogin;
 
     public String getId() {
         return id;
@@ -50,5 +57,61 @@ public class Auth implements Serializable {
 
     public void setRoles(String[] roles) {
         this.roles = roles;
+    }
+
+    public Integer getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public void setFailedAttempts(Integer failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public Boolean getUseTfa() {
+        return useTfa;
+    }
+
+    public void setUseTfa(Boolean useTfa) {
+        this.useTfa = useTfa;
+    }
+
+    public TfaType getTfaType() {
+        return tfaType;
+    }
+
+    public void setTfaType(TfaType tfaType) {
+        this.tfaType = tfaType;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public Date getLastAttemptedLogin() {
+        return lastAttemptedLogin;
+    }
+
+    public void setLastAttemptedLogin(Date lastAttemptedLogin) {
+        this.lastAttemptedLogin = lastAttemptedLogin;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }

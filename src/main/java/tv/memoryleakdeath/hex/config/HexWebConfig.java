@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -27,7 +28,7 @@ public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/js/").resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
         registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/css/").resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
         registry.addResourceHandler("/images/**").addResourceLocations("/WEB-INF/images/").resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
-        registry.addResourceHandler("/favicon.png").addResourceLocations("/WEB-INF/images/favicon.png").resourceChain(true).addResolver(new EncodedResourceResolver())
+        registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/images/favicon.png").resourceChain(true).addResolver(new EncodedResourceResolver())
                 .addResolver(new PathResourceResolver());
     }
 
@@ -60,6 +61,12 @@ public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.ac = applicationContext;
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**").allowedMethods("GET", "POST").exposedHeaders("*");
+        registry.addMapping("/**").allowedMethods("GET", "POST").allowedOriginPatterns("http://localhost:[*]", "https://localhost:[*]").exposedHeaders("*");
     }
 
 }
