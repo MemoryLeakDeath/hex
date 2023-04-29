@@ -14,7 +14,7 @@
         <servlet.api.version>6.0.0</servlet.api.version>
         <thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
         <slf4j.version>2.0.7</slf4j.version>
-        <logback.version>1.4.6</logback.version>
+        <logback.version>1.4.7</logback.version>
         <postgresql.version>42.6.0</postgresql.version>
         <hikari.version>5.0.1</hikari.version>
         <junit.version>5.9.2</junit.version>
