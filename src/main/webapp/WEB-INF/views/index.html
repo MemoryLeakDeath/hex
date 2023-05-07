@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title>Hex</title>
-	</head>
-	<body>
-		<h1 th:text="${helloMsg}"/>
-		
-		<form th:action="@{/logout}" method="POST">
-		  <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-		  <button type="submit">Logout</button>
-		</form>
-		
-		<a th:href="@{/registration/}">Register User</a>
-	</body>
+<head>
+</head>
+<body>
+    <div class="container mx-auto" th:fragment="content">
+        <h1 th:text="${helloMsg}"/>
+	    <form th:action="@{/logout}" method="POST">
+	      <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+	      <button type="submit" role="button" class="rounded-full bg-sky-500 hover:bg-sky-700">Logout</button>
+	    </form>
+	    
+	    <a th:href="@{/registration/}">Register User</a>
+    </div>
+</body>
 </html>

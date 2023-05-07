@@ -9,6 +9,8 @@ import org.springframework.web.servlet.DispatcherServlet;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
+import tv.memoryleakdeath.hex.frontend.controller.interceptors.CSPHeaderFilter;
+import tv.memoryleakdeath.hex.frontend.controller.interceptors.CorsHeaderFilter;
 
 public class HexInit implements WebApplicationInitializer {
 
@@ -22,6 +24,8 @@ public class HexInit implements WebApplicationInitializer {
 
         // Add spring security filter chain to servlet context
         servletContext.addFilter("securityFilter", new DelegatingFilterProxy("springSecurityFilterChain")).addMappingForUrlPatterns(null, false, "/*");
+        servletContext.addFilter("corsFilter", new CorsHeaderFilter()).addMappingForUrlPatterns(null, true, "/*");
+        servletContext.addFilter("cspFilter", new CSPHeaderFilter()).addMappingForUrlPatterns(null, true, "/*");
 
         // Register and map the dispatcher servlet
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(rootContext));

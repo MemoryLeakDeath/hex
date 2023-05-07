@@ -1,5 +1,6 @@
 package tv.memoryleakdeath.hex.backend.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,9 @@ public class HexTotpService {
     }
 
     public boolean verify(String secret, String code) {
+        if (StringUtils.isAnyBlank(secret, code)) {
+            return false;
+        }
         DefaultCodeVerifier verifier = new DefaultCodeVerifier(new DefaultCodeGenerator(), new SystemTimeProvider());
         verifier.setAllowedTimePeriodDiscrepancy(PERIOD_DISCREPANCY);
         return verifier.isValidCode(secret, code);

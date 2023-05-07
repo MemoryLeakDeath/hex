@@ -28,31 +28,6 @@ public class HexSecurity {
     @Autowired
     private HexUserDetailsService userDetailsService;
 
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:[*]", "https://localhost:[*]"));
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
-//        configuration.setAllowedHeaders(Arrays.asList(CorsConfiguration.ALL));
-//        configuration.setExposedHeaders(Arrays.asList(CorsConfiguration.ALL));
-//
-//        CorsConfiguration apiConfiguration = new CorsConfiguration();
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedOriginPatterns(Arrays.asList(CorsConfiguration.ALL));
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
-//        configuration.setAllowedHeaders(Arrays.asList(CorsConfiguration.ALL));
-//        configuration.setExposedHeaders(Arrays.asList(CorsConfiguration.ALL));
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        Map<String, CorsConfiguration> configs = new LinkedHashMap<>();
-//        configs.put("/api/**", apiConfiguration);
-//        configs.put("/**", configuration);
-//
-//        source.setCorsConfigurations(configs);
-//        return new CorsFilter(source);
-//    }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         HexAuthenticationProvider authProvider = new HexAuthenticationProvider();
@@ -69,14 +44,14 @@ public class HexSecurity {
     @Bean
     @Order(1)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults()).securityMatcher("/api/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("API")).httpBasic(Customizer.withDefaults());
+        http.cors(cors -> cors.disable()).securityMatcher("/api/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("API")).httpBasic(Customizer.withDefaults());
         return http.build();
     }
 
     @Bean
     @Order(2)
     public SecurityFilterChain authenticatedFilterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults()).securityMatcher("/settings/**", "/dashboard/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("USER"))
+        http.cors(cors -> cors.disable()).securityMatcher("/settings/**", "/dashboard/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("USER"))
                 .formLogin(formLogin()).logout(formLogout());
         return http.build();
     }
@@ -84,7 +59,7 @@ public class HexSecurity {
     @Bean
     @Order(3)
     public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults()).securityMatcher("/admin/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"))
+        http.cors(cors -> cors.disable()).securityMatcher("/admin/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"))
                 .formLogin(formLogin()).logout(formLogout());
         return http.build();
     }
@@ -92,7 +67,7 @@ public class HexSecurity {
     @Bean
     @Order(4)
     public SecurityFilterChain allAccessFilterChain(HttpSecurity http) throws Exception {
-        http.cors(Customizer.withDefaults()).securityMatcher("/**").authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll())
+        http.cors(cors -> cors.disable()).securityMatcher("/**").authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll())
                 .formLogin(formLogin()).logout(formLogout());
         return http.build();
     }

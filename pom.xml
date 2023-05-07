@@ -213,6 +213,62 @@
                <artifactId>maven-surefire-plugin</artifactId>
                <version>3.0.0</version>
            </plugin>
+            <plugin>
+               <groupId>com.gitlab.haynes</groupId>
+               <artifactId>libsass-maven-plugin</artifactId>
+               <version>0.2.29</version>
+               <executions>
+                  <execution>
+                     <phase>generate-resources</phase>
+                     <goals>
+                        <goal>compile</goal>
+                     </goals>
+                  </execution>
+               </executions>
+               <configuration>
+                  <inputPath>${project.basedir}/src/main/WEB-INF/scss/</inputPath>
+                  <outputPath>${project.build.directory}/WEB-INF/css/</outputPath>
+                  <enableClasspathAwareImporter>true</enableClasspathAwareImporter>
+               </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.12.1</version>
+                <executions>
+                    <execution>
+                        <id>install npm and node</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <nodeVersion>v18.15.0</nodeVersion>
+                            <npmVersion>9.6.5</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>                    
+                    <execution>
+                        <id>Gulp Build</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>        
     </build>
     <profiles>

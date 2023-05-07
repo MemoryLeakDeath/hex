@@ -22,11 +22,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 import tv.memoryleakdeath.hex.backend.dao.TestDao;
 import tv.memoryleakdeath.hex.config.HexApplicationConfig;
+import tv.memoryleakdeath.hex.config.HexSecurity;
 import tv.memoryleakdeath.hex.config.HexWebConfig;
 import tv.memoryleakdeath.hex.test.config.TestDBConfig;
 
 @ExtendWith(MockitoExtension.class)
-@SpringJUnitWebConfig({ HexWebConfig.class, TestDBConfig.class, HexApplicationConfig.class, HomeControllerTest.Config.class })
+@SpringJUnitWebConfig({ HexWebConfig.class, TestDBConfig.class, HexApplicationConfig.class, HexSecurity.class, HomeControllerTest.Config.class })
 public class HomeControllerTest {
 
     @Configuration
@@ -56,6 +57,10 @@ public class HomeControllerTest {
 	public void testTestDatabase() throws Exception {
 		when(mockTestDao.testDatabase()).thenReturn(false);
 		
-		mockMvc.perform(get("/test")).andExpect(status().isOk()).andExpect(view().name("test")).andExpect(model().attribute("testResults", false));
+		mockMvc.perform(get("/test"))
+		.andExpect(status().isOk())
+		.andExpect(view().name("layout/main"))
+		.andExpect(model().attribute("testResults", false))
+		.andExpect(model().attribute("view", "test"));
 	}
 }

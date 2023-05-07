@@ -27,3 +27,5 @@ hs_err_pid*
 /.settings/
 /secretkeys.properties
 /.checkstyle
+/node/
+/node_modules/

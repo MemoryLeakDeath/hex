@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title>Hex</title>
-	</head>
-	<body>
-		<h1 th:text="|The Database test result was: ${testResults}|"/>		
-	</body>
+<head>
+</head>
+<body>
+    <div th:fragment="content">
+	   <h1 th:text="|The Database test result was: ${testResults}|"/>      
+    </div>
+</body>
 </html>
