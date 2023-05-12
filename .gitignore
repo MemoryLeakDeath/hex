@@ -29,3 +29,4 @@ hs_err_pid*
 /.checkstyle
 /node/
 /node_modules/
+/.externalToolBuilders/

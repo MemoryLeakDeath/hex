@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration>
+
+<configuration scan="true">
+  <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
+  <import class="ch.qos.logback.core.rolling.RollingFileAppender"/>
+  <import class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy"/>
+  
+  <appender name="ROLLING" class="RollingFileAppender">
+    <file>${catalina.base:-./target}/logs/hex.log</file>
+    <rollingPolicy class="SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${catalina.base:-./target}/logs/archived/hex-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <maxFileSize>100MB</maxFileSize>
+      <maxHistory>60</maxHistory>
+      <totalSizeCap>20GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder class="PatternLayoutEncoder">
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="DEBUG">
+    <appender-ref ref="ROLLING"/>
+  </root>
+</configuration>

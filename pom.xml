@@ -248,7 +248,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>npm install</id>
+                        <id>npm install Resources</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
@@ -265,6 +265,30 @@
                         <phase>generate-resources</phase>
                         <configuration>
                             <arguments>build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>Copy frontend NPM resources to static js folder</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/js</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/node_modules/jquery/dist/</directory>
+                                    <include>jquery.min.js</include>
+                                    <include>jquery.min.map</include>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>

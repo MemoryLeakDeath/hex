@@ -1,15 +1,20 @@
 package tv.memoryleakdeath.hex.config;
 
+import java.util.Locale;
+import java.util.TimeZone;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.resource.EncodedResourceResolver;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -70,6 +75,24 @@ public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HexControllerInterceptor());
         registry.addInterceptor(new ThymeleafLayoutInterceptor());
+    }
+
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("/WEB-INF/messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setDefaultLocale(Locale.US);
+        messageSource.setCacheSeconds(60);
+        return messageSource;
+    }
+
+    @Bean
+    public SessionLocaleResolver localeResolver() {
+        SessionLocaleResolver resolver = new SessionLocaleResolver();
+        resolver.setDefaultLocale(Locale.US);
+        resolver.setDefaultTimeZone(TimeZone.getTimeZone("America/New_York"));
+        return resolver;
     }
 
 }
