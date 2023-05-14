@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/")
-public class LoginController {
+public class LoginController extends BaseFrontendController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @GetMapping("/login")

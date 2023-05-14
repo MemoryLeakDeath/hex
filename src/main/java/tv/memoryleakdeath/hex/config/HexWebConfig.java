@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.resource.EncodedResourceResolver;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -75,12 +76,13 @@ public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new HexControllerInterceptor());
         registry.addInterceptor(new ThymeleafLayoutInterceptor());
+        registry.addInterceptor(localeChangeInterceptor());
     }
 
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("/WEB-INF/messages");
+        messageSource.setBasename("/WEB-INF/messages/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setDefaultLocale(Locale.US);
         messageSource.setCacheSeconds(60);
@@ -93,6 +95,12 @@ public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
         resolver.setDefaultLocale(Locale.US);
         resolver.setDefaultTimeZone(TimeZone.getTimeZone("America/New_York"));
         return resolver;
+    }
+
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("language");
+        return interceptor;
     }
 
 }

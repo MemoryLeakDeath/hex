@@ -11,7 +11,7 @@ import tv.memoryleakdeath.hex.backend.dao.TestDao;
 
 @Controller
 @RequestMapping("/")
-public class HomeController {
+public class HomeController extends BaseFrontendController {
 
     @Autowired
     private TestDao testDao;

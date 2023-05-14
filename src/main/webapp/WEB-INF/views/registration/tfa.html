@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Hex New User Registration</title>
     </head>
     <body>
-        <h1>Hex Register Two Factor Authentication</h1>
-        
-        <form th:action="@{/registration/validatetfa}" method="POST">
-          <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-          <input type="hidden" name="u" th:value="${username}"/>
-          <div>
-            <img th:src="${qrcode}"/>
-            <div>
-                <label for="code">Validation code:</label>
-	            <input type="text" name="code" value=""/>
-            </div>
-          </div>
-          <button type="submit">Validate</button>
-        </form>
+        <div th:fragment="content">
+	        <h1>Hex Register Two Factor Authentication</h1>
+	        
+	        <form th:action="@{/registration/validatetfa}" method="POST">
+	          <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+	          <input type="hidden" name="u" th:value="${username}"/>
+	          <div>
+	            <img th:src="${qrcode}"/>
+	            <div>
+	                <label for="code">Validation code:</label>
+		            <input type="text" name="code" value=""/>
+	            </div>
+	          </div>
+	          <button type="submit">Validate</button>
+	        </form>
+        </div>
     </body>
 </html>

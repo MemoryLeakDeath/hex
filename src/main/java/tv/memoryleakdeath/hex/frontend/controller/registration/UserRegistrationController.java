@@ -69,7 +69,8 @@ public class UserRegistrationController {
         String returnView;
         try {
             String secret = totpService.generateNewSecret();
-            if (!authDao.updateUserTfa(username, false, secret, TfaType.authapp)) {
+            String encryptedSecret = totpService.getEncryptedSecret(secret);
+            if (!authDao.updateUserTfa(username, false, encryptedSecret, TfaType.authapp)) {
                 logger.error("Unable to update user's tfa settings!");
                 returnView = "redirect: " + URL;
             } else {

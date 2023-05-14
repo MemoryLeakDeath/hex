@@ -14,7 +14,7 @@ create table identities (
     emailVerified boolean not null default false,
     useTfa boolean not null default false,
     tfaType tfa_types null default null,
-    secret varchar(100) null default null,
+    secret varchar(250) null default null,
     createdDate timestamp not null default now(),
     lastAttemptedLogin timestamp null default null
 );
