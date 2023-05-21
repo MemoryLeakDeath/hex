@@ -5,7 +5,7 @@
 	    <title>Login</title>
 	</head>
 	<body>
-		<div>
+		<div th:fragment="content">
 		    <form th:action="@{/logincheck}" method="POST">
 		        <div>
 		            <label for="username">Username:</label>
@@ -19,7 +19,7 @@
                     <label for="2fa">Authentication Code (optional):</label>
                     <input type="text" id="2fa" name="2fa"/>
                 </div>
-		        <button type="submit">Login</button>
+		        <button type="submit" class="btn-primary">Login</button>
 		    </form>
 		</div>
 	</body>

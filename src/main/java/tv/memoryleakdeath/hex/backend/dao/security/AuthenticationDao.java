@@ -1,10 +1,15 @@
 package tv.memoryleakdeath.hex.backend.dao.security;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +32,23 @@ public class AuthenticationDao {
 
     public Auth getUserByUsername(String username) {
         return jdbcTemplate.queryForObject(GET_USER_BY_USERNAME, new AuthMapper(), username, username);
+    }
+
+    public String getUserIdForUsername(String username) {
+        String sql = "select id from identities where username = ?";
+        List<String> results = jdbcTemplate.query(sql, new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                if (rs.next()) {
+                    return rs.getString("id");
+                }
+                return null;
+            }
+        });
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
     }
 
     public boolean checkUsernameExists(String username) {

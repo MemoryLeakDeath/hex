@@ -1,6 +1,12 @@
-@tailwind  base;
-@tailwind  components;
-@tailwind  utilities;
-
-
-
+body[data-bs-theme="dark"] {
+	--bs-body-bg: var(--smokey-black);
+	--bs-primary: var(--hunter-green);
+	--bs-primary-bg-subtle: #485F46;
+	--bs-primary-border-subtle: #485F46;
+	--bs-secondary-color: var(--silver);
+	--smokey-black: #130e08ff;
+	--hunter-green: #485f46ff;
+	--white-smoke: #f0f2efff;
+	--silver: #a69f98ff;
+	--rose-taupe: #8c6057ff;	
+}

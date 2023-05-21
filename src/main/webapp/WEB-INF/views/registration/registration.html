@@ -7,7 +7,6 @@
 	        <h1>Hex Sign up</h1>
 	        
 	        <form th:action="@{/registration/create}" method="POST">
-	          <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
 	          <div>
 	              <label for="username">Username:</label>
 	              <input type="text" id="username" name="username" autofocus="autofocus" required="required"/>

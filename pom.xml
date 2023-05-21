@@ -257,16 +257,6 @@
                             <arguments>install</arguments>
                         </configuration>
                     </execution>                    
-                    <execution>
-                        <id>Gulp Build</id>
-                        <goals>
-                            <goal>gulp</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>build</arguments>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -288,11 +278,64 @@
                                     <include>jquery.min.js</include>
                                     <include>jquery.min.map</include>
                                 </resource>
+                                <resource>
+                                    <directory>${project.basedir}/node_modules/bootstrap/dist/js</directory>
+                                    <include>bootstrap.bundle.min.js</include>
+                                    <include>bootstrap.bundle.min.js.map</include>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Copy frontend NPM resources to static css folder</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/css</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/node_modules/bootstrap/dist/css</directory>
+                                    <include>bootstrap.min.css</include>
+                                    <include>bootstrap.min.css.map</include>
+                                </resource>
+                                <resource>
+                                    <directory>${project.basedir}/node_modules/@fortawesome/fontawesome-free/css</directory>
+                                    <include>brands.min.css</include>
+                                    <include>fontawesome.min.css</include>
+                                    <include>solid.min.css</include>
+                                    <include>regular.min.css</include>
+                                </resource>
                             </resources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>keytool-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                  <execution>
+                    <goals>
+                      <goal>generateKeyPair</goal>
+                    </goals>
+                    <phase>generate-resources</phase>
+                  </execution>
+                </executions>
+                <configuration>
+                  <keystore>${project.basedir}/conf/local_keystore.jks</keystore>
+                  <storepass>changeit</storepass>
+                  <keypass>changeit</keypass>
+                  <alias>tomcat</alias>
+                  <dname>cn=localhost, ou=Test, L=Test, ST=Test, o=Test, c=US</dname>
+                  <validity>99999</validity>
+                  <keyalg>RSA</keyalg>
+                  <keysize>2048</keysize>
+                  <skipIfExist>true</skipIfExist>
+                </configuration>
+            </plugin>            
         </plugins>        
     </build>
     <profiles>

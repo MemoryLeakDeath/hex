@@ -5,20 +5,14 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -37,6 +31,7 @@ import dev.samstevens.totp.qr.ZxingPngQrGenerator;
 import dev.samstevens.totp.secret.DefaultSecretGenerator;
 import dev.samstevens.totp.time.SystemTimeProvider;
 import dev.samstevens.totp.util.Utils;
+import tv.memoryleakdeath.hex.utils.CryptoUtil;
 
 @Service
 public class HexTotpService {
@@ -84,30 +79,12 @@ public class HexTotpService {
         }
     }
 
-    private SecretKey generateKey(byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        SecretKeyFactory factory = SecretKeyFactory.getInstance(TOTP_KEY_GEN_INSTANCE);
-        KeySpec spec = new PBEKeySpec(totpKey.toCharArray(), salt, 65536, 256);
-        return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
-    }
-
-    private IvParameterSpec generateIv() {
-        byte[] iv = new byte[IV_SIZE];
-        new SecureRandom().nextBytes(iv);
-        return new IvParameterSpec(iv);
-    }
-
-    private byte[] generateSalt() {
-        byte[] salt = new byte[SALT_SIZE];
-        new SecureRandom().nextBytes(salt);
-        return salt;
-    }
-
     public String getEncryptedSecret(String unencryptedSecret)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException {
         Cipher cipher = Cipher.getInstance(CYPHER_INSTANCE);
-        IvParameterSpec iv = generateIv();
-        byte[] salt = generateSalt();
-        cipher.init(Cipher.ENCRYPT_MODE, generateKey(salt), iv);
+        IvParameterSpec iv = CryptoUtil.generateIv(IV_SIZE);
+        byte[] salt = CryptoUtil.generateSalt(SALT_SIZE);
+        cipher.init(Cipher.ENCRYPT_MODE, CryptoUtil.generateKey(salt, TOTP_KEY_GEN_INSTANCE, totpKey, "AES"), iv);
         byte[] cipherText = cipher.doFinal(unencryptedSecret.getBytes(StandardCharsets.UTF_8));
         ByteBuffer encryptedText = ByteBuffer.allocate(SALT_SIZE + IV_SIZE + cipherText.length).put(salt).put(iv.getIV()).put(cipherText);
         return Base64.getEncoder().encodeToString(encryptedText.array());
@@ -121,7 +98,7 @@ public class HexTotpService {
         rawSecret.get(rawSalt);
         byte[] rawIv = new byte[IV_SIZE];
         rawSecret.get(rawIv);
-        cipher.init(Cipher.DECRYPT_MODE, generateKey(rawSalt), new IvParameterSpec(rawIv));
+        cipher.init(Cipher.DECRYPT_MODE, CryptoUtil.generateKey(rawSalt, TOTP_KEY_GEN_INSTANCE, totpKey, "AES"), new IvParameterSpec(rawIv));
         byte[] secretText = new byte[rawSecret.remaining()];
         rawSecret.get(secretText);
         return new String(cipher.doFinal(secretText), StandardCharsets.UTF_8);

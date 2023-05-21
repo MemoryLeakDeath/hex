@@ -14,8 +14,16 @@ public class HexApplicationConfig {
     @Value("${totpKey}")
     private String totpKey;
 
+    @Value("${rememberMeKey}")
+    private String rememberMeKey;
+
     @Bean
     public String totpKey() {
         return totpKey;
+    }
+
+    @Bean
+    public String rememberMeKey() {
+        return rememberMeKey;
     }
 }
