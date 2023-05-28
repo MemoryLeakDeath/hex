@@ -20,6 +20,9 @@ public class HexAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        if (!supports(authentication.getClass())) {
+            return null;
+        }
         Auth user = null;
         try {
             user = authDao.getUserByUsername(authentication.getName());
@@ -30,8 +33,13 @@ public class HexAuthenticationProvider extends DaoAuthenticationProvider {
             throw new BadCredentialsException("User does not exist or sql error!");
         }
 
+        HexWebAuthenticationDetails details = (HexWebAuthenticationDetails) authentication.getDetails();
+        if (details == null) {
+            throw new BadCredentialsException("No User Details were created!");
+        }
+
         if (Boolean.TRUE.equals(user.getUseTfa())) {
-            String authCode = ((HexWebAuthenticationDetails) authentication.getDetails()).getVerificationCode();
+            String authCode = details.getVerificationCode();
             if (!totpService.verify(user.getSecret(), authCode)) {
                 throw new BadCredentialsException("2FA code incorrect");
             }
@@ -41,7 +49,7 @@ public class HexAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
 
 }

@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-    </head>
-    <body>
-        <div th:fragment="content">
-	        <h1>Hex Sign up</h1>
-	        
-	        <form th:action="@{/registration/create}" method="POST">
-	          <div>
-	              <label for="username">Username:</label>
-	              <input type="text" id="username" name="username" autofocus="autofocus" required="required"/>
-	          </div>
-	          <div>
-	              <label for="password">Password:</label>
-	              <input type="password" id="password" name="password" required="required"/>
-	          </div>
-	          <div>
-	              <input type="checkbox" id="usetfa" name="useTfa">Use Two Factor Authentication?
-	          </div>
-	          <button type="submit">Sign Up</button>
-	        </form>
-        </div>
-    </body>
+	<div class="container" th:fragment="content">
+		<h1 th:text="#{registration.text.signup}"></h1>
+		
+		<form th:action="@{/registration/create}" method="POST">
+		  <div class="mb-2">
+		      <label for="username" class="form-label" th:text="#{text.username}"></label>
+		      <input type="text" class="form-control" id="username" name="username" autofocus="autofocus" autocomplete="username" required="required"/>
+		  </div>
+		  <div class="mb-2">
+		      <label for="password" class="form-label" th:text="#{text.password}"></label>
+		      <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required="required"/>
+		  </div>
+		  <div class="form-check form-switch mb-4">
+		      <label for="usetfa" class="form-check-label" th:text="#{registration.text.usemfa}"></label>
+		      <input type="checkbox" class="form-check-input" id="usetfa" name="useTfa" value="true">
+		  </div>
+		  <button type="submit" class="btn btn-primary" th:text="#{registration.button.signup}"></button>
+		</form>
+	</div>
 </html>

@@ -11,7 +11,6 @@ create table identities (
     password varchar(100) not null,
     active boolean not null default false,
     failedAttempts smallint not null default 0,
-    emailVerified boolean not null default false,
     useTfa boolean not null default false,
     tfaType tfa_types null default null,
     secret varchar(250) null default null,
@@ -25,13 +24,13 @@ create unique index ix_identities_username on identities(username);
 
 --changeset memoryleakdeath:04222023143655 dbms:postgresql
 create table authorities (
-    username varchar(50) not null,
+    userid uuid not null,
     authority varchar(50) not null,
-    constraint fk_authorities_identities foreign key(username) references identities(username)
+    constraint fk_authorities_identities foreign key(userid) references identities(id)
 );
 --rollback drop table if exists authorities;
 
-create unique index ix_auth_username on authorities (username, authority);
+create unique index ix_auth_username on authorities (userid, authority);
 --rollback drop index if exists ix_auth_username;
 
 

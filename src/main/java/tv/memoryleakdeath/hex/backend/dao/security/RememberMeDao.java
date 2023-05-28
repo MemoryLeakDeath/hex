@@ -24,7 +24,7 @@ public class RememberMeDao {
     private static final String FIND_NON_EXPIRED_BY_SERIES_AND_TOKEN_SQL = """
                 select %s from rememberme
                 where token = ?
-                and expirationdate < NOW()
+                and expirationdate > NOW()
             """.formatted(StringUtils.join(COLUMN_NAMES, ","));
 
     public RememberMe find(String token) {
@@ -56,7 +56,7 @@ public class RememberMeDao {
     @Transactional
     public boolean create(RememberMe me) {
         logger.debug("[Remember me] Creating new token for user.");
-        String sql = "insert into rememberme (userid, token, lastused, expirationdate) values (?,?,NOW(),?)";
+        String sql = "insert into rememberme (userid, token, lastused, expirationdate) values (?::uuid,?,NOW(),?)";
         int rows = jdbcTemplate.update(sql, me.getUserId(), me.getToken(), me.getExpirationDate());
         return (rows > 0);
     }

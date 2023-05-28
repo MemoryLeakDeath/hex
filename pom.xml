@@ -24,6 +24,7 @@
         <commonslang.version>3.12.0</commonslang.version>
         <bouncycastlepkix.version>1.73</bouncycastlepkix.version>
         <totp.version>1.7.1</totp.version>
+        <faker.version>1.9.0</faker.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -156,6 +157,12 @@
             <version>${jsonpath.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>${faker.version}</version>
+            <scope>test</scope>
+        </dependency>        
     </dependencies>
     <build>
         <finalName>ROOT-${project.version}</finalName>

@@ -1,15 +1,22 @@
 package tv.memoryleakdeath.hex.backend.dao.security;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,35 +27,48 @@ import tv.memoryleakdeath.hex.common.pojo.TfaType;
 @Repository
 public class AuthenticationDao {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationDao.class);
-    private static final String[] COLUMN_NAMES = { "id", "username", "password", "active", "failedattempts", "emailverified", "usetfa", "tfatype", "secret", "createddate", "lastattemptedlogin" };
+    private static final String[] COLUMN_NAMES = { "id", "username", "password", "active", "failedattempts", "usetfa", "tfatype", "secret", "createddate", "lastattemptedlogin" };
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     private static final String GET_USER_BY_USERNAME = """
-                select %s, ARRAY(select authority from authorities where username = ?) AS roles from identities
+                select %s, ARRAY(select authority from authorities a where a.userid = id) AS roles from identities
                 where username = ?
             """.formatted(StringUtils.join(COLUMN_NAMES, ","));
 
     public Auth getUserByUsername(String username) {
-        return jdbcTemplate.queryForObject(GET_USER_BY_USERNAME, new AuthMapper(), username, username);
+        List<Auth> results = jdbcTemplate.query(GET_USER_BY_USERNAME, new AuthMapper(), username);
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
+    }
+
+    private static final String GET_ACTIVE_USER_BY_ID = """
+                select %s, ARRAY(select authority from authorities where id = ?::uuid) AS roles from identities
+                where id = ?::uuid and active = true
+            """.formatted(StringUtils.join(COLUMN_NAMES, ","));
+
+    public Auth getActiveUserById(String id) {
+        List<Auth> results = jdbcTemplate.query(GET_ACTIVE_USER_BY_ID, new AuthMapper(), id, id);
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
     }
 
     public String getUserIdForUsername(String username) {
         String sql = "select id from identities where username = ?";
-        List<String> results = jdbcTemplate.query(sql, new RowMapper<String>() {
+        return jdbcTemplate.query(sql, new ResultSetExtractor<String>() {
             @Override
-            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+            public String extractData(ResultSet rs) throws SQLException, DataAccessException {
                 if (rs.next()) {
                     return rs.getString("id");
                 }
                 return null;
             }
-        });
-        if (results.isEmpty()) {
-            return null;
-        }
-        return results.get(0);
+        }, username);
     }
 
     public boolean checkUsernameExists(String username) {
@@ -61,13 +81,22 @@ public class AuthenticationDao {
     public void createUserInitial(String username, String password) {
         logger.debug("New user created! Username: {}", username);
         String sql = "insert into identities (username, password, active) values (?,?,true)";
-        jdbcTemplate.update(sql, username, password);
-        createInitalUserRole(username);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, username);
+                ps.setString(2, password);
+                return ps;
+            }
+        }, keyHolder);
+        createInitalUserRole(keyHolder.getKeys().get("id").toString());
     }
 
-    private void createInitalUserRole(String username) {
-        String sql = "insert into authorities (username, authority) values (?,'ROLE_USER')";
-        jdbcTemplate.update(sql, username);
+    private void createInitalUserRole(String id) {
+        String sql = "insert into authorities (userid, authority) values (?::uuid,'ROLE_USER')";
+        jdbcTemplate.update(sql, id);
     }
 
     @Transactional

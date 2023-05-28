@@ -85,7 +85,7 @@ public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
         messageSource.setBasename("/WEB-INF/messages/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setDefaultLocale(Locale.US);
-        messageSource.setCacheSeconds(60);
+        messageSource.setCacheSeconds(2);
         return messageSource;
     }
 

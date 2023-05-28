@@ -12,7 +12,6 @@ public class Auth implements Serializable {
     private Boolean active;
     private String[] roles;
     private Integer failedAttempts;
-    private Boolean emailVerified;
     private Boolean useTfa;
     private TfaType tfaType;
     private String secret;
@@ -65,14 +64,6 @@ public class Auth implements Serializable {
 
     public void setFailedAttempts(Integer failedAttempts) {
         this.failedAttempts = failedAttempts;
-    }
-
-    public Boolean getEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
     }
 
     public Boolean getUseTfa() {

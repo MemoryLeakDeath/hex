@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-	    <meta charset="UTF-8"/>
-	    <title>Login</title>
-	</head>
-	<body>
-		<div th:fragment="content">
-		    <form th:action="@{/logincheck}" method="POST">
-		        <div>
-		            <label for="username">Username:</label>
-		            <input type="text" id="username" name="username" autofocus="autofocus" required="required"/>
-		        </div>
-		        <div>
-		            <label for="password">Password:</label>
-		            <input type="password" id="password" name="password" required="required"/>
-		        </div>
-                <div>
-                    <label for="2fa">Authentication Code (optional):</label>
-                    <input type="text" id="2fa" name="2fa"/>
-                </div>
-		        <button type="submit" class="btn-primary">Login</button>
-		    </form>
-		</div>
-	</body>
+	<div th:fragment="content">
+	    <form th:action="@{/logincheck}" method="POST">
+	        <div>
+	            <label for="username">Username:</label>
+	            <input type="text" id="username" name="username" autofocus="autofocus" autocomplete="off" required="required"/>
+	        </div>
+	        <div>
+	            <label for="password">Password:</label>
+	            <input type="password" id="password" name="password" autocomplete="off" required="required"/>
+	        </div>
+               <div>
+                   <label for="2fa">Authentication Code (optional):</label>
+                   <input type="text" id="2fa" name="2fa" autocomplete="one-time-password"/>
+               </div>
+               <div>
+                   <label for="rememberme">Remember</label>
+                   <input type="checkbox" id="rememberme" name="rememberme" value="true"/>
+               </div>
+	        <button type="submit" class="btn-primary">Login</button>
+	    </form>
+	</div>
 </html>

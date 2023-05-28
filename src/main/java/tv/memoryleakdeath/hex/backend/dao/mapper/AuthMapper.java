@@ -15,7 +15,6 @@ public class AuthMapper implements RowMapper<Auth> {
         Auth user = new Auth();
         user.setActive(rs.getBoolean("active"));
         user.setCreatedDate(rs.getDate("createddate"));
-        user.setEmailVerified(rs.getBoolean("emailverified"));
         user.setFailedAttempts(rs.getInt("failedattempts"));
         user.setId(rs.getString("id"));
         user.setLastAttemptedLogin(rs.getDate("lastattemptedlogin"));
