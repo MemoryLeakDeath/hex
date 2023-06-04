@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ThymeleafLayoutInterceptor implements HandlerInterceptor {
     private static final String DEFAULT_LAYOUT = "layout/main";
     private static final String DEFAULT_VIEW_VARIABLE_NAME = "view";
-    private static final String LAYOUT_NAME_VARIABLE = "layout";
+    public static final String LAYOUT_NAME_VARIABLE = "layout";
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {

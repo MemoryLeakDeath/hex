@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="messages">
+       <div th:each="err : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).ERROR_MESSAGES)}" th:text="#{${err}}" class="alert alert-danger alert-dismissable">
+       </div>
+       <div th:each="warn : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).WARNING_MESSAGES)}" th:text="#{${warn}}" class="alert alert-warning alert-dismissable">
+       </div>
+       <div th:each="success : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).SUCCESS_MESSAGES)}" th:text="#{${success}}" class="alert alert-success alert-dismissable">
+       </div>
+       <div th:each="info : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).INFO_MESSAGES)}" th:text="#{${info}}" class="alert alert-success alert-info">
+       </div>
+    </div>
+</html>

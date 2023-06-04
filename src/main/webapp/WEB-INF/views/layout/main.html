@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/html-header :: htmlhead"></head>
 <body class="bg-body-color" data-bs-theme="dark">
+    <div th:replace="fragment/top-navigation :: topnav"></div>
+    <div th:replace="fragment/messages :: messages"></div>
     <div th:replace="${view} :: content" class="text-primary"></div>
 </body>
 </html>

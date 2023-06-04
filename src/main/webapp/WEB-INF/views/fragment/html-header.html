@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="htmlhead">
-    <title th:text="#{site.title} + ' - ' + ${pageTitle}"></title>
-	<meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <title th:text="#{site.title} + ' - ' + ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).PAGE_TITLE)}"></title>
 	<link rel="stylesheet"href="/css/fontawesome.min.css">
 	<link rel="stylesheet" href="/css/brands.min.css">
 	<link rel="stylesheet" href="/css/solid.min.css">

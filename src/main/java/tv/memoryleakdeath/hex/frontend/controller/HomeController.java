@@ -19,7 +19,9 @@ public class HomeController extends BaseFrontendController {
     @GetMapping("/")
     public String view(HttpServletRequest request, Model model) {
         setPageTitle(request, model, "title.home");
+        addCommonModelAttributes(model);
         model.addAttribute("helloMsg", "Hello World!");
+        addSuccessMessage(model, "text.success.ok");
         return "index";
     }
 
