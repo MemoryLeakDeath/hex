@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
     <title th:text="#{site.title} + ' - ' + ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).PAGE_TITLE)}"></title>
-	<link rel="stylesheet"href="/css/fontawesome.min.css">
-	<link rel="stylesheet" href="/css/brands.min.css">
-	<link rel="stylesheet" href="/css/solid.min.css">
-    <link rel="stylesheet" href="/css/regular.min.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/css/application.css"/>
-    <script type="text/javascript" src="/js/jquery.min.js"></script>    
-    <script type="text/javascript" src="/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" th:href="@{/css/fontawesome.min.css}">
+	<link rel="stylesheet" th:href="@{/css/brands.min.css}">
+	<link rel="stylesheet" th:href="@{/css/solid.min.css}">
+    <link rel="stylesheet" th:href="@{/css/regular.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/application.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>    
+    <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/application.js}"></script>
 </head>
 <body>
 </body>

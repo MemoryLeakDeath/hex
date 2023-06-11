@@ -20,6 +20,8 @@ public abstract class BaseFrontendController {
     public static final String INFO_MESSAGES = "pageInfos";
     public static final String WARNING_MESSAGES = "pageWarnings";
     public static final String SUCCESS_MESSAGES = "pageSuccesses";
+    public static final String IMAGE_CAPTCHA = "imageCaptcha";
+    public static final String AUDIO_CAPTCHA = "audioCaptcha";
 
     @Autowired
     private MessageSource messageSource;

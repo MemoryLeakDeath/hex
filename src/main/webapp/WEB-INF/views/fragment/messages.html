@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <div th:fragment="messages">
-       <div th:each="err : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).ERROR_MESSAGES)}" th:text="#{${err}}" class="alert alert-danger alert-dismissable">
+    <div th:fragment="messages" id="topMessagesBox">
+       <div th:each="err : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).ERROR_MESSAGES)}" class="alert alert-danger alert-dismissable" role="alert">
+          <span>
+             <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;
+             [(#{${err}})]
+          </span>
+          <button type="button" class="btn-close float-end" data-bs-dismiss="alert" th:aria-label="#{button.close}"></button>
        </div>
-       <div th:each="warn : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).WARNING_MESSAGES)}" th:text="#{${warn}}" class="alert alert-warning alert-dismissable">
+       <div th:each="warn : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).WARNING_MESSAGES)}" class="alert alert-warning alert-dismissable" role="alert">
+          <span>
+             <i class="fa-solid fa-circle-exclamation"></i>&nbsp;
+             [(#{${warn}})]
+          </span>
+          <button type="button" class="btn-close float-end" data-bs-dismiss="alert" th:aria-label="#{button.close}"></button>
        </div>
-       <div th:each="success : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).SUCCESS_MESSAGES)}" th:text="#{${success}}" class="alert alert-success alert-dismissable">
+       <div th:each="success : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).SUCCESS_MESSAGES)}" class="alert alert-success alert-dismissable" role="alert">
+          <span>
+             <i class="fa-solid fa-circle-check"></i>&nbsp;
+             [(#{${success}})]
+          </span>
+          <button type="button" class="btn-close float-end" data-bs-dismiss="alert" th:aria-label="#{button.close}"></button>
        </div>
-       <div th:each="info : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).INFO_MESSAGES)}" th:text="#{${info}}" class="alert alert-success alert-info">
+       <div th:each="info : ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).INFO_MESSAGES)}" class="alert alert-success alert-info alert-dismissable" role="alert">
+          <span>
+             <i class="fa-solid fa-circle-info"></i>&nbsp;
+             [(#{${info}})]
+          </span>
+          <button type="button" class="btn-close float-end" data-bs-dismiss="alert" th:aria-label="#{button.close}"></button>
        </div>
     </div>
 </html>

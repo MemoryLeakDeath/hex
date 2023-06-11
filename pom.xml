@@ -27,6 +27,8 @@
         <totp.version>1.7.1</totp.version>
         <faker.version>1.9.0</faker.version>
         <greenmail.version>2.1.0-alpha-1</greenmail.version>
+        <nanocaptcha.version>1.5</nanocaptcha.version>
+        <jakarta.mail.version>2.0.1</jakarta.mail.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -128,7 +130,17 @@
             <artifactId>commons-text</artifactId>
             <version>${commonstext.version}</version>
         </dependency>
-
+        <dependency>
+          <groupId>net.logicsquad</groupId>
+          <artifactId>nanocaptcha</artifactId>
+          <version>${nanocaptcha.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>${jakarta.mail.version}</version>
+        </dependency>
+        
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

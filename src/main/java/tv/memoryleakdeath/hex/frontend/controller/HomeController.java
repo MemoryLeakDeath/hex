@@ -21,6 +21,9 @@ public class HomeController extends BaseFrontendController {
         setPageTitle(request, model, "title.home");
         addCommonModelAttributes(model);
         model.addAttribute("helloMsg", "Hello World!");
+        addWarningMessage(model, "text.warn.partial");
+        addErrorMessage(model, "text.error.systemerror");
+        addInfoMessage(model, "text.info.test");
         addSuccessMessage(model, "text.success.ok");
         return "index";
     }

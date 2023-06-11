@@ -16,6 +16,16 @@
 		      <label for="usetfa" class="form-check-label" th:text="#{registration.text.usemfa}"></label>
 		      <input type="checkbox" class="form-check-input" id="usetfa" name="useTfa" value="true">
 		  </div>
+		  <div class="container">
+		      <div class="form-group">
+		          <img th:alt="#{registration.alt.captcha}" th:src="${imageCaptcha}">
+		          <input type="text" class="form-control" id="captchaAnswer" name="captchaAnswer" autocomplete="none" required="required"/>
+		      </div>
+		      <!-- 
+              <audio controls th:src="${audioCaptcha}" th:aria-label="#{registration.alt.captcha}">
+              </audio>		      
+		       -->
+		  </div>
 		  <button type="submit" class="btn btn-primary" th:text="#{registration.button.signup}"></button>
 		</form>
 	</div>

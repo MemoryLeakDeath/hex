@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<div th:fragment="topnav">
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		  <div class="container-lg justify-content-between m-0">
-			  <a class="navbar-brand" href="#"><img src="logo_placeholder.png" alt="Logo" /></a>
-			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-0">
+		  <div class="d-flex w-100 m-0">
+			  <a class="navbar-brand" th:href="@{/}"><img th:src="@{/images/hex-top-logo.png}" th:alt="#{site.title}" width="200" height="68" /></a>
+			  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="#{text.togglenavigation}">
 			    <span class="navbar-toggler-icon"></span>
 			  </button>
 			  <div class="collapse navbar-collapse" id="navbarNav">
 			    <ul class="navbar-nav me-auto">
 			      <li class="nav-item active">
-			        <a class="nav-link" href="#">Browse</a>
+			        <a class="nav-link" href="#" th:text="#{text.nav.browse}"></a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link" href="#">Feed</a>
+			        <a class="nav-link" href="#" th:text="#{text.nav.feed}"></a>
 			      </li>
 			    </ul>
 			    <form class="form-inline my-2 my-lg-0 col-8">
-			      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+			      <input class="form-control mr-sm-2" type="search" th:placeholder="#{button.placeholder.search}" th:aria-label="#{button.placeholder.search}">
 			    </form>
 			    <ul class="navbar-nav ms-auto">
 			      <li class="nav-item">
