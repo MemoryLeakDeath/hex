@@ -29,6 +29,7 @@
         <greenmail.version>2.1.0-alpha-1</greenmail.version>
         <nanocaptcha.version>1.5</nanocaptcha.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
+        <velocity.version>2.3</velocity.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -140,6 +141,12 @@
             <artifactId>jakarta.mail</artifactId>
             <version>${jakarta.mail.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>${velocity.version}</version>
+        </dependency>
+        
         
         <!-- Test Dependencies -->
         <dependency>
