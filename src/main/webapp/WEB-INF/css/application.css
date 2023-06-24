@@ -10,3 +10,10 @@ body[data-bs-theme="dark"] {
 	--silver: #a69f98ff;
 	--rose-taupe: #8c6057ff;	
 }
+
+.table {
+    --bs-table-active-color: var(--smokey-black);
+    --bs-table-active-bg: var(--silver);
+    --bs-table-hover-color: var(--smokey-black);
+    --bs-table-hover-bg: var(--silver);
+}

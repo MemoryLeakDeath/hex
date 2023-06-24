@@ -47,6 +47,15 @@ public class EmailService {
         return sendMessage(recipient, parsedTemplateParts[0], parsedTemplateParts[1]);
     }
 
+    public boolean sendVerificationEmail(String recipient, String userDisplayName, String token, String baseUrl) {
+        EmailTemplate template = templateDao.getTemplateByLocaleOrDefault(EmailTemplateType.verification, Locale.US);
+        Map<String, Object> templateVariables = new HashMap<>();
+        templateVariables.put("displayName", userDisplayName);
+        templateVariables.put("generatedUrl", baseUrl + "/email/verify/" + token);
+        String[] parsedTemplateParts = parseTemplateSubjectAndBody(template, "verificationTemplate", templateVariables);
+        return sendMessage(recipient, parsedTemplateParts[0], parsedTemplateParts[1]);
+    }
+
     private String[] parseTemplateSubjectAndBody(EmailTemplate template, String logTemplateName, Map<String, Object> variables) {
         Velocity.init();
         VelocityContext context = new VelocityContext(variables);

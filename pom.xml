@@ -224,6 +224,12 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources_filtered</directory>
+                <filtering>true</filtering>                
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -241,16 +247,35 @@
                 <groupId>org.liquibase</groupId>  
                 <artifactId>liquibase-maven-plugin</artifactId>  
                 <version>4.22.0</version>  
-                <configuration>
-                    <propertyFile>liquibase.properties</propertyFile>  
-                </configuration>  
                 <dependencies>  
                   <dependency>  
                       <groupId>org.postgresql</groupId>  
                       <artifactId>postgresql</artifactId>  
                       <version>${postgresql.version}</version>  
                   </dependency>  
-              </dependencies>  
+              </dependencies>
+              <executions>
+<!--                  <execution>-->
+<!--                      <id>main-db-migrate</id>-->
+<!--                      <configuration>-->
+<!--                        <propertyFile>liquibase.properties</propertyFile>  -->
+<!--                      </configuration>-->
+<!--                      <phase>process-resources</phase>-->
+<!--                      <goals>-->
+<!--                          <goal>update</goal>-->
+<!--                      </goals>-->
+<!--                  </execution>-->
+<!--                  <execution>-->
+<!--                      <id>test-db-migrate</id>-->
+<!--                      <configuration>-->
+<!--                        <propertyFile>liquibase-test.properties</propertyFile>  -->
+<!--                      </configuration>-->
+<!--                      <phase>process-test-classes</phase>-->
+<!--                      <goals>-->
+<!--                          <goal>update</goal>-->
+<!--                      </goals>-->
+<!--                  </execution>-->
+              </executions>  
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

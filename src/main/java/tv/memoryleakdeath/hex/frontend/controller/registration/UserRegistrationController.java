@@ -24,6 +24,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import net.logicsquad.nanocaptcha.audio.AudioCaptcha;
 import net.logicsquad.nanocaptcha.image.ImageCaptcha;
 import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
+import tv.memoryleakdeath.hex.backend.email.EmailService;
+import tv.memoryleakdeath.hex.backend.email.EmailVerificationService;
 import tv.memoryleakdeath.hex.backend.security.HexCaptchaService;
 import tv.memoryleakdeath.hex.backend.security.HexTotpService;
 import tv.memoryleakdeath.hex.backend.security.UserAuthService;
@@ -49,6 +51,12 @@ public class UserRegistrationController extends BaseFrontendController {
 
     @Autowired
     private HexCaptchaService captchaService;
+
+    @Autowired
+    private EmailVerificationService emailVerificationService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/")
     public String registerNewUser(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
@@ -123,7 +131,7 @@ public class UserRegistrationController extends BaseFrontendController {
                     return createTfa(request, model, userModel.getUsername());
                 }
                 addSuccessMessage(model, "registration.text.success.usercreated");
-                returnView = "redirect: /login";
+                returnView = successfulRegistration(request, userModel);
             }
         } catch (Exception e) {
             logger.error("Unable to create new user!", e);
@@ -166,7 +174,7 @@ public class UserRegistrationController extends BaseFrontendController {
             Auth userAuth = authDao.getUserByUsername(username);
             if (userAuth != null && totpService.verify(userAuth.getSecret(), validationCode) && authDao.updateUserTfa(username, true)) {
                 addSuccessMessage(model, "registration.text.success.usercreated");
-                returnView = "redirect: /login";
+                returnView = successfulRegistration(request, null);
             } else {
                 logger.error("Unable to verify user's inital 2fa code for user: {}", username);
                 addErrorMessage(model, "registration.text.error.tfainvalid");
@@ -178,5 +186,14 @@ public class UserRegistrationController extends BaseFrontendController {
             returnView = "redirect: " + URL;
         }
         return returnView;
+    }
+
+    private String successfulRegistration(HttpServletRequest request, UserRegistrationModel model) {
+        String userId = authDao.getUserIdForUsername(model.getUsername());
+        String token = emailVerificationService.createNewVerificationToken(userId);
+        if (!emailService.sendVerificationEmail("someone@something.com", "someDisplayName", token, "https://" + request.getServerName() + ":" + request.getServerPort())) {
+            logger.error("[Email Verification Service] Unable to send user initial email verification token.");
+        }
+        return "redirect: /login";
     }
 }

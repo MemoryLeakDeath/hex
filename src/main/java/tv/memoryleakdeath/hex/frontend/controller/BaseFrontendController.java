@@ -1,5 +1,6 @@
 package tv.memoryleakdeath.hex.frontend.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -50,6 +51,14 @@ public abstract class BaseFrontendController {
 
     protected void addCommonModelAttributes(Model model) {
         model.addAttribute(PAGE_HELPER, pageHelper);
+    }
+
+    protected String getUsername(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        if (principal != null) {
+            return principal.getName();
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
