@@ -47,11 +47,12 @@ public class EmailService {
         return sendMessage(recipient, parsedTemplateParts[0], parsedTemplateParts[1]);
     }
 
-    public boolean sendVerificationEmail(String recipient, String userDisplayName, String token, String baseUrl) {
+    public boolean sendVerificationEmail(String recipient, String userDisplayName, String token, String serverName, String serverPort) {
         EmailTemplate template = templateDao.getTemplateByLocaleOrDefault(EmailTemplateType.verification, Locale.US);
         Map<String, Object> templateVariables = new HashMap<>();
         templateVariables.put("displayName", userDisplayName);
-        templateVariables.put("generatedUrl", baseUrl + "/email/verify/" + token);
+        String url = "https://%s:%s/email/verify/%s".formatted(serverName, serverPort, token);
+        templateVariables.put("generatedUrl", url);
         String[] parsedTemplateParts = parseTemplateSubjectAndBody(template, "verificationTemplate", templateVariables);
         return sendMessage(recipient, parsedTemplateParts[0], parsedTemplateParts[1]);
     }

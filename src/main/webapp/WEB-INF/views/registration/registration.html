@@ -3,23 +3,36 @@
 	<div class="container" th:fragment="content">
 		<h1 th:text="#{registration.text.signup}"></h1>
 		
-		<form th:action="@{/registration/create}" method="POST">
+		<form th:action="@{/registration/create}" method="POST" th:object="${userModel}">
 		  <div class="mb-2">
 		      <label for="username" class="form-label" th:text="#{text.username}"></label>
-		      <input type="text" class="form-control" id="username" name="username" autofocus="autofocus" autocomplete="username" required="required"/>
+		      <input type="text" class="form-control" th:errorclass="is-invalid" id="username" th:field="*{username}" autofocus="autofocus" autocomplete="username" required="required" maxlength="50" aria-describedby="username-error"/>
+		      <div id="username-error" class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
 		  </div>
 		  <div class="mb-2">
 		      <label for="password" class="form-label" th:text="#{text.password}"></label>
-		      <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required="required"/>
+		      <input type="password" class="form-control" th:errorclass="is-invalid" id="password" th:field="*{password}" autocomplete="new-password" required="required" maxlength="100" aria-describedby="password-error"/>
+              <div id="password-error" class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
 		  </div>
+          <div class="mb-2">
+              <label for="displayName" class="form-label" th:text="#{text.displayname}"></label>
+              <input type="text" class="form-control" th:errorclass="is-invalid" id="displayName" th:field="*{displayName}" autocomplete="none" required="required" maxlength="75" aria-describedby="displayname-error"/>
+              <div id="displayname-error" class="invalid-feedback" th:if="${#fields.hasErrors('displayName')}" th:errors="*{displayName}"></div>
+          </div>
+          <div class="mb-2">
+              <label for="email" class="form-label" th:text="#{text.email}"></label>
+              <input type="text" class="form-control" th:errorclass="is-invalid" id="email" th:field="*{email}" autocomplete="none" required="required" maxlength="100" aria-describedby="email-error"/>
+              <div id="email-error" class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+          </div>
 		  <div class="form-check form-switch mb-4">
 		      <label for="usetfa" class="form-check-label" th:text="#{registration.text.usemfa}"></label>
-		      <input type="checkbox" class="form-check-input" id="usetfa" name="useTfa" value="true">
+		      <input type="checkbox" class="form-check-input" id="usetfa" th:field="*{useTfa}" value="true">
 		  </div>
 		  <div class="container">
 		      <div class="form-group">
 		          <img th:alt="#{registration.alt.captcha}" th:src="${imageCaptcha}">
-		          <input type="text" class="form-control" id="captchaAnswer" name="captchaAnswer" autocomplete="none" required="required"/>
+		          <input type="text" class="form-control" th:errorclass="is-invalid" id="captchaAnswer" th:field="*{captchaAnswer}" autocomplete="none" required="required" aria-describedby="captcha-error"/>
+	              <div id="captcha-error" class="invalid-feedback" th:if="${#fields.hasErrors('captchaAnswer')}" th:errors="*{captchaAnswer}"></div>
 		      </div>
 		      <!-- 
               <audio controls th:src="${audioCaptcha}" th:aria-label="#{registration.alt.captcha}">

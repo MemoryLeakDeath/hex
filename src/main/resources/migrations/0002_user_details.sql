@@ -7,6 +7,7 @@ create table userdetails (
     email varchar(100) not null,
     emailVerified boolean not null default false,
     lastUpdated timestamp not null,
+    UNIQUE(displayName),
     constraint fk_userdetails_identities foreign key(userid) references identities(id)
 );
 --rollback drop table if exists userdetails;

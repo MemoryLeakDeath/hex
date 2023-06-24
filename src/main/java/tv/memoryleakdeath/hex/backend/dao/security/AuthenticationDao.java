@@ -78,7 +78,7 @@ public class AuthenticationDao {
     }
 
     @Transactional
-    public void createUserInitial(String username, String password) {
+    public String createUserInitial(String username, String password) {
         logger.debug("New user created! Username: {}", username);
         String sql = "insert into identities (username, password, active) values (?,?,true)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -91,7 +91,9 @@ public class AuthenticationDao {
                 return ps;
             }
         }, keyHolder);
-        createInitalUserRole(keyHolder.getKeys().get("id").toString());
+        String id = keyHolder.getKeys().get("id").toString();
+        createInitalUserRole(id);
+        return id;
     }
 
     private void createInitalUserRole(String id) {

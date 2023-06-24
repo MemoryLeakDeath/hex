@@ -3,9 +3,8 @@ package tv.memoryleakdeath.hex.config;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +28,9 @@ import tv.memoryleakdeath.hex.frontend.controller.interceptors.ThymeleafLayoutIn
 @Configuration
 @EnableWebMvc
 @ComponentScan("tv.memoryleakdeath.hex.frontend")
-public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
+public class HexWebConfig implements WebMvcConfigurer {
+
+    @Autowired
     private ApplicationContext ac;
 
     @Override
@@ -66,11 +67,6 @@ public class HexWebConfig implements WebMvcConfigurer, ApplicationContextAware {
         viewResolver.setTemplateEngine(templateEngine());
         viewResolver.setOrder(1);
         return viewResolver;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.ac = applicationContext;
     }
 
     @Override

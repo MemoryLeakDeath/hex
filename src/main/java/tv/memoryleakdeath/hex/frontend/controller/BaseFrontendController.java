@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.LocaleResolver;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -85,5 +86,10 @@ public abstract class BaseFrontendController {
 
     protected void addInfoMessage(Model model, String errorKey) {
         addMessage(model, INFO_MESSAGES, errorKey);
+    }
+
+    protected void stuffErrorsBackIntoModel(String modelName, Object modelObject, Model springModel, BindingResult bindingResult) {
+        springModel.addAttribute("org.springframework.validation.BindingResult." + modelName, bindingResult);
+        springModel.addAttribute(modelName, modelObject);
     }
 }

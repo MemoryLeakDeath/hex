@@ -6,7 +6,6 @@ import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import net.logicsquad.nanocaptcha.audio.AudioCaptcha;
 import net.logicsquad.nanocaptcha.image.ImageCaptcha;
 import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
+import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
 import tv.memoryleakdeath.hex.backend.email.EmailService;
 import tv.memoryleakdeath.hex.backend.email.EmailVerificationService;
 import tv.memoryleakdeath.hex.backend.security.HexCaptchaService;
@@ -31,6 +30,7 @@ import tv.memoryleakdeath.hex.backend.security.HexTotpService;
 import tv.memoryleakdeath.hex.backend.security.UserAuthService;
 import tv.memoryleakdeath.hex.common.pojo.Auth;
 import tv.memoryleakdeath.hex.common.pojo.TfaType;
+import tv.memoryleakdeath.hex.common.pojo.UserDetails;
 import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
 
 @Controller
@@ -58,8 +58,14 @@ public class UserRegistrationController extends BaseFrontendController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private UserDetailsDao userDetailsDao;
+
+    @Autowired
+    private UserRegistrationModelValidator<UserRegistrationModel> registrationValidator;
+
     @GetMapping("/")
-    public String registerNewUser(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+    public String registerNewUser(HttpServletRequest request, Model model) {
         addCommonModelAttributes(model);
         try {
             ImageCaptcha imageCaptcha = captchaService.generateImageCaptcha();
@@ -71,6 +77,9 @@ public class UserRegistrationController extends BaseFrontendController {
             String encodedAudioCaptcha = getEncodedAudioCaptcha(model, audioCaptcha);
             model.addAttribute("imageCaptcha", "data:image/png;base64," + encodedCaptcha);
             model.addAttribute("audioCaptcha", "data:audio/wav;base64," + encodedAudioCaptcha);
+            if (!model.containsAttribute("userModel")) {
+                model.addAttribute("userModel", new UserRegistrationModel());
+            }
         } catch (Exception e) {
             logger.error("Unable to display register new user page!", e);
             addErrorMessage(model, "text.error.systemerror");
@@ -107,38 +116,49 @@ public class UserRegistrationController extends BaseFrontendController {
     }
 
     @PostMapping("/create")
-    public String createNewUser(HttpServletRequest request, Model model, @ModelAttribute UserRegistrationModel userModel, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+    public String createNewUser(HttpServletRequest request, Model model, @ModelAttribute UserRegistrationModel userModel, BindingResult bindingResult) {
         addCommonModelAttributes(model);
         String returnView;
         try {
-            if (StringUtils.isBlank(userModel.getCaptchaAnswer())
-                    || !captchaService.verifyImageCaptcha((ImageCaptcha) request.getSession(false).getAttribute(IMAGE_CAPTCHA), userModel.getCaptchaAnswer())) {
-                redirectAttributes.addFlashAttribute("userModel", userModel);
-                addErrorMessage(model, "registration.text.error.captcha");
+            registrationValidator.validate(request, userModel, bindingResult);
+            if (bindingResult.hasErrors()) {
+                logger.debug("[Validation] User registration validation failed!");
+                userModel.setCaptchaAnswer("");
+                stuffErrorsBackIntoModel("userModel", userModel, model, bindingResult);
+                return registerNewUser(request, model);
+            }
+
+            String encodedPassword = userAuthService.encodePassword(userModel.getPassword());
+            userModel.setId(authDao.createUserInitial(userModel.getUsername(), encodedPassword));
+            if (!createUserDetails(model, userModel)) {
+                logger.debug("[User Details] Unable to save user details!");
                 returnView = "redirect: " + URL;
                 return returnView;
             }
 
-            if (authDao.checkUsernameExists(userModel.getUsername())) {
-                logger.error("Unable to create user: {} username already exists!", userModel.getUsername());
-                redirectAttributes.addFlashAttribute("userModel", userModel);
-                addErrorMessage(model, "registration.text.error.usernameexists");
-                returnView = "redirect: " + URL;
-            } else {
-                String encodedPassword = userAuthService.encodePassword(userModel.getPassword());
-                authDao.createUserInitial(userModel.getUsername(), encodedPassword);
-                if (Boolean.TRUE.equals(userModel.getUseTfa())) {
-                    return createTfa(request, model, userModel.getUsername());
-                }
-                addSuccessMessage(model, "registration.text.success.usercreated");
-                returnView = successfulRegistration(request, userModel);
+            if (Boolean.TRUE.equals(userModel.getUseTfa())) {
+                return createTfa(request, model, userModel.getUsername());
             }
+            addSuccessMessage(model, "registration.text.success.usercreated");
+            returnView = successfulRegistration(request, userModel);
         } catch (Exception e) {
             logger.error("Unable to create new user!", e);
             addErrorMessage(model, "text.error.systemerror");
             returnView = "redirect: " + URL;
         }
         return returnView;
+    }
+
+    private boolean createUserDetails(Model model, UserRegistrationModel userRegistration) {
+        if (userDetailsDao.isDisplayNameTaken(userRegistration.getDisplayName())) {
+            addErrorMessage(model, "registration.text.error.uniquedisplayname");
+            return false;
+        }
+        UserDetails details = new UserDetails();
+        details.setDisplayName(userRegistration.getDisplayName());
+        details.setEmail(userRegistration.getEmail());
+        details.setUserId(userRegistration.getId());
+        return userDetailsDao.insertInitialDetails(details);
     }
 
     @PostMapping("/createtfa")
@@ -189,9 +209,9 @@ public class UserRegistrationController extends BaseFrontendController {
     }
 
     private String successfulRegistration(HttpServletRequest request, UserRegistrationModel model) {
-        String userId = authDao.getUserIdForUsername(model.getUsername());
-        String token = emailVerificationService.createNewVerificationToken(userId);
-        if (!emailService.sendVerificationEmail("someone@something.com", "someDisplayName", token, "https://" + request.getServerName() + ":" + request.getServerPort())) {
+        logger.debug("[Successful Registration] User created successfully, performing successful actions...");
+        String token = emailVerificationService.createNewVerificationToken(model.getId());
+        if (!emailService.sendVerificationEmail(model.getEmail(), model.getDisplayName(), token, request.getServerName(), String.valueOf(request.getServerPort()))) {
             logger.error("[Email Verification Service] Unable to send user initial email verification token.");
         }
         return "redirect: /login";
