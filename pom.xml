@@ -31,7 +31,7 @@
         <nanocaptcha.version>1.5</nanocaptcha.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
         <velocity.version>2.3</velocity.version>
-        <liquidbase.version>4.22.0</liquidbase.version>
+        <liquidbase.version>4.23.0</liquidbase.version>
     </properties>
     <dependencyManagement>
         <dependencies>
