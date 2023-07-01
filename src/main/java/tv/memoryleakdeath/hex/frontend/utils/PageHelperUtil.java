@@ -8,7 +8,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("PageHelperUtil")
 public class PageHelperUtil {
     private static final String LONG_DATE_FORMAT = "ccc d LLLL yyyy K:mm:ss a zzz";
     private static final String SHORT_DATE_FORMAT = "L/dd/yyyy K:mm:ss a zzz";
@@ -28,4 +28,5 @@ public class PageHelperUtil {
     public String jsEscape(String js) {
         return StringEscapeUtils.escapeEcmaScript(js);
     }
+
 }

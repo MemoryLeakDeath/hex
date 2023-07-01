@@ -17,3 +17,9 @@ body[data-bs-theme="dark"] {
     --bs-table-hover-color: var(--smokey-black);
     --bs-table-hover-bg: var(--silver);
 }
+
+.required:after {
+    content: '   Required';
+    font-size: 0.6em;
+    color: red; 
+}

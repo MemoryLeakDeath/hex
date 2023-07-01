@@ -21,19 +21,18 @@ public class TestEmailController extends BaseFrontendController {
 
     @GetMapping("/test")
     public String testEmail(HttpServletRequest request, Model model) {
-        addCommonModelAttributes(model);
         String to = "testuser@hex-example.com";
         try {
             boolean success = emailService.sendTestEmail(to);
             if (success) {
-                addSuccessMessage(model, "text.success.ok");
+                addSuccessMessage(request, "text.success.ok");
             } else {
                 logger.error("Email service returned an error!");
-                addErrorMessage(model, "text.error.systemerror");
+                addErrorMessage(request, "text.error.systemerror");
             }
         } catch (Exception e) {
             logger.error("Unable to send test email!", e);
-            addErrorMessage(model, "text.error.systemerror");
+            addErrorMessage(request, "text.error.systemerror");
         }
         return "test-email";
     }

@@ -19,12 +19,11 @@ public class HomeController extends BaseFrontendController {
     @GetMapping("/")
     public String view(HttpServletRequest request, Model model) {
         setPageTitle(request, model, "title.home");
-        addCommonModelAttributes(model);
         model.addAttribute("helloMsg", "Hello World!");
-        addWarningMessage(model, "text.warn.partial");
-        addErrorMessage(model, "text.error.systemerror");
-        addInfoMessage(model, "text.info.test");
-        addSuccessMessage(model, "text.success.ok");
+        addWarningMessage(request, "text.warn.partial");
+        addErrorMessage(request, "text.error.systemerror");
+        addInfoMessage(request, "text.info.test");
+        addSuccessMessage(request, "text.success.ok");
         return "index";
     }
 

@@ -32,13 +32,13 @@ public class EmailVerificationController extends BaseFrontendController {
             String userId = authDao.getUserIdForUsername(getUsername(request));
             boolean isVerified = verificationService.isTokenValid(userId, token);
             if (isVerified) {
-                addSuccessMessage(model, "email.verify.text.success");
+                addSuccessMessage(request, "email.verify.text.success");
             } else {
-                addErrorMessage(model, "email.verify.text.error");
+                addErrorMessage(request, "email.verify.text.error");
             }
         } catch (Exception e) {
             logger.error("Unable to verify email token", e);
-            addErrorMessage(model, "text.error.systemerror");
+            addErrorMessage(request, "text.error.systemerror");
         }
         return "redirect: /";
     }
