@@ -31,6 +31,7 @@
         <nanocaptcha.version>1.5</nanocaptcha.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
         <velocity.version>2.3</velocity.version>
+        <liquidbase.version>4.22.0</liquidbase.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -252,7 +253,7 @@
             <plugin>  
                 <groupId>org.liquibase</groupId>  
                 <artifactId>liquibase-maven-plugin</artifactId>  
-                <version>4.22.0</version>
+                <version>${liquidbase.version}</version>
                 <configuration>
                     <propertyFile>liquibase.properties</propertyFile>
                 </configuration>  
@@ -263,28 +264,6 @@
                       <version>${postgresql.version}</version>  
                   </dependency>  
               </dependencies>
-              <executions>
-<!--                  <execution>-->
-<!--                      <id>main-db-migrate</id>-->
-<!--                      <configuration>-->
-<!--                        <propertyFile>liquibase.properties</propertyFile>  -->
-<!--                      </configuration>-->
-<!--                      <phase>process-resources</phase>-->
-<!--                      <goals>-->
-<!--                          <goal>update</goal>-->
-<!--                      </goals>-->
-<!--                  </execution>-->
-<!--                  <execution>-->
-<!--                      <id>test-db-migrate</id>-->
-<!--                      <configuration>-->
-<!--                        <propertyFile>liquibase-test.properties</propertyFile>  -->
-<!--                      </configuration>-->
-<!--                      <phase>process-test-classes</phase>-->
-<!--                      <goals>-->
-<!--                          <goal>update</goal>-->
-<!--                      </goals>-->
-<!--                  </execution>-->
-              </executions>  
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -507,6 +486,46 @@
                     <filter>prod.properties</filter>
                 </filters>
             </build>        
+        </profile>
+        <profile>
+            <id>integration-tests</id>
+            <activation>
+                <property>
+                    <name>environment</name>
+                    <value>test</value>
+                </property>                
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>  
+                        <groupId>org.liquibase</groupId>  
+                        <artifactId>liquibase-maven-plugin</artifactId>  
+                        <version>${liquidbase.version}</version>
+                        <configuration>
+                            <propertyFile>liquibase.properties</propertyFile>
+                        </configuration>  
+                        <dependencies>  
+                          <dependency>  
+                              <groupId>org.postgresql</groupId>  
+                              <artifactId>postgresql</artifactId>  
+                              <version>${postgresql.version}</version>  
+                          </dependency>  
+                      </dependencies>
+                      <executions>
+                          <execution>
+                              <id>test-db-migrate</id>
+                              <configuration>
+                                <propertyFile>liquibase-test.properties</propertyFile>  
+                              </configuration>
+                              <phase>process-test-classes</phase>
+                              <goals>
+                                  <goal>update</goal>
+                              </goals>
+                          </execution>
+                      </executions>  
+                    </plugin>
+                </plugins>
+            </build>            
         </profile>
     </profiles>    
 </project>

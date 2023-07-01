@@ -2,85 +2,58 @@ package tv.memoryleakdeath.hex.test.config;
 
 import javax.sql.DataSource;
 
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import tv.memoryleakdeath.hex.config.HexDBConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-public class TestDBConfig extends HexDBConfig {
+@PropertySource("classpath:hex-test.properties")
+public class TestDBConfig {
 
+    @Value("${databaseUsername}")
     private String databaseUsername;
+
+    @Value("${databasePassword}")
     private String databasePassword;
+
+    @Value("${databaseUrl}")
     private String databaseUrl;
+
+    @Value("${databaseName}")
     private String databaseName;
+
+    @Value("${databaseServer}")
     private String databaseServer;
+
+    @Value("${databasePort}")
     private int databasePort;
 
-    @Override
+    @Bean
     public DataSource getDataSource() {
-        return null;
+        HikariDataSource ds = new HikariDataSource();
+        ds.setDataSourceClassName("org.postgresql.ds.PGSimpleDataSource");
+        ds.setUsername(databaseUsername);
+        ds.setPassword(databasePassword);
+        ds.addDataSourceProperty("applicationName", "hex");
+        ds.addDataSourceProperty("databaseName", databaseName);
+        ds.addDataSourceProperty("serverNames", new String[] { databaseServer });
+        ds.addDataSourceProperty("portNumbers", new int[] { databasePort });
+        return ds;
     }
 
     @Bean
     public JdbcTemplate getJdbcTemplate() {
-        return Mockito.mock(JdbcTemplate.class);
+        return new JdbcTemplate(getDataSource());
     }
 
     @Bean
     public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
-        return Mockito.mock(NamedParameterJdbcTemplate.class);
-    }
-
-    public String getDatabaseUsername() {
-        return databaseUsername;
-    }
-
-    public void setDatabaseUsername(String databaseUsername) {
-        this.databaseUsername = databaseUsername;
-    }
-
-    public String getDatabasePassword() {
-        return databasePassword;
-    }
-
-    public void setDatabasePassword(String databasePassword) {
-        this.databasePassword = databasePassword;
-    }
-
-    public String getDatabaseUrl() {
-        return databaseUrl;
-    }
-
-    public void setDatabaseUrl(String databaseUrl) {
-        this.databaseUrl = databaseUrl;
-    }
-
-    public String getDatabaseName() {
-        return databaseName;
-    }
-
-    public void setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
-    }
-
-    public String getDatabaseServer() {
-        return databaseServer;
-    }
-
-    public void setDatabaseServer(String databaseServer) {
-        this.databaseServer = databaseServer;
-    }
-
-    public int getDatabasePort() {
-        return databasePort;
-    }
-
-    public void setDatabasePort(int databasePort) {
-        this.databasePort = databasePort;
+        return new NamedParameterJdbcTemplate(getDataSource());
     }
 
 }
