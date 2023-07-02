@@ -40,7 +40,7 @@ public class HexWebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/css/").resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
         registry.addResourceHandler("/webfonts/**").addResourceLocations("/WEB-INF/webfonts/").resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
         registry.addResourceHandler("/images/**").addResourceLocations("/WEB-INF/images/").resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
-        registry.addResourceHandler("/favicon.png").addResourceLocations("/WEB-INF/images/favicon.png").resourceChain(true).addResolver(new EncodedResourceResolver())
+        registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/images/favicon.ico").resourceChain(true).addResolver(new EncodedResourceResolver())
                 .addResolver(new PathResourceResolver());
     }
 

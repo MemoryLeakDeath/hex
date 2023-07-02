@@ -13,7 +13,7 @@ public class CSPHeaderFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        response.setHeader("Content-Security-Policy", "default-src 'self' data:; script-src 'self' 'nonce-browser-sync';");
+        response.setHeader("Content-Security-Policy", "default-src 'self' data:; script-src 'self' 'nonce-browser-sync'; img-src 'self' data: www.gravatar.com;");
         filterChain.doFilter(request, response);
     }
 

@@ -33,4 +33,5 @@ public class UserRegistrationModel extends Auth {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }

@@ -8,7 +8,7 @@
 			    <span class="navbar-toggler-icon"></span>
 			  </button>
 			  <div class="collapse navbar-collapse" id="navbarNav">
-			    <ul class="navbar-nav me-auto">
+			    <ul class="navbar-nav me-4">
 			      <li class="nav-item active">
 			        <a class="nav-link" href="#" th:text="#{text.nav.browse}"></a>
 			      </li>
@@ -19,29 +19,31 @@
 			    <form class="form-inline my-2 my-lg-0 col-8">
 			      <input class="form-control mr-sm-2" type="search" th:placeholder="#{button.placeholder.search}" th:aria-label="#{button.placeholder.search}">
 			    </form>
-			    <ul class="navbar-nav ms-auto">
+			    <ul class="navbar-nav ms-auto me-3">
 			      <li class="nav-item">
 			        <a class="nav-link" href="#"><i class="far fa-bell"></i></a>
 			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="#">Username</a>
+			      <li class="nav-item" sec:authorize="isAuthenticated()">
+			        <div class="nav-link" sec:authentication="principal.displayName"></div>
 			      </li>
 			      <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
 			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			          <img src="avatar_placeholder.png" alt="Avatar" />
+			          <th:block th:with="avatarId = ${#authentication.principal.gravatarId}">
+				          <img th:src="${@GravatarService.getAvatarUrl(avatarId)}" alt="Avatar" />
+			          </th:block>
 			        </a>
 			        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-			          <a class="dropdown-item" href="#">Action</a>
-			          <a class="dropdown-item" href="#">Another action</a>
-			          <a class="dropdown-item" href="#">Something else here</a>
+			          <a id="logoutbutton" class="dropdown-item logout" href="#" th:text="#{button.logout}"></a>
 			        </div>
 			      </li>
 			      <li class="nav-item" sec:authorize="isAnonymous()">
-			         <button class="btn btn-primary" th:text="#{button.login}"></button>
+			         <a class="btn btn-primary" th:text="#{button.login}" th:href="@{/login}"></a>
 			      </li>
 			    </ul>
 			  </div>
 		  </div>
 		</nav>
+		<form id="logoutform" th:action="@{/logout}" method="POST">
+		</form>		
 	</div>
 </html>

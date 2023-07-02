@@ -12,6 +12,7 @@ public class UserDetails implements Serializable {
     private String email;
     private Boolean emailVerified;
     private Date lastUpdated;
+    private String gravatarId;
 
     public String getUserId() {
         return userId;
@@ -51,5 +52,13 @@ public class UserDetails implements Serializable {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public String getGravatarId() {
+        return gravatarId;
+    }
+
+    public void setGravatarId(String gravatarId) {
+        this.gravatarId = gravatarId;
     }
 }

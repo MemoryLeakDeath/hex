@@ -1,17 +1,18 @@
 package tv.memoryleakdeath.hex.frontend.controller;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.LocaleResolver;
 
 import jakarta.servlet.http.HttpServletRequest;
+import tv.memoryleakdeath.hex.common.pojo.HexUser;
 import tv.memoryleakdeath.hex.frontend.controller.interceptors.ThymeleafLayoutInterceptor;
 
 public abstract class BaseFrontendController {
@@ -45,10 +46,26 @@ public abstract class BaseFrontendController {
         model.addAttribute(ThymeleafLayoutInterceptor.LAYOUT_NAME_VARIABLE, layoutRelativePath);
     }
 
-    protected String getUsername(HttpServletRequest request) {
-        Principal principal = request.getUserPrincipal();
-        if (principal != null) {
-            return principal.getName();
+    protected String getUserId(HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
+        if (token != null && token.getPrincipal() != null) {
+            return ((HexUser) token.getPrincipal()).getId();
+        }
+        return null;
+    }
+
+    protected String getDisplayName(HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
+        if (token != null && token.getPrincipal() != null) {
+            return ((HexUser) token.getPrincipal()).getDisplayName();
+        }
+        return null;
+    }
+
+    protected HexUser getUser(HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
+        if (token != null && token.getPrincipal() != null) {
+            return (HexUser) token.getPrincipal();
         }
         return null;
     }

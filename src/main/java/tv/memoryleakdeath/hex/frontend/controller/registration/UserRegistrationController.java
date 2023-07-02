@@ -25,6 +25,7 @@ import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
 import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
 import tv.memoryleakdeath.hex.backend.email.EmailService;
 import tv.memoryleakdeath.hex.backend.email.EmailVerificationService;
+import tv.memoryleakdeath.hex.backend.gravatar.GravatarService;
 import tv.memoryleakdeath.hex.backend.security.HexCaptchaService;
 import tv.memoryleakdeath.hex.backend.security.HexTotpService;
 import tv.memoryleakdeath.hex.backend.security.UserAuthService;
@@ -63,6 +64,9 @@ public class UserRegistrationController extends BaseFrontendController {
 
     @Autowired
     private UserRegistrationModelValidator<UserRegistrationModel> registrationValidator;
+
+    @Autowired
+    private GravatarService gravatarService;
 
     @GetMapping("/")
     public String registerNewUser(HttpServletRequest request, Model model) {
@@ -156,6 +160,7 @@ public class UserRegistrationController extends BaseFrontendController {
         details.setDisplayName(userRegistration.getDisplayName());
         details.setEmail(userRegistration.getEmail());
         details.setUserId(userRegistration.getId());
+        details.setGravatarId(gravatarService.getHash(details.getEmail()));
         return userDetailsDao.insertInitialDetails(details);
     }
 

@@ -18,6 +18,9 @@ public class EmailVerificationDao {
     private JdbcTemplate jdbcTemplate;
 
     public boolean isVerified(String userId, String token) {
+        if (userId == null || token == null) {
+            return false;
+        }
         String sql = "select count(*) from emailverification where userid = ?::uuid and token = ? and expirationdate < now()";
         int result = jdbcTemplate.queryForObject(sql, Integer.class);
         return (result == 1);
