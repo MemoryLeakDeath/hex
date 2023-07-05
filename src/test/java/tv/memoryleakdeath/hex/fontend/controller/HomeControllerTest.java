@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.ContextConfiguration;
 
 import tv.memoryleakdeath.hex.backend.dao.TestDao;
+import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
 
+@ContextConfiguration(classes = { HomeControllerTest.Config.class })
 public class HomeControllerTest extends AbstractControllerTest {
 
     @Configuration
@@ -40,4 +43,13 @@ public class HomeControllerTest extends AbstractControllerTest {
 		.andExpect(model().attribute("testResults", false))
 		.andExpect(model().attribute("view", "test"));
 	}
+
+    @Test
+    public void testHomepage() throws Exception {
+        getMockMvc().perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("layout/main"))
+                .andExpect(model().attribute(BaseFrontendController.PAGE_TITLE, "Home"))
+                .andExpect(model().attribute("view", "index"));
+    }
 }

@@ -1,6 +1,7 @@
 package tv.memoryleakdeath.hex.fontend.controller;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,8 @@ import tv.memoryleakdeath.hex.config.HexWebConfig;
 import tv.memoryleakdeath.hex.test.config.MockDBConfig;
 
 @ExtendWith(MockitoExtension.class)
-@SpringJUnitWebConfig({ HexWebConfig.class, MockDBConfig.class, HexApplicationConfig.class, HexSecurity.class, AbstractControllerTest.Config.class })
+@SpringJUnitWebConfig({ HexWebConfig.class, MockDBConfig.class, HexApplicationConfig.class, HexSecurity.class })
+@Tag("unit-test")
 public abstract class AbstractControllerTest {
     private MockMvc mockMvc;
 
@@ -34,7 +36,6 @@ public abstract class AbstractControllerTest {
 
     @Configuration
     static abstract class Config {
-
     }
 
 }

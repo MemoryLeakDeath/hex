@@ -8,10 +8,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
+@EnableTransactionManagement
 @PropertySource("classpath:hex.properties")
 public class HexDBConfig {
 
@@ -44,6 +48,11 @@ public class HexDBConfig {
         ds.addDataSourceProperty("serverNames", new String[] { databaseServer });
         ds.addDataSourceProperty("portNumbers", new int[] { databasePort });
         return ds;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(getDataSource());
     }
 
     @Bean

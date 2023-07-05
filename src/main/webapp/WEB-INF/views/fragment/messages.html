@@ -9,7 +9,7 @@
 	          </span>
 	          <button type="button" class="btn-close float-end" data-bs-dismiss="alert" th:aria-label="#{button.close}"></button>
 	       </div>
-	       [[${errorList.clear()}]]
+           [[${errorList != null ? errorList.clear() : ''}]]
        </th:block>
        <th:block th:with="warnList = ${#ctx.getVariable('session').get(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).WARNING_MESSAGES)}">
 	       <div th:each="warn : ${warnList}" class="alert alert-warning alert-dismissable" role="alert">
@@ -19,7 +19,7 @@
 	          </span>
 	          <button type="button" class="btn-close float-end" data-bs-dismiss="alert" th:aria-label="#{button.close}"></button>
 	       </div>
-           [[${warnList.clear()}]]
+          [[${warnList != null ? warnList.clear() : ''}]]
        </th:block>
        <th:block th:with="successList = ${#ctx.getVariable('session').get(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).SUCCESS_MESSAGES)}">
 	       <div th:each="success : ${successList}" class="alert alert-success alert-dismissable" role="alert">
@@ -29,7 +29,7 @@
 	          </span>
 	          <button type="button" class="btn-close float-end" data-bs-dismiss="alert" th:aria-label="#{button.close}"></button>
 	       </div>
-           [[${successList.clear()}]]
+         [[${successList != null ? successList.clear() : ''}]]
        </th:block>
        <th:block th:with="infoList = ${#ctx.getVariable('session').get(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).INFO_MESSAGES)}">
 	       <div th:each="info : ${infoList}" class="alert alert-success alert-info alert-dismissable" role="alert">
@@ -39,7 +39,7 @@
 	          </span>
 	          <button type="button" class="btn-close float-end" data-bs-dismiss="alert" th:aria-label="#{button.close}"></button>
 	       </div>
-           [[${infoList.clear()}]]
+        [[${infoList != null ? infoList.clear() : ''}]]
        </th:block>
     </div>
 </html>
