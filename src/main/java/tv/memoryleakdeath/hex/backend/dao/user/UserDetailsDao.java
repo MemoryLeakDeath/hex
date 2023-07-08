@@ -16,7 +16,7 @@ import tv.memoryleakdeath.hex.common.pojo.UserDetails;
 @Repository
 public class UserDetailsDao {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsDao.class);
-    private static final String COLUMNS[] = { "userid", "displayname", "email", "emailverified", "lastupdated", "gravatarid" };
+    private static final String[] COLUMNS = { "userid", "displayname", "email", "emailverified", "lastupdated", "gravatarid" };
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

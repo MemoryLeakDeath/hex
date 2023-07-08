@@ -34,15 +34,15 @@ public class HomeControllerTest extends AbstractControllerTest {
     private TestDao mockTestDao;
 
     @Test
-	public void testTestDatabase() throws Exception {
-		when(mockTestDao.testDatabase()).thenReturn(false);
-		
-		getMockMvc().perform(get("/test"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("layout/main"))
-		.andExpect(model().attribute("testResults", false))
-		.andExpect(model().attribute("view", "test"));
-	}
+    public void testTestDatabase() throws Exception {
+        when(mockTestDao.testDatabase()).thenReturn(false);
+        
+        getMockMvc().perform(get("/test"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("layout/main"))
+        .andExpect(model().attribute("testResults", false))
+        .andExpect(model().attribute("view", "test"));
+    }
 
     @Test
     public void testHomepage() throws Exception {

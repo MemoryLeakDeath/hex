@@ -24,7 +24,6 @@ public class HexCaptchaService {
     public static final int CAPTCHA_HEIGHT = 50;
     public static final int CAPTCHA_LENGTH = 7;
     
-
     public ImageCaptcha generateImageCaptcha() {
         return new ImageCaptcha.Builder(CAPTCHA_WIDTH, CAPTCHA_HEIGHT)
                 .addContent(new LatinContentProducer(CAPTCHA_LENGTH))
