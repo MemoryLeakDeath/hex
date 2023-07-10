@@ -37,7 +37,9 @@
 			        </div>
 			      </li>
 			      <li class="nav-item" sec:authorize="isAnonymous()">
-			         <a class="btn btn-primary" th:text="#{button.login}" th:href="@{/login}"></a>
+			         <a class="btn btn-secondary me-2" th:text="#{button.register}" th:href="@{/registration/}" role="button"></a>
+			         <a class="btn btn-primary login" th:text="#{button.login}" href="#" th:data-url="@{/login}" data-id="#loginModalContents" role="button"></a>
+			         <th:block th:replace="~{fragment/login-modal :: loginModal}"></th:block>
 			      </li>
 			    </ul>
 			  </div>

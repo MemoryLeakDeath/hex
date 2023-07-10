@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<div th:fragment="content">
-	    <form th:action="@{/logincheck}" method="POST">
-	        <div>
-	            <label for="username">Username:</label>
-	            <input type="text" id="username" name="username" autofocus="autofocus" autocomplete="off" required="required"/>
-	        </div>
-	        <div>
-	            <label for="password">Password:</label>
-	            <input type="password" id="password" name="password" autocomplete="off" required="required"/>
-	        </div>
-               <div>
-                   <label for="2fa">Authentication Code (optional):</label>
-                   <input type="text" id="2fa" name="2fa" autocomplete="one-time-password"/>
-               </div>
-               <div>
-                   <label for="rememberme">Remember</label>
-                   <input type="checkbox" id="rememberme" name="rememberme" value="true"/>
-               </div>
-	        <button type="submit" class="btn-primary">Login</button>
-	    </form>
+		<form th:action="@{/logincheck}" id="loginForm" method="POST">
+		    <div class="mb-2">
+		        <label for="username" class="form-label required" th:text="#{login.text.username}"></label>
+		        <input type="text" id="username" class="form-control" name="username" autofocus="autofocus" autocomplete="off" required="required" maxlength="50"/>
+		    </div>
+		    <div class="mb-2">
+		        <label for="password" class="form-label required" th:text="#{login.text.password}"></label>
+		        <input type="password" id="password" class="form-control" name="password" autocomplete="off" required="required" maxlength="100"/>
+		    </div>
+	       <div class="mb-2">
+	           <label for="2fa" class="form-label" th:text="#{login.text.mfa}"></label>
+	           <input type="text" id="2fa" class="form-control" name="2fa" autocomplete="one-time-password" maxlength="6"/>
+	       </div>
+	       <div class="mb-2">
+              <div class="form-check form-switch mb-4">                                 
+				<label for="rememberme" class="form-check-label" th:text="#{login.text.rememberme}"></label>
+				<input type="checkbox" id="rememberme" class="form-check-input" name="rememberme" value="true"/>
+              </div>
+	       </div>
+		</form>
 	</div>
 </html>

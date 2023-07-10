@@ -23,6 +23,9 @@ public abstract class BaseFrontendController {
     public static final String SUCCESS_MESSAGES = "pageSuccesses";
     public static final String IMAGE_CAPTCHA = "imageCaptcha";
     public static final String AUDIO_CAPTCHA = "audioCaptcha";
+    public static final String CSS_SCRIPTS = "pageCSSScripts";
+    public static final String JS_SCRIPTS = "pageJSScripts";
+    public static final String NONCE = "nonce";
 
     @Autowired
     private MessageSource messageSource;
@@ -44,6 +47,26 @@ public abstract class BaseFrontendController {
 
     protected void setLayout(Model model, String layoutRelativePath) {
         model.addAttribute(ThymeleafLayoutInterceptor.LAYOUT_NAME_VARIABLE, layoutRelativePath);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void addPageCSS(Model model, String relativePath) {
+        List<String> cssList = (List<String>) model.getAttribute(CSS_SCRIPTS);
+        if (cssList == null) {
+            cssList = new ArrayList<>();
+            model.addAttribute(CSS_SCRIPTS, cssList);
+        }
+        cssList.add(relativePath);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void addPageJS(Model model, String relativePath) {
+        List<String> jsList = (List<String>) model.getAttribute(JS_SCRIPTS);
+        if (jsList == null) {
+            jsList = new ArrayList<>();
+            model.addAttribute(JS_SCRIPTS, jsList);
+        }
+        jsList.add(relativePath);
     }
 
     protected String getUserId(HttpServletRequest request) {

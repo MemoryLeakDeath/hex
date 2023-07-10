@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -73,7 +74,8 @@ public class HexSecurity {
     @Bean
     @Order(2)
     public SecurityFilterChain authenticatedFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-        http.cors(cors -> cors.disable()).securityMatcher("/settings/**", "/dashboard/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("USER"))
+        http.headers(commonHeaders()).cors(cors -> cors.disable()).securityMatcher("/settings/**", "/dashboard/**")
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("USER"))
                 .authenticationManager(authManager)
                 .rememberMe(rememberMeConfig())
                 .formLogin(formLogin()).logout(formLogout());
@@ -83,7 +85,8 @@ public class HexSecurity {
     @Bean
     @Order(3)
     public SecurityFilterChain adminFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-        http.cors(cors -> cors.disable()).securityMatcher("/admin/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"))
+        http.headers(commonHeaders()).cors(cors -> cors.disable()).securityMatcher("/admin/**")
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"))
                 .authenticationManager(authManager)
                 .formLogin(formLogin()).logout(formLogout());
         return http.build();
@@ -92,7 +95,7 @@ public class HexSecurity {
     @Bean
     @Order(4)
     public SecurityFilterChain allAccessFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-        http.cors(cors -> cors.disable()).securityMatcher("/**")
+        http.headers(commonHeaders()).cors(cors -> cors.disable()).securityMatcher("/**")
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll()).rememberMe(rememberMeConfig())
                 .authenticationManager(authManager)
                 .formLogin(formLogin()).logout(formLogout());
@@ -110,6 +113,10 @@ public class HexSecurity {
 
     private Customizer<RememberMeConfigurer<HttpSecurity>> rememberMeConfig() {
         return me -> me.rememberMeServices(rememberMeService);
+    }
+
+    private Customizer<HeadersConfigurer<HttpSecurity>> commonHeaders() {
+        return headers -> headers.frameOptions(frame -> frame.deny());
     }
 
 }

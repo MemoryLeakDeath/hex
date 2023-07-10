@@ -23,6 +23,7 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+import tv.memoryleakdeath.hex.frontend.controller.interceptors.CSPHeaderInterceptor;
 import tv.memoryleakdeath.hex.frontend.controller.interceptors.HexControllerInterceptor;
 import tv.memoryleakdeath.hex.frontend.controller.interceptors.ThymeleafLayoutInterceptor;
 
@@ -76,6 +77,7 @@ public class HexWebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new HexControllerInterceptor());
         registry.addInterceptor(new ThymeleafLayoutInterceptor());
         registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(new CSPHeaderInterceptor());
     }
 
     @Bean
