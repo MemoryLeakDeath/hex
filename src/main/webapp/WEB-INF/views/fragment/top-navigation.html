@@ -24,12 +24,12 @@
 			        <a class="nav-link" href="#"><i class="far fa-bell"></i></a>
 			      </li>
 			      <li class="nav-item" sec:authorize="isAuthenticated()">
-			        <div class="nav-link" sec:authentication="principal.displayName"></div>
+			        <div id="userDisplayName" class="nav-link" sec:authentication="principal.displayName"></div>
 			      </li>
 			      <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
 			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			          <th:block th:with="avatarId = ${#authentication.principal.gravatarId}">
-				          <img th:src="${@GravatarService.getAvatarUrl(avatarId)}" alt="Avatar" />
+				          <img id="userAvatar" th:src="${@GravatarService.getAvatarUrl(avatarId)}" alt="Avatar" />
 			          </th:block>
 			        </a>
 			        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -37,8 +37,8 @@
 			        </div>
 			      </li>
 			      <li class="nav-item" sec:authorize="isAnonymous()">
-			         <a class="btn btn-secondary me-2" th:text="#{button.register}" th:href="@{/registration/}" role="button"></a>
-			         <a class="btn btn-primary login" th:text="#{button.login}" href="#" th:data-url="@{/login}" data-id="#loginModalContents" role="button"></a>
+			         <a class="btn btn-secondary me-2" id="topNavRegistrationButton" th:text="#{button.register}" th:href="@{/registration/}" role="button"></a>
+			         <a class="btn btn-primary login" id="topNavLoginButton" th:text="#{button.login}" href="#" th:data-url="@{/login}" data-id="#loginModalContents" role="button"></a>
 			         <th:block th:replace="~{fragment/login-modal :: loginModal}"></th:block>
 			      </li>
 			    </ul>
