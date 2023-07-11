@@ -1,0 +1,3 @@
+id,emailtype,locale,subject,body
+1,test,NULL,`$testSubject`,`This is a test email, the test email variable is set to: $testVar`
+2,verification,NULL,`Please verify your email $displayName`,`Thank you for registering with Hex, please verify your email address by clicking this link: $generatedUrl`

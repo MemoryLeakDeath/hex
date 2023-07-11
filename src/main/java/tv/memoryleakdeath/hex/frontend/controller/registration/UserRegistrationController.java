@@ -1,10 +1,12 @@
 package tv.memoryleakdeath.hex.frontend.controller.registration;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioFileFormat.Type;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,8 +108,8 @@ public class UserRegistrationController extends BaseFrontendController {
 
     private String getEncodedAudioCaptcha(HttpServletRequest request, AudioCaptcha audioCaptcha) {
         String encodedCaptcha = "";
-        try (InputStream is = audioCaptcha.getAudio().getAudioInputStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            is.transferTo(out);
+        try (AudioInputStream is = audioCaptcha.getAudio().getAudioInputStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            AudioSystem.write(is, Type.WAVE, out);
             out.flush();
             byte[] captchaAudioBytes = out.toByteArray();
             encodedCaptcha = Base64.getEncoder().encodeToString(captchaAudioBytes);

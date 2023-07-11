@@ -11,6 +11,7 @@ import net.logicsquad.nanocaptcha.audio.AudioCaptcha;
 import net.logicsquad.nanocaptcha.audio.noise.RandomNoiseProducer;
 import net.logicsquad.nanocaptcha.audio.producer.RandomNumberVoiceProducer;
 import net.logicsquad.nanocaptcha.content.LatinContentProducer;
+import net.logicsquad.nanocaptcha.content.NumbersContentProducer;
 import net.logicsquad.nanocaptcha.image.ImageCaptcha;
 import net.logicsquad.nanocaptcha.image.backgrounds.SquigglesBackgroundProducer;
 import net.logicsquad.nanocaptcha.image.noise.CurvedLineNoiseProducer;
@@ -39,7 +40,11 @@ public class HexCaptchaService {
     }
 
     public AudioCaptcha generateAudioCaptcha() {
-        return new AudioCaptcha.Builder().addContent().addVoice(new RandomNumberVoiceProducer(Locale.ENGLISH)).addNoise(new RandomNoiseProducer()).build();
+        return new AudioCaptcha.Builder()
+                .addContent(new NumbersContentProducer(CAPTCHA_LENGTH))
+                .addVoice(new RandomNumberVoiceProducer(Locale.ENGLISH))
+                .addNoise(new RandomNoiseProducer())
+                .build();
     }
 
     public boolean verifyAudioCaptcha(AudioCaptcha captcha, String answer) {

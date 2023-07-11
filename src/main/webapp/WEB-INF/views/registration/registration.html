@@ -11,7 +11,7 @@
 		  </div>
 		  <div class="mb-2">
 		      <label for="password" class="form-label required" th:text="#{text.password}"></label>
-		      <input type="password" class="form-control" th:errorclass="is-invalid" id="password" th:field="*{password}" autocomplete="new-password" required="required" maxlength="100" aria-describedby="password-error"/>
+		      <input type="password" class="form-control" th:errorclass="is-invalid" id="password" th:field="*{password}" th:placeholder="#{registration.placeholder.password}" autocomplete="new-password" required="required" pattern=".{10,100}" maxlength="100" minlength="10" aria-describedby="password-error"/>
               <div id="password-error" class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
 		  </div>
           <div class="mb-2">
@@ -30,14 +30,19 @@
 		  </div>
 		  <div class="container">
 		      <div class="form-group">
-		          <img th:alt="#{registration.alt.captcha}" th:src="${imageCaptcha}">
-		          <input type="text" class="form-control" th:errorclass="is-invalid" id="captchaAnswer" th:field="*{captchaAnswer}" autocomplete="none" required="required" aria-describedby="captcha-error"/>
+		          <div class="row">
+		              <div class="col-md-auto">
+		                  <img th:alt="#{registration.alt.captcha}" th:src="${imageCaptcha}">
+		              </div>
+		              <div class="col-md-auto">
+			              <audio controls th:aria-label="#{registration.alt.captcha}">
+			                <source th:src="${audioCaptcha}"/>
+			              </audio>            
+		              </div>		          
+		          </div>
+		          <input type="text" class="form-control" th:errorclass="is-invalid" id="captchaAnswer" th:field="*{captchaAnswer}" autocomplete="none" required="required" maxlength="7" aria-describedby="captcha-error"/>
 	              <div id="captcha-error" class="invalid-feedback" th:if="${#fields.hasErrors('captchaAnswer')}" th:errors="*{captchaAnswer}"></div>
 		      </div>
-		      <!-- 
-              <audio controls th:src="${audioCaptcha}" th:aria-label="#{registration.alt.captcha}">
-              </audio>		      
-		       -->
 		  </div>
 		  <button type="submit" class="btn btn-primary" th:text="#{registration.button.signup}"></button>
 		</form>

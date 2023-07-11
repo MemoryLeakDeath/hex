@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.logicsquad.nanocaptcha.audio.AudioCaptcha;
 import net.logicsquad.nanocaptcha.image.ImageCaptcha;
 import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
 import tv.memoryleakdeath.hex.backend.security.HexCaptchaService;
@@ -22,6 +23,7 @@ public class UserRegistrationModelValidator<T extends UserRegistrationModel> {
     private static final int MAX_EMAIL_LENGTH = 100;
     private static final int MAX_USERNAME_LENGTH = 50;
     private static final int MAX_PASSWORD_LENGTH = 100;
+    private static final int MIN_PASSWORD_LENGTH = 10;
 
     private EmailValidator emailValidator = EmailValidator.getInstance(false, false);
 
@@ -33,7 +35,7 @@ public class UserRegistrationModelValidator<T extends UserRegistrationModel> {
 
     public void validate(HttpServletRequest request, T target, Errors errors) {
         if (StringUtils.isBlank(target.getCaptchaAnswer())
-                || !captchaService.verifyImageCaptcha((ImageCaptcha) request.getSession(false).getAttribute(BaseFrontendController.IMAGE_CAPTCHA), target.getCaptchaAnswer())) {
+                || !checkCaptcha(request, target.getCaptchaAnswer())) {
             errors.rejectValue("captchaAnswer", "registration.text.error.captcha");
         }
 
@@ -45,7 +47,7 @@ public class UserRegistrationModelValidator<T extends UserRegistrationModel> {
             errors.rejectValue("username", "registration.text.error.usernameexists");
         }
 
-        if (StringUtils.isBlank(target.getPassword()) || target.getPassword().length() > MAX_PASSWORD_LENGTH) {
+        if (StringUtils.isBlank(target.getPassword()) || target.getPassword().length() > MAX_PASSWORD_LENGTH || target.getPassword().length() < MIN_PASSWORD_LENGTH) {
             errors.rejectValue("password", "registration.text.error.passwordinvalid");
         }
 
@@ -57,5 +59,10 @@ public class UserRegistrationModelValidator<T extends UserRegistrationModel> {
         if (StringUtils.isBlank(target.getEmail()) || !emailValidator.isValid(target.getEmail()) || target.getEmail().length() > MAX_EMAIL_LENGTH) {
             errors.rejectValue("email", "registration.text.error.emailinvalid");
         }
+    }
+
+    private boolean checkCaptcha(HttpServletRequest request, String answer) {
+        return captchaService.verifyImageCaptcha((ImageCaptcha) request.getSession(false).getAttribute(BaseFrontendController.IMAGE_CAPTCHA), answer)
+                || captchaService.verifyAudioCaptcha((AudioCaptcha) request.getSession(false).getAttribute(BaseFrontendController.AUDIO_CAPTCHA), answer);
     }
 }
