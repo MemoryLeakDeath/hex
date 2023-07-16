@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:fragment="settings-nav">
+        <!-- Sidebar -->
+        <div class="col-2 d-flex flex-column bg-dark vh-100" style="width: 200px;">
+            <a href="#" class="d-flex align-items-center justify-content-between p-3 link-light text-decoration-none border-bottom">
+                <i class="fas fa-home fs-4 me-3"></i>
+                <span th:text="#{settings.nav.text.basicinfo}"></span>
+            </a>
+            <a href="#" class="d-flex align-items-center justify-content-between p-3 link-light text-decoration-none border-bottom">
+                <i class="fas fa-lock fs-4 me-3"></i>
+                <span th:text="#{settings.nav.text.password}"></span>
+            </a>
+            <a href="#" class="d-flex align-items-center justify-content-between p-3 link-light text-decoration-none border-bottom">
+                <i class="fas fa-key fs-4 me-3"></i>
+                <span th:text="#{settings.nav.text.tfa}"></span>
+            </a>
+        </div>
+    </th:block>
+</html>

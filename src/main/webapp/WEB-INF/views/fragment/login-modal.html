@@ -12,12 +12,11 @@
                    </div>
                    <div class="modal-footer">
                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.close}"></button>
-                       <button type="button" id="loginButton" class="btn btn-primary" th:text="#{button.login}"></button>
+                       <button type="button" id="loginButton" class="btn btn-primary login" th:text="#{button.login}"></button>
                    </div>
                </div>
            </div>
         </div>
-        <!--  [[${nonce}]] -->
        <script type="text/javascript" th:src="@{/js/login.js}" th:nonce="${nonce}"></script>
     </div>
 </html>

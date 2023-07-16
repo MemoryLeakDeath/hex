@@ -45,15 +45,15 @@ public class UserDetailsDao {
     }
 
     @Transactional
-    public boolean updateDetails(UserDetails details) {
-        String sql = "update from userdetails set displayname = ?, email = ?, lastupdated = now(), gravatarid = ? where userid = ?";
+    public boolean updateBasicDetails(UserDetails details) {
+        String sql = "update userdetails set displayname = ?, email = ?, lastupdated = now(), gravatarid = ? where userid = ?::uuid";
         int rows = jdbcTemplate.update(sql, details.getDisplayName(), details.getEmail(), details.getGravatarId(), details.getUserId());
         return (rows > 0);
     }
 
     @Transactional
     public boolean updateEmailVerified(String userId, boolean verified) {
-        String sql = "update from userdetails set emailverified = ?, lastupdated = now() where userid = ?";
+        String sql = "update userdetails set emailverified = ?, lastupdated = now() where userid = ?::uuid";
         int rows = jdbcTemplate.update(sql, verified, userId);
         return (rows > 0);
     }
@@ -67,5 +67,14 @@ public class UserDetailsDao {
     public int getReusedEmailCount(String email) {
         String sql = "select count(*) from userdetails where email = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, email);
+    }
+
+    public String getUserEmail(String userId) {
+        String sql = "select email from userdetails where userid = ?::uuid";
+        List<String> results = jdbcTemplate.queryForList(sql, String.class, userId);
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
     }
 }

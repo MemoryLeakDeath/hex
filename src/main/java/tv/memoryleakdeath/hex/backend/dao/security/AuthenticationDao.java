@@ -119,4 +119,24 @@ public class AuthenticationDao {
     public boolean updateUserTfa(String username, Boolean useTfa) {
         return updateUserTfa(username, useTfa, null, null);
     }
+
+    @Transactional
+    public boolean updateFailedAttempts(String username, boolean reset) {
+        String incrementSql = "update identities set failedattempts = failedattempts + 1, lastattemptedlogin = now() where username = ?";
+        String resetSql = "update identities set failedattempts = 0, lastattemptedlogin = now() where username = ?";
+        int rows = 0;
+        if (reset) {
+            rows = jdbcTemplate.update(resetSql, username);
+        } else {
+            rows = jdbcTemplate.update(incrementSql, username);
+        }
+        return (rows == 1);
+    }
+
+    @Transactional
+    public boolean updateLastAttemptDate(String username) {
+        String sql = "update identities set lastattemptedlogin = now() where username = ?";
+        int rows = jdbcTemplate.update(sql, username);
+        return (rows == 1);
+    }
 }

@@ -46,6 +46,9 @@ public class CSPHeaderInterceptor implements HandlerInterceptor {
             nonce = "";
         }
         response.setHeader("Content-Security-Policy", CSP_POLICY.formatted(nonce));
+        if (modelAndView != null && modelAndView.getModel() != null) {
+            modelAndView.getModel().put(BaseFrontendController.NONCE, nonce);
+        }
     }
 
 }

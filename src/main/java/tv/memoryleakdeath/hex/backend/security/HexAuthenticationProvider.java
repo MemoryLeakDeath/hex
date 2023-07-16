@@ -35,16 +35,30 @@ public class HexAuthenticationProvider extends DaoAuthenticationProvider {
 
         HexWebAuthenticationDetails details = (HexWebAuthenticationDetails) authentication.getDetails();
         if (details == null) {
+            authDao.updateFailedAttempts(user.getUsername(), false);
             throw new BadCredentialsException("No User Details were created!");
         }
 
         if (Boolean.TRUE.equals(user.getUseTfa())) {
             String authCode = details.getVerificationCode();
             if (!totpService.verify(user.getSecret(), authCode)) {
+                authDao.updateFailedAttempts(user.getUsername(), false);
                 throw new BadCredentialsException("2FA code incorrect");
             }
         }
-        return super.authenticate(authentication);
+        try {
+            Authentication check = super.authenticate(authentication);
+            if (!check.isAuthenticated()) {
+                authDao.updateFailedAttempts(user.getUsername(), false);
+            } else {
+                // successful authentication
+                authDao.updateFailedAttempts(user.getUsername(), true);
+            }
+            return check;
+        } catch (AuthenticationException e) {
+            authDao.updateFailedAttempts(user.getUsername(), false);
+            throw e;
+        }
     }
 
     @Override

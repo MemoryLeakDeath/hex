@@ -1,31 +1,17 @@
 package tv.memoryleakdeath.hex.frontend.controller.registration;
 
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import jakarta.servlet.http.HttpServletRequest;
-import net.logicsquad.nanocaptcha.audio.AudioCaptcha;
-import net.logicsquad.nanocaptcha.image.ImageCaptcha;
 import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
+import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
 import tv.memoryleakdeath.hex.backend.security.HexCaptchaService;
-import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
+import tv.memoryleakdeath.hex.frontend.utils.ValidationUtils;
 
 @Component
 public class UserRegistrationModelValidator<T extends UserRegistrationModel> {
-    private static final Pattern VALID_USERNAME = Pattern.compile("^[a-zA-Z0-9]+$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern VALID_DISPLAYNAME = Pattern.compile("^\\S*(\\S\\s{0,1})*\\S*$", Pattern.CASE_INSENSITIVE);
-    private static final int MAX_DISPLAYNAME_LENGTH = 75;
-    private static final int MAX_EMAIL_LENGTH = 100;
-    private static final int MAX_USERNAME_LENGTH = 50;
-    private static final int MAX_PASSWORD_LENGTH = 100;
-    private static final int MIN_PASSWORD_LENGTH = 10;
-
-    private EmailValidator emailValidator = EmailValidator.getInstance(false, false);
 
     @Autowired
     private HexCaptchaService captchaService;
@@ -33,36 +19,41 @@ public class UserRegistrationModelValidator<T extends UserRegistrationModel> {
     @Autowired
     private AuthenticationDao authDao;
 
+    @Autowired
+    private UserDetailsDao userDetailsDao;
+
     public void validate(HttpServletRequest request, T target, Errors errors) {
-        if (StringUtils.isBlank(target.getCaptchaAnswer())
-                || !checkCaptcha(request, target.getCaptchaAnswer())) {
+        if (ValidationUtils.isCaptchaInvalid(request, target.getCaptchaAnswer(), captchaService)) {
             errors.rejectValue("captchaAnswer", "registration.text.error.captcha");
         }
 
-        if (StringUtils.isBlank(target.getUsername()) || !VALID_USERNAME.matcher(target.getUsername()).matches() || target.getUsername().length() > MAX_USERNAME_LENGTH) {
+        if (ValidationUtils.isUsernameInvalid(target.getUsername())) {
             errors.rejectValue("username", "registration.text.error.usernameinvalid");
         }
 
-        if (authDao.checkUsernameExists(target.getUsername())) {
+        if (ValidationUtils.isUsernameTaken(target.getUsername(), authDao)) {
             errors.rejectValue("username", "registration.text.error.usernameexists");
         }
 
-        if (StringUtils.isBlank(target.getPassword()) || target.getPassword().length() > MAX_PASSWORD_LENGTH || target.getPassword().length() < MIN_PASSWORD_LENGTH) {
+        if (ValidationUtils.isPasswordInvalid(target.getPassword())) {
             errors.rejectValue("password", "registration.text.error.passwordinvalid");
         }
 
+        if (ValidationUtils.isPasswordNotComplexEnough(target.getPassword())) {
+            errors.rejectValue("password", "registration.text.error.passwordnotcomplex");
+        }
+
         String displayName = target.getDisplayName();
-        if (StringUtils.isBlank(displayName) || !VALID_DISPLAYNAME.matcher(displayName).matches() || displayName.length() > MAX_DISPLAYNAME_LENGTH) {
+        if (ValidationUtils.isDisplayNameInvalid(displayName)) {
             errors.rejectValue("displayName", "registration.text.error.displaynameinvalid");
         }
 
-        if (StringUtils.isBlank(target.getEmail()) || !emailValidator.isValid(target.getEmail()) || target.getEmail().length() > MAX_EMAIL_LENGTH) {
+        if (ValidationUtils.isDisplayNameTaken(displayName, userDetailsDao)) {
+            errors.rejectValue("displayName", "registration.text.error.uniquedisplayname");
+        }
+
+        if (ValidationUtils.isEmailInvalid(target.getEmail())) {
             errors.rejectValue("email", "registration.text.error.emailinvalid");
         }
-    }
-
-    private boolean checkCaptcha(HttpServletRequest request, String answer) {
-        return captchaService.verifyImageCaptcha((ImageCaptcha) request.getSession(false).getAttribute(BaseFrontendController.IMAGE_CAPTCHA), answer)
-                || captchaService.verifyAudioCaptcha((AudioCaptcha) request.getSession(false).getAttribute(BaseFrontendController.AUDIO_CAPTCHA), answer);
     }
 }

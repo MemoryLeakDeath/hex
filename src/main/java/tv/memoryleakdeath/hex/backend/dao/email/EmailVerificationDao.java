@@ -22,7 +22,7 @@ public class EmailVerificationDao {
             return false;
         }
         String sql = "select count(*) from emailverification where userid = ?::uuid and token = ? and expirationdate < now()";
-        int result = jdbcTemplate.queryForObject(sql, Integer.class);
+        int result = jdbcTemplate.queryForObject(sql, Integer.class, userId, token);
         return (result == 1);
     }
 

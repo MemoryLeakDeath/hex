@@ -18,8 +18,14 @@ public class LoginController extends BaseFrontendController {
     @GetMapping("/login")
     public String view(HttpServletRequest request, Model model, @RequestParam(name = "error", required = false, defaultValue = "false") Boolean error) {
         model.addAttribute("error", error);
+        setLayout(model, "layout/main");
+        return "loginfull";
+    }
+
+    @GetMapping("/loginmodal")
+    public String viewModal(HttpServletRequest request, Model model, @RequestParam(name = "error", required = false, defaultValue = "false") Boolean error) {
+        model.addAttribute("error", error);
         setLayout(model, "layout/minimal");
-        model.addAttribute(NONCE, request.getAttribute(NONCE));
         return "login";
     }
 

@@ -33,12 +33,13 @@
 			          </th:block>
 			        </a>
 			        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+			          <a id="settingsbutton" class="dropdown-item settings" th:href="@{/settings/}" th:text="#{button.settings}"></a>
 			          <a id="logoutbutton" class="dropdown-item logout" href="#" th:text="#{button.logout}"></a>
 			        </div>
 			      </li>
 			      <li class="nav-item" sec:authorize="isAnonymous()">
 			         <a class="btn btn-secondary me-2" id="topNavRegistrationButton" th:text="#{button.register}" th:href="@{/registration/}" role="button"></a>
-			         <a class="btn btn-primary login" id="topNavLoginButton" th:text="#{button.login}" href="#" th:data-url="@{/login}" data-id="#loginModalContents" role="button"></a>
+			         <a class="btn btn-primary login" id="topNavLoginButton" th:text="#{button.login}" href="#" th:data-url="@{/loginmodal}" data-id="#loginModalContents" role="button"></a>
 			         <th:block th:replace="~{fragment/login-modal :: loginModal}"></th:block>
 			      </li>
 			    </ul>

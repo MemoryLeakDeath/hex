@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="content">
+        <div class="mb-2">
+          <button type="button" id="resendbutton" class="btn btn-secondary" th:text="#{settings.button.resend}" th:data-url="@{/settings/resend}"></button>
+        </div>
+        <form th:action="@{/settings/updatebasic}" method="POST" th:object="${userModel}">
+          <div class="mb-2">
+              <label for="displayName" class="form-label required" th:text="#{text.displayname}"></label>
+              <input type="text" class="form-control" th:errorclass="is-invalid" id="displayName" th:field="*{displayName}" autocomplete="none" required="required" maxlength="75" aria-describedby="displayname-error"/>
+              <div id="displayname-error" class="invalid-feedback" th:if="${#fields.hasErrors('displayName')}" th:errors="*{displayName}"></div>
+          </div>
+          <div class="mb-2">
+              <label for="email" class="form-label required" th:text="#{text.email}"></label>
+              <input type="text" class="form-control" th:errorclass="is-invalid" id="email" th:field="*{email}" autocomplete="none" required="required" maxlength="100" aria-describedby="email-error"/>
+              <div id="email-error" class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+          </div>
+          <button type="submit" class="mt-4 btn btn-primary" th:text="#{button.save}"></button>
+        </form>
+        <script type="text/javascript" th:src="@{/js/settings/user-settings.js}" nonce="${nonce}"></script>
+    </div>
+</html>
