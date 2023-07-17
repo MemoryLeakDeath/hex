@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tv.memoryleakdeath.hex.backend.dao.email.EmailVerificationDao;
+import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
 
 @Service
 public class EmailVerificationService {
@@ -21,6 +22,9 @@ public class EmailVerificationService {
 
     @Autowired
     private EmailVerificationDao verificationDao;
+
+    @Autowired
+    private UserDetailsDao userDetailsDao;
 
     public String createNewVerificationToken(String userId) {
         byte[] token = new byte[TOKEN_SIZE];
@@ -37,4 +41,13 @@ public class EmailVerificationService {
         verificationDao.deleteExpired();
         return verificationDao.isVerified(userId, token);
     }
+
+    public boolean setUserEmailVerified(String userId) {
+        return userDetailsDao.updateEmailVerified(userId, true);
+    }
+
+    public boolean clearUserEmailVerified(String userId) {
+        return userDetailsDao.updateEmailVerified(userId, false);
+    }
+
 }

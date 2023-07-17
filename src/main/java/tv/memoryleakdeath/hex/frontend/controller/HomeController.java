@@ -20,10 +20,6 @@ public class HomeController extends BaseFrontendController {
     public String view(HttpServletRequest request, Model model) {
         setPageTitle(request, model, "title.home");
         model.addAttribute("helloMsg", "Hello World!");
-        addWarningMessage(request, "text.warn.partial");
-        addErrorMessage(request, "text.error.systemerror");
-        addInfoMessage(request, "text.info.test");
-        addSuccessMessage(request, "text.success.ok");
         return "index";
     }
 

@@ -19,7 +19,9 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import tv.memoryleakdeath.hex.backend.security.HexAuthenticationFailureHandler;
 import tv.memoryleakdeath.hex.backend.security.HexAuthenticationProvider;
+import tv.memoryleakdeath.hex.backend.security.HexAuthenticationSuccessHandler;
 import tv.memoryleakdeath.hex.backend.security.HexRememberMeAuthenticationProvider;
 import tv.memoryleakdeath.hex.backend.security.HexUserDetailsService;
 import tv.memoryleakdeath.hex.backend.security.HexWebAuthenticationDetailsSource;
@@ -38,6 +40,12 @@ public class HexSecurity {
 
     @Autowired
     private RememberMeService rememberMeService;
+
+    @Autowired
+    private HexAuthenticationFailureHandler authFailureHandler;
+
+    @Autowired
+    private HexAuthenticationSuccessHandler authSuccessHandler;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -103,7 +111,7 @@ public class HexSecurity {
     }
 
     private Customizer<FormLoginConfigurer<HttpSecurity>> formLogin() {
-        return login -> login.authenticationDetailsSource(authenticationDetailsSource).loginPage("/login").defaultSuccessUrl("/").failureUrl("/login?error=true")
+        return login -> login.authenticationDetailsSource(authenticationDetailsSource).loginPage("/login").successHandler(authSuccessHandler).failureHandler(authFailureHandler)
                 .loginProcessingUrl("/logincheck");
     }
 

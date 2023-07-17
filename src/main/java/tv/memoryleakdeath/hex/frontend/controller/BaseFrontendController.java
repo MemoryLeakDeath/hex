@@ -25,6 +25,7 @@ public abstract class BaseFrontendController {
     public static final String AUDIO_CAPTCHA = "audioCaptcha";
     public static final String CSS_SCRIPTS = "pageCSSScripts";
     public static final String JS_SCRIPTS = "pageJSScripts";
+    public static final String LOGIN_ERROR_RETURN = "loginErrorReturn";
     public static final String NONCE = "nonce";
 
     @Autowired

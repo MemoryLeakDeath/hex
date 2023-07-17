@@ -19,6 +19,7 @@ public class LoginController extends BaseFrontendController {
     public String view(HttpServletRequest request, Model model, @RequestParam(name = "error", required = false, defaultValue = "false") Boolean error) {
         model.addAttribute("error", error);
         setLayout(model, "layout/main");
+        request.getSession().setAttribute(BaseFrontendController.LOGIN_ERROR_RETURN, "/login?error=true");
         return "loginfull";
     }
 
@@ -26,6 +27,7 @@ public class LoginController extends BaseFrontendController {
     public String viewModal(HttpServletRequest request, Model model, @RequestParam(name = "error", required = false, defaultValue = "false") Boolean error) {
         model.addAttribute("error", error);
         setLayout(model, "layout/minimal");
+        request.getSession().setAttribute(BaseFrontendController.LOGIN_ERROR_RETURN, "/loginmodal?error=true");
         return "login";
     }
 

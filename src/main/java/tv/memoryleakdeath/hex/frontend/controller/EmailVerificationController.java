@@ -28,6 +28,7 @@ public class EmailVerificationController extends BaseFrontendController {
             String userId = getUserId(request);
             boolean isVerified = verificationService.isTokenValid(userId, token);
             if (isVerified) {
+                verificationService.setUserEmailVerified(userId);
                 addSuccessMessage(request, "email.verify.text.success");
             } else {
                 addErrorMessage(request, "email.verify.text.error");
