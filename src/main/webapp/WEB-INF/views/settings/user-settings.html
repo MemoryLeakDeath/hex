@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <div th:fragment="content">
-        <div class="mb-2">
+        <h2 th:text="#{settings.nav.text.basicinfo}"></h2>
+        <div class="mb-4" th:if="${notEmailVerified}">
           <button type="button" id="resendbutton" class="btn btn-secondary" th:text="#{settings.button.resend}" th:data-url="@{/settings/resend}"></button>
         </div>
         <form th:action="@{/settings/updatebasic}" method="POST" th:object="${userModel}">
@@ -17,6 +18,5 @@
           </div>
           <button type="submit" class="mt-4 btn btn-primary" th:text="#{button.save}"></button>
         </form>
-        <script type="text/javascript" th:src="@{/js/settings/user-settings.js}" nonce="${nonce}"></script>
     </div>
 </html>

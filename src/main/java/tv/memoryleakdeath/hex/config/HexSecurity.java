@@ -104,14 +104,16 @@ public class HexSecurity {
     @Order(4)
     public SecurityFilterChain allAccessFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http.headers(commonHeaders()).cors(cors -> cors.disable()).securityMatcher("/**")
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/**").permitAll()).rememberMe(rememberMeConfig())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .rememberMe(rememberMeConfig())
                 .authenticationManager(authManager)
                 .formLogin(formLogin()).logout(formLogout());
         return http.build();
     }
 
     private Customizer<FormLoginConfigurer<HttpSecurity>> formLogin() {
-        return login -> login.authenticationDetailsSource(authenticationDetailsSource).loginPage("/login").successHandler(authSuccessHandler).failureHandler(authFailureHandler)
+        return login -> login.authenticationDetailsSource(authenticationDetailsSource).loginPage("/login").successHandler(new HexAuthenticationSuccessHandler())
+                .failureHandler(new HexAuthenticationFailureHandler())
                 .loginProcessingUrl("/logincheck");
     }
 

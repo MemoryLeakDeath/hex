@@ -58,6 +58,12 @@ public class UserDetailsDao {
         return (rows > 0);
     }
 
+    public boolean isDisplayNameTaken(String displayName, String userId) {
+        String sql = "select count(*) from userdetails where displayname = ? and userid != ?::uuid";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, displayName, userId);
+        return (count > 0);
+    }
+
     public boolean isDisplayNameTaken(String displayName) {
         String sql = "select count(*) from userdetails where displayname = ?";
         int count = jdbcTemplate.queryForObject(sql, Integer.class, displayName);

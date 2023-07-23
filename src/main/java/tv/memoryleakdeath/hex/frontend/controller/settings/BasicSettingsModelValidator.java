@@ -6,6 +6,7 @@ import org.springframework.validation.Errors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
+import tv.memoryleakdeath.hex.frontend.utils.UserUtils;
 import tv.memoryleakdeath.hex.frontend.utils.ValidationUtils;
 
 @Component
@@ -19,7 +20,7 @@ public class BasicSettingsModelValidator<T extends BasicSettingsModel> {
             errors.rejectValue("displayName", "registration.text.error.displaynameinvalid");
         }
 
-        if (ValidationUtils.isDisplayNameTaken(target.getDisplayName(), userDetailsDao)) {
+        if (ValidationUtils.isDisplayNameTaken(target.getDisplayName(), UserUtils.getUserId(request), userDetailsDao)) {
             errors.rejectValue("displayName", "registration.text.error.uniquedisplayname");
         }
 

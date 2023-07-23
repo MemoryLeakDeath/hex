@@ -4,15 +4,19 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import jakarta.servlet.http.HttpServletRequest;
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.resources.ConfigurationBuilder;
+import me.gosimple.nbvcxz.resources.Generator;
+import me.gosimple.nbvcxz.resources.Generator.CharacterTypes;
 import net.logicsquad.nanocaptcha.audio.AudioCaptcha;
 import net.logicsquad.nanocaptcha.image.ImageCaptcha;
 import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
 import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
 import tv.memoryleakdeath.hex.backend.security.HexCaptchaService;
+import tv.memoryleakdeath.hex.common.pojo.Auth;
 import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
 
 public final class ValidationUtils {
@@ -23,6 +27,8 @@ public final class ValidationUtils {
     public static final int MAX_EMAIL_LENGTH = 100;
     public static final int MAX_PASSWORD_LENGTH = 100;
     public static final int MIN_PASSWORD_LENGTH = 10;
+    public static final int GENERATED_PASSWORD_LENGTH = 50;
+
     private static EmailValidator emailValidator = EmailValidator.getInstance(false, false);
     private static Nbvcxz complexityChecker = new Nbvcxz(new ConfigurationBuilder().setMaxLength(MAX_PASSWORD_LENGTH).setMinimumEntropy(50d).createConfiguration());
 
@@ -34,12 +40,16 @@ public final class ValidationUtils {
                 || displayName.length() > MAX_DISPLAYNAME_LENGTH;
     }
 
+    public static boolean isDisplayNameTaken(String displayName, String userId, UserDetailsDao userDetailsDao) {
+        return userDetailsDao.isDisplayNameTaken(displayName, userId);
+    }
+
     public static boolean isDisplayNameTaken(String displayName, UserDetailsDao userDetailsDao) {
         return userDetailsDao.isDisplayNameTaken(displayName);
     }
 
-    public static boolean isDisplaynameTakenOrInvalid(String displayName, UserDetailsDao userDetailsDao) {
-        return isDisplayNameInvalid(displayName) || isDisplayNameTaken(displayName, userDetailsDao);
+    public static boolean isDisplaynameTakenOrInvalid(String displayName, String userId, UserDetailsDao userDetailsDao) {
+        return isDisplayNameInvalid(displayName) || isDisplayNameTaken(displayName, userId, userDetailsDao);
     }
 
     public static boolean isEmailInvalid(String email) {
@@ -74,6 +84,15 @@ public final class ValidationUtils {
 
     public static boolean isPasswordNotComplexEnough(String password) {
         return !complexityChecker.estimate(password).isMinimumEntropyMet();
+    }
+
+    public static boolean isUserPasswordNotCorrect(String userId, String password, PasswordEncoder passwordEncoder, AuthenticationDao authDao) {
+        Auth user = authDao.getActiveUserById(userId);
+        return !passwordEncoder.matches(password, user.getPassword());
+    }
+
+    public static String generateCompliantPassword() {
+        return Generator.generateRandomPassword(CharacterTypes.ALPHANUMERICSYMBOL, GENERATED_PASSWORD_LENGTH);
     }
 
 }

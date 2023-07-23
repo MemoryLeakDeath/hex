@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.LocaleResolver;
@@ -14,6 +13,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import tv.memoryleakdeath.hex.common.pojo.HexUser;
 import tv.memoryleakdeath.hex.frontend.controller.interceptors.ThymeleafLayoutInterceptor;
+import tv.memoryleakdeath.hex.frontend.utils.UserUtils;
 
 public abstract class BaseFrontendController {
     public static final String PAGE_TITLE = "pageTitle";
@@ -27,6 +27,7 @@ public abstract class BaseFrontendController {
     public static final String JS_SCRIPTS = "pageJSScripts";
     public static final String LOGIN_ERROR_RETURN = "loginErrorReturn";
     public static final String NONCE = "nonce";
+    public static final String PASSWORD_CHANGE_ATTEMPTS = "numPasswordChangeAttempts";
 
     @Autowired
     private MessageSource messageSource;
@@ -71,27 +72,15 @@ public abstract class BaseFrontendController {
     }
 
     protected String getUserId(HttpServletRequest request) {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
-        if (token != null && token.getPrincipal() != null) {
-            return ((HexUser) token.getPrincipal()).getId();
-        }
-        return null;
+        return UserUtils.getUserId(request);
     }
 
     protected String getDisplayName(HttpServletRequest request) {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
-        if (token != null && token.getPrincipal() != null) {
-            return ((HexUser) token.getPrincipal()).getDisplayName();
-        }
-        return null;
+        return UserUtils.getDisplayName(request);
     }
 
     protected HexUser getUser(HttpServletRequest request) {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
-        if (token != null && token.getPrincipal() != null) {
-            return (HexUser) token.getPrincipal();
-        }
-        return null;
+        return UserUtils.getUserDetailsFromSession(request);
     }
 
     @SuppressWarnings("unchecked")
@@ -123,5 +112,9 @@ public abstract class BaseFrontendController {
     protected void stuffBindingErrorsBackIntoModel(String modelName, Object modelObject, Model springModel, BindingResult bindingResult) {
         springModel.addAttribute("org.springframework.validation.BindingResult." + modelName, bindingResult);
         springModel.addAttribute(modelName, modelObject);
+    }
+
+    protected String logoutUser() {
+        return "redirect: /logout";
     }
 }

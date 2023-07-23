@@ -8,9 +8,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.crypto.BadPaddingException;
@@ -25,9 +23,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +34,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
 import tv.memoryleakdeath.hex.backend.dao.security.RememberMeDao;
+import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
 import tv.memoryleakdeath.hex.common.pojo.Auth;
+import tv.memoryleakdeath.hex.common.pojo.HexUser;
 import tv.memoryleakdeath.hex.common.pojo.RememberMe;
 import tv.memoryleakdeath.hex.utils.CryptoUtil;
 
@@ -62,6 +62,9 @@ public class RememberMeService implements RememberMeServices {
     @Autowired
     private AuthenticationDao authDao;
 
+    @Autowired
+    private UserDetailsDao userDetailsDao;
+
     @Override
     public Authentication autoLogin(HttpServletRequest request, HttpServletResponse response) {
         Cookie rememberMeCookie = getRememberMeCookie(request);
@@ -71,12 +74,9 @@ public class RememberMeService implements RememberMeServices {
             if (rememberMe != null) {
                 Auth userAuth = authDao.getActiveUserById(rememberMe.getUserId());
                 if (userAuth != null) {
-                    Collection<GrantedAuthority> authorities = new ArrayList<>();
-                    for (String role : userAuth.getRoles()) {
-                        authorities.add(new SimpleGrantedAuthority(role));
-                    }
+                    UserDetails principal = populatePrincipal(userAuth);
                     logger.debug("[Remember Me] rememberme token valid!  Logging in user.");
-                    HexRememberMeToken token = new HexRememberMeToken(userAuth.getUsername(), rememberMeCookie.getValue(), authorities);
+                    HexRememberMeToken token = new HexRememberMeToken(principal, rememberMeCookie.getValue(), principal.getAuthorities());
                     return token;
                 }
             }
@@ -162,5 +162,16 @@ public class RememberMeService implements RememberMeServices {
 
     private RememberMe findDatabaseToken(String cookieToken) {
         return rememberDao.find(cookieToken);
+    }
+
+    private UserDetails populatePrincipal(Auth user) {
+        tv.memoryleakdeath.hex.common.pojo.UserDetails details = userDetailsDao.findById(user.getId());
+        HexUser userDetails = new HexUser(user.getUsername(), user.getPassword(), user.getActive(), true, true, true, AuthorityUtils.createAuthorityList(user.getRoles()));
+        userDetails.setId(user.getId());
+        if (details != null) {
+            userDetails.setDisplayName(details.getDisplayName());
+            userDetails.setGravatarId(details.getGravatarId());
+        }
+        return userDetails;
     }
 }
