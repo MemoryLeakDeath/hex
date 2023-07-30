@@ -1,0 +1,11 @@
+version: "2.1"
+services:
+ 
+  hex-db:
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${postgresPassword}
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data 

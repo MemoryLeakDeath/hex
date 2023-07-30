@@ -16,6 +16,7 @@
         <slf4j.version>2.0.7</slf4j.version>
         <logback.version>1.4.8</logback.version>
         <postgresql.version>42.6.0</postgresql.version>
+        <postgresdb.version>15.3</postgresdb.version>
         <hikari.version>5.0.1</hikari.version>
         <junit.version>5.9.3</junit.version>
         <mockito.version>5.4.0</mockito.version>
@@ -508,7 +509,40 @@
                     </deployables>
                 </configuration>
             </plugin>          
-        </plugins>        
+			<plugin>
+			    <groupId>io.fabric8</groupId>
+			    <artifactId>docker-maven-plugin</artifactId>
+			    <version>0.43.1</version>
+			    <configuration>
+					<dockerHost>${env.DOCKER_HOST}</dockerHost>
+					<images>
+						<image>
+							<name>hex-db</name>
+							<alias>hex-db</alias>
+							<external>
+								<type>compose</type>
+								<basedir>${project.build.directory}/classes</basedir>
+								<composeFile>docker-compose.yml</composeFile>
+							</external>
+				            <build>
+							  <from>postgres:${postgresdb.version}</from>
+				              <assembly>
+				                <mode>dir</mode>
+				                <targetDir>/docker-entrypoint-initdb.d</targetDir>
+				                <inline>
+				                  <files>
+				                    <file>
+				                      <source>${project.build.directory}/classes/hex-db-init.sh</source>
+				                    </file>
+				                  </files>
+				                </inline>
+				              </assembly>
+				            </build>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+        </plugins>
     </build>
     <profiles>
         <profile>
