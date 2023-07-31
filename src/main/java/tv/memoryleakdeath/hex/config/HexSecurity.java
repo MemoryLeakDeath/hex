@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.RememberMe
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import tv.memoryleakdeath.hex.backend.security.HexAuthenticationFailureHandler;
 import tv.memoryleakdeath.hex.backend.security.HexAuthenticationProvider;
@@ -69,6 +70,11 @@ public class HexSecurity {
     public AuthenticationManager authManager(HttpSecurity security) throws Exception {
         AuthenticationManagerBuilder builder = security.getSharedObject(AuthenticationManagerBuilder.class);
         return builder.authenticationProvider(authenticationProvider()).authenticationProvider(rememberMeProvider()).build();
+    }
+    
+    @Bean
+    public SecurityContextLogoutHandler logoutHandler() {
+        return new SecurityContextLogoutHandler();
     }
 
     @Bean

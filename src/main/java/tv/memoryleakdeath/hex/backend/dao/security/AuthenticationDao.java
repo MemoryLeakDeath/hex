@@ -139,4 +139,11 @@ public class AuthenticationDao {
         int rows = jdbcTemplate.update(sql, username);
         return (rows == 1);
     }
+
+    @Transactional
+    public boolean updatePassword(String userId, String password) {
+        String sql = "update identities set password = ? where id = ?::uuid";
+        int rows = jdbcTemplate.update(sql, password, userId);
+        return (rows == 1);
+    }
 }

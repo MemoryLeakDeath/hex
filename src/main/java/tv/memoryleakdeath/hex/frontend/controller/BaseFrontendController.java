@@ -6,11 +6,14 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.LocaleResolver;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import tv.memoryleakdeath.hex.backend.security.RememberMeService;
 import tv.memoryleakdeath.hex.common.pojo.HexUser;
 import tv.memoryleakdeath.hex.frontend.controller.interceptors.ThymeleafLayoutInterceptor;
 import tv.memoryleakdeath.hex.frontend.utils.UserUtils;
@@ -34,6 +37,12 @@ public abstract class BaseFrontendController {
 
     @Autowired
     private LocaleResolver localeResolver;
+    
+    @Autowired
+    private SecurityContextLogoutHandler logoutHandler;
+
+    @Autowired
+    private RememberMeService rememberMeService;
 
     protected Locale getLocale(HttpServletRequest request) {
         return localeResolver.resolveLocale(request);
@@ -114,7 +123,9 @@ public abstract class BaseFrontendController {
         springModel.addAttribute(modelName, modelObject);
     }
 
-    protected String logoutUser() {
-        return "redirect: /logout";
+    protected String logoutUser(HttpServletRequest request, HttpServletResponse response) {
+        logoutHandler.logout(request, null, null);
+        rememberMeService.clearRememberMeCookie(request, response);
+        return "redirect: /";
     }
 }

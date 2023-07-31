@@ -72,6 +72,7 @@ public class UserRegistrationController extends BaseFrontendController {
 
     @GetMapping("/")
     public String registerNewUser(HttpServletRequest request, Model model) {
+        addPageJS(model, "/js/registration/registration.js");
         try {
             ImageCaptcha imageCaptcha = captchaService.generateImageCaptcha();
             AudioCaptcha audioCaptcha = captchaService.generateAudioCaptcha();

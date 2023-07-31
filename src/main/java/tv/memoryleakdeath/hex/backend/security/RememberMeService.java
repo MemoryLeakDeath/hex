@@ -125,6 +125,17 @@ public class RememberMeService implements RememberMeServices {
         }
     }
 
+    public void clearRememberMeCookie(HttpServletRequest request, HttpServletResponse response) {
+        Cookie rememberMeCooke = getRememberMeCookie(request);
+        if (rememberMeCooke != null) {
+            rememberMeCooke.setMaxAge(0);
+            rememberMeCooke.setHttpOnly(true);
+            rememberMeCooke.setPath("/");
+            rememberMeCooke.setSecure(true);
+            response.addCookie(rememberMeCooke);
+        }
+    }
+
     private String generateToken() {
         try {
             byte[] salt = CryptoUtil.generateSalt(SALT_SIZE);

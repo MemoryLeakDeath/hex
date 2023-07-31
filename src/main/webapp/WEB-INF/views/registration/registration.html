@@ -3,7 +3,7 @@
 	<div class="container" th:fragment="content">
 		<h1 th:text="#{registration.text.signup}"></h1>
 		
-		<form th:action="@{/registration/create}" method="POST" th:object="${userModel}">
+		<form id="registrationform" th:action="@{/registration/create}" method="POST" th:object="${userModel}" th:data-complexity-url="@{/password/validatepasswordcomplexity}" th:data-complexity-message="#{registration.text.newpasswordnotcomplex}">
 		  <div class="mb-2">
 		      <label for="username" class="form-label required" th:text="#{text.username}"></label>
 		      <input type="text" class="form-control" th:errorclass="is-invalid" id="username" th:field="*{username}" autofocus="autofocus" autocomplete="username" required="required" maxlength="50" aria-describedby="username-error"/>
@@ -11,8 +11,15 @@
 		  </div>
 		  <div class="mb-2">
 		      <label for="password" class="form-label required" th:text="#{text.password}"></label>
-		      <input type="password" class="form-control" th:errorclass="is-invalid" id="password" th:field="*{password}" th:placeholder="#{registration.placeholder.password}" autocomplete="new-password" required="required" pattern=".{10,100}" maxlength="100" minlength="10" aria-describedby="password-error"/>
-              <div id="password-error" class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+              <div class="input-group">
+                  <button id="generatePasswordButton" class="btn btn-secondary" type="button" th:title="#{settings.button.generatepassword}" th:data-url="@{/password/generatepassword}">
+                      <i class="fas fa-gears"></i>
+                  </button>
+			      <input type="password" class="form-control" th:errorclass="is-invalid" id="password" th:field="*{password}" th:placeholder="#{registration.placeholder.password}" autocomplete="new-password" required="required" pattern=".{10,100}" maxlength="100" minlength="10" aria-describedby="password-error"/>
+              </div>
+              <div id="password-error" class="invalid-feedback">
+				  <th:block th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></th:block>
+			  </div>
 		  </div>
           <div class="mb-2">
               <label for="displayName" class="form-label required" th:text="#{text.displayname}"></label>
