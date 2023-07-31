@@ -12,7 +12,7 @@
         <spring.framework.version>6.0.11</spring.framework.version>
         <spring.security.version>6.1.2</spring.security.version>
         <servlet.api.version>6.0.0</servlet.api.version>
-        <thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
+        <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
         <slf4j.version>2.0.7</slf4j.version>
         <logback.version>1.4.8</logback.version>
         <postgresql.version>42.6.0</postgresql.version>
