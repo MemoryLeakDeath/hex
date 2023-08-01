@@ -1,10 +1,14 @@
 package tv.memoryleakdeath.hex.frontend.controller.settings;
 
+import java.security.Principal;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,16 +16,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import tv.memoryleakdeath.hex.backend.dao.security.OAuth2AuthorizationConsentDao;
+import tv.memoryleakdeath.hex.backend.dao.security.OAuth2AuthorizationDao;
 import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
 import tv.memoryleakdeath.hex.backend.email.EmailService;
 import tv.memoryleakdeath.hex.backend.email.EmailVerificationService;
 import tv.memoryleakdeath.hex.backend.gravatar.GravatarService;
 import tv.memoryleakdeath.hex.backend.security.UserAuthService;
+import tv.memoryleakdeath.hex.common.pojo.UserApplicationInfo;
 import tv.memoryleakdeath.hex.common.pojo.UserDetails;
 import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
+import tv.memoryleakdeath.hex.frontend.controller.api.interceptors.JwtTokenBlacklistCheckerFilter;
 import tv.memoryleakdeath.hex.frontend.utils.UserUtils;
 
 @RequestMapping("/settings")
@@ -49,6 +58,15 @@ public class UserSettingsController extends BaseFrontendController {
 
     @Autowired
     private UserAuthService userAuthService;
+
+    @Autowired
+    private OAuth2AuthorizationConsentDao oauthConsentDao;
+
+    @Autowired
+    private OAuth2AuthorizationDao authDao;
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     @GetMapping("/")
     public String view(HttpServletRequest request, Model model) {
@@ -171,6 +189,39 @@ public class UserSettingsController extends BaseFrontendController {
         }
         return "settings/changepassword";
     }
+
+    @GetMapping("/applications")
+    public String viewApplications(HttpServletRequest request, Model model) {
+        setPageTitle(request, model, "title.settings");
+        setLayout(model, "layout/settings");
+        String userName = getUser(request).getUsername();
+        try {
+            List<UserApplicationInfo> info = oauthConsentDao.findApplicationInfoForUser(userName);
+            model.addAttribute("applications", info);
+        } catch (Exception e) {
+            logger.error("Unable to display user applications!", e);
+            addErrorMessage(request, "text.error.systemerror");
+        }
+        return "settings/applications";
+    }
+
+    @PostMapping("/applications/revoke")
+    public void revokeApplicationAccess(HttpServletRequest request, HttpServletResponse response, Model model,
+            Principal principal, @RequestParam(name = "id", required = true) String applicationId) {
+        response.setHeader("HX-Redirect", request.getContextPath() + "/settings/applications");
+        String userName = getUser(request).getUsername();
+        try {
+            List<String> blackListAuthTokens = authDao.getNonExpiredAccessTokensForApplicationAndUser(applicationId,
+                    userName);
+            oauthConsentDao.remove(applicationId, userName);
+            JwtTokenBlacklistCheckerFilter.getTokenBlacklist().addAll(blackListAuthTokens);
+            addSuccessMessage(request, "settings.applications.success.accessrevoked");
+        } catch (Exception e) {
+            logger.error("Unable to revoke application access for application: " + applicationId, e);
+            addErrorMessage(request, "text.error.systemerror");
+        }
+    }
+
 
     private UserDetails populateBasicUserDetails(String email, String displayName, String userId) {
         UserDetails userDetails = new UserDetails();

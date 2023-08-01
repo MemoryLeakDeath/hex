@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="content">
+        <h2 th:text="#{developer.nav.text.applications}"></h2>
+		<button id="newapplicationbutton" type="button" class="btn btn-primary mb-3 mt-2" th:text="#{button.developer.applications.new}"></button>
+		<table class="table table-bordered table-hover">
+		   <thead>
+		       <tr>
+		           <th th:text="#{developer.applications.header.actions}"></th>
+		           <th th:text="#{developer.applications.header.applicationname}"></th>
+		           <th th:text="#{developer.applications.header.clientid}"></th>
+		           <th th:text="#{developer.applications.header.totalconsent}"></th>
+		       </tr>
+		   </thead>
+		   <tbody>
+		      <tr th:each="app : ${apps}">
+		         <td class="text-nowrap">
+					 <div class="btn-group" role="group">
+						 <button class="btn btn-secondary btn-sm deleteclientbutton" th:title="#{button.delete}" th:data-id="${app.id}" th:data-confirm="#{developer.applications.text.confirmdelete}"><i class="fas fa-trash"></i></button>
+						 <button class="btn btn-secondary btn-sm editclientbutton" th:title="#{button.edit}" th:data-id="${app.id}"><i class="fas fa-pencil"></i></button>
+						 <button class="btn btn-secondary btn-sm changeclientsecretbutton" th:title="#{button.developer.applications.updateclientsecret}" th:data-id="${app.id}"><i class="fas fa-arrows-rotate"></i></button>
+					 </div>
+			     </td>
+		         <td th:text="${app.clientName}"></td>
+		         <td>
+					 <div class="input-group" role="group">
+						 <button class="btn btn-secondary btn-sm viewclientidbutton" th:title="#{button.view}" th:data-id="${app.id}"><i class="far fa-eye"></i></button>
+						 <button class="btn btn-secondary btn-sm copyclientidbutton" th:title="#{button.copytoclipboard}" th:data-id="${app.id}" th:data-errormsg="#{text.error.clipboardfailure}" th:data-successmsg="#{text.success.clipboardcopy}"><i class="far fa-copy"></i></button>
+						 <input type="text" class="blur" readonly th:id="'clientidtext-' + ${app.id}" th:value="${app.clientId}">					 						 
+					 </div>
+				 </td>
+		         <td><span th:text="${authCounts.get('__${app.id}__')}"></span></td>
+		      </tr>
+		   </tbody>
+		</table>
+        <form id="newapplicationform" th:action="@{/developer/applications/new}" method="POST">
+        </form>
+        <form id="regenerateclientsecretform" th:action="@{/developer/applications/regeneratesecret}" method="POST">
+			<input id="regenerateclientsecretidinput" type="hidden" name="id" value="">
+		</form>
+		<form id="deleteapplicationform" th:action="@{/developer/applications/delete}" method="POST">
+			<input id="deleteapplicationid" name="id" type="hidden" value="">
+		</form>
+		<form id="editapplicationform" th:action="@{/developer/applications/edit}" method="POST">
+			<input id="editapplicationid" name="id" type="hidden" value="">
+		</form>
+		<form id="changeclientsecretform" th:action="@{/developer/applications/changesecret}" method="POST">
+			<input id="changeclientsecretid" name="id" type="hidden" value="">
+		</form>
+        <script type="text/javascript" th:src="@{/js/developer/applications.js}">
+		</script>		
+    </div>
+</html>

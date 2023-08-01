@@ -92,7 +92,11 @@ public final class ValidationUtils {
     }
 
     public static String generateCompliantPassword() {
-        return Generator.generateRandomPassword(CharacterTypes.ALPHANUMERICSYMBOL, GENERATED_PASSWORD_LENGTH);
+        return generateCompliantPassword(GENERATED_PASSWORD_LENGTH);
+    }
+
+    public static String generateCompliantPassword(int length) {
+        return Generator.generateRandomPassword(CharacterTypes.ALPHANUMERICSYMBOL, length);
     }
 
 }

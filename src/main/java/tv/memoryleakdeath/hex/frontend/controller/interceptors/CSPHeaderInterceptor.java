@@ -14,6 +14,7 @@ import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
 public class CSPHeaderInterceptor implements HandlerInterceptor {
     private static final String CSP_POLICY = "default-src 'self' data:; script-src 'self' 'nonce-%s'; img-src 'self' data: www.gravatar.com;";
     private static final int NONCE_SIZE = 128;
+    private static final String HTMX_CONFIG = "{\"inlineScriptNonce\":\"%s\", \"includeIndicatorStyles\":false}";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,6 +28,7 @@ public class CSPHeaderInterceptor implements HandlerInterceptor {
             nonce = (String) request.getAttribute(BaseFrontendController.NONCE);
         }
         request.setAttribute(BaseFrontendController.NONCE, nonce);
+        request.setAttribute(BaseFrontendController.HTMX_CONFIG, HTMX_CONFIG.formatted(nonce));
         return true;
     }
 
