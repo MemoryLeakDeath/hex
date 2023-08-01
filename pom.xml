@@ -26,7 +26,7 @@
         <commonstext.version>1.10.0</commonstext.version>
         <commonscodec.version>1.16.0</commonscodec.version>
         <commonsvalidator.version>1.7</commonsvalidator.version>
-        <bouncycastlepkix.version>1.75</bouncycastlepkix.version>
+        <bouncycastlepkix.version>1.76</bouncycastlepkix.version>
         <totp.version>1.7.1</totp.version>
         <faker.version>2.0.1</faker.version>
         <greenmail.version>2.1.0-alpha-1</greenmail.version>
