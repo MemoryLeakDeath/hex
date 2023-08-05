@@ -263,11 +263,19 @@
                 <directory>src/main/resources_filtered</directory>
                 <filtering>true</filtering>
             </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
         </resources>
         <testResources>
             <testResource>
                 <directory>src/test/resources_filtered</directory>
                 <filtering>true</filtering>                
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>false</filtering>                
             </testResource>
         </testResources>
         <plugins>
