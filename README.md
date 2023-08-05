@@ -19,6 +19,7 @@ To get a development environment setup for this project, follow these steps:
 - Make a copy of the "prod.properties" file under the root of the project and name it "secretkeys.properties" then specify actual values for the keys.  This file is automatically picked up by the maven build if it exists and will be used by the application (it is also in the .gitignore file so no need to worry about accidently committing it).
 Some common "secretkeys.properties" values if you are using the default setup:
 ```
+(This is just some of the settings not all of them, please make sure to copy all the settings from prod.properties and fill them in)
 dbport=5432
 dbserver=localhost
 dburl=jdbc:postgresql://${dbserver}:${dbport}/${dbname}
