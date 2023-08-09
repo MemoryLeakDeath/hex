@@ -73,6 +73,9 @@ public class UserRegistrationController extends BaseFrontendController {
     @GetMapping("/")
     public String registerNewUser(HttpServletRequest request, Model model) {
         addPageJS(model, "/js/registration/registration.js");
+        if (!model.containsAttribute("userModel") || model.getAttribute("userModel") == null) {
+            model.addAttribute("userModel", new UserRegistrationModel());
+        }
         try {
             ImageCaptcha imageCaptcha = captchaService.generateImageCaptcha();
             AudioCaptcha audioCaptcha = captchaService.generateAudioCaptcha();
@@ -83,9 +86,6 @@ public class UserRegistrationController extends BaseFrontendController {
             String encodedAudioCaptcha = getEncodedAudioCaptcha(request, audioCaptcha);
             model.addAttribute("imageCaptcha", "data:image/png;base64," + encodedCaptcha);
             model.addAttribute("audioCaptcha", "data:audio/wav;base64," + encodedAudioCaptcha);
-            if (!model.containsAttribute("userModel")) {
-                model.addAttribute("userModel", new UserRegistrationModel());
-            }
         } catch (Exception e) {
             logger.error("Unable to display register new user page!", e);
             addErrorMessage(request, "text.error.systemerror");
