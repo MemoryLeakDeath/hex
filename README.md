@@ -41,7 +41,7 @@ mvn clean resources:resources docker:build docker:start
 
 - To run the database migration scripts and generate a SSL keystore, run the following command:
 ```
-mvn verify
+mvn resources:resources liquibase:update verify
 ```
 - Configure tomcat's server.xml to connect via SSL on port 8443 with the following configuration (replace "<project.directory>" with the path to the project files downloaded from github):
 ```
