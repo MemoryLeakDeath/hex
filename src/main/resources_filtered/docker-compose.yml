@@ -2,6 +2,7 @@ version: "2.1"
 services:
  
   hex-db:
+    image: postgres:${postgresdb.version}
     restart: always
     environment:
       POSTGRES_PASSWORD: ${postgresPassword}

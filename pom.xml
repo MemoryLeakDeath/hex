@@ -8,7 +8,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>        
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> 
+        <finalname>ROOT-${project.version}</finalname>       
         <spring.framework.version>6.0.11</spring.framework.version>
         <spring.security.version>6.1.2</spring.security.version>
         <servlet.api.version>6.0.0</servlet.api.version>
@@ -17,6 +18,8 @@
         <logback.version>1.4.8</logback.version>
         <postgresql.version>42.6.0</postgresql.version>
         <postgresdb.version>15.3</postgresdb.version>
+        <tomcatapp.version>10.1.11</tomcatapp.version>
+        <tomcatjdk.version>jdk17</tomcatjdk.version>
         <hikari.version>5.0.1</hikari.version>
         <junit.version>5.10.0</junit.version>
         <mockito.version>5.4.0</mockito.version>
@@ -243,13 +246,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.icegreen</groupId>
-            <artifactId>greenmail-webapp</artifactId>
-            <version>${greenmail.version}</version>
-            <type>war</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
             <version>9.5</version>
@@ -257,7 +253,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>ROOT-${project.version}</finalName>
+        <finalName>${finalname}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources_filtered</directory>
@@ -488,35 +484,6 @@
                   <skipIfExist>true</skipIfExist>
                 </configuration>
             </plugin>  
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven3-plugin</artifactId>
-                <version>1.10.8</version>
-                <configuration>
-                  <!-- Container configuration -->
-                    <container>
-                      <containerId>jetty10x</containerId>
-                      <type>embedded</type>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.ow2.asm</groupId>
-                                <artifactId>asm</artifactId>
-                            </dependency>
-                        </dependencies>                
-                    </container>
-                  <!-- Configuration to use with the container or the deployer -->
-                    <deployables>
-                      <deployable>
-                        <groupId>com.icegreen</groupId>
-                        <artifactId>greenmail-webapp</artifactId>
-                        <type>war</type>
-                        <properties>
-                            <context>greenmail</context>
-                        </properties>
-                      </deployable>
-                    </deployables>
-                </configuration>
-            </plugin>          
 			<plugin>
 			    <groupId>io.fabric8</groupId>
 			    <artifactId>docker-maven-plugin</artifactId>
@@ -531,6 +498,7 @@
 								<type>compose</type>
 								<basedir>${project.build.directory}/classes</basedir>
 								<composeFile>docker-compose.yml</composeFile>
+								<mode>override</mode>
 							</external>
 				            <build>
 							  <from>postgres:${postgresdb.version}</from>
@@ -546,6 +514,67 @@
 				                </inline>
 				              </assembly>
 				            </build>
+				            <run>
+								<wait>
+					              <log>(?s)database system is ready to accept connections.*database system is ready to accept connections</log>
+					              <time>20000</time>
+								</wait>
+							</run>
+						</image>
+						<image>
+							<name>hex-app</name>
+							<alias>hex-app</alias>
+				            <build>
+							  <from>tomcat:${tomcatapp.version}-${tomcatjdk.version}</from>
+							  <assemblies>
+					              <assembly>
+									<name>tomcat-conf</name>
+					                <mode>dir</mode>
+					                <targetDir>/usr/local/tomcat/conf</targetDir>
+					                <inline>
+					                  <files>
+					                    <file>
+					                      <source>${project.basedir}/conf/server.xml</source>
+					                    </file>
+					                  </files>
+					                </inline>
+					              </assembly>								  
+					              <assembly>
+									<name>tomcat-keystore</name>
+					                <mode>dir</mode>
+					                <targetDir>/app/hex/conf</targetDir>
+					                <inline>
+					                  <files>
+					                    <file>
+					                      <source>${project.basedir}/conf/local_keystore.jks</source>
+					                    </file>
+					                  </files>
+					                </inline>
+					              </assembly>								  
+							  </assemblies>
+				            </build>
+				            <run>
+								<dependsOn>
+									<container>hex-db</container>
+								</dependsOn>
+							    <restartPolicy>
+									<name>always</name>
+								</restartPolicy>
+								<ports>
+									<port>8080:8080</port>
+									<port>8443:8443</port>
+									<port>8005:8005</port>
+								</ports>
+								<volumes>
+									<bind>
+										<volume>${project.basedir}/src/main/webapp/META-INF:/usr/local/tomcat/webapps/hex/META-INF</volume>
+										<volume>${project.basedir}/src/main/webapp/WEB-INF:/usr/local/tomcat/webapps/hex/WEB-INF</volume>
+										<volume>${project.build.outputDirectory}:/usr/local/tomcat/webapps/hex/WEB-INF/classes</volume>
+										<volume>${project.build.directory}/${finalname}/WEB-INF/lib:/usr/local/tomcat/webapps/hex/WEB-INF/lib</volume>
+										<volume>${project.basedir}/logs:/usr/local/tomcat/logs</volume>
+									</bind>
+								</volumes>
+							</run>
 						</image>
 					</images>
 				</configuration>
