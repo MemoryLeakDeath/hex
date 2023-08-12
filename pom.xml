@@ -490,16 +490,11 @@
 			    <version>0.43.2</version>
 			    <configuration>
 					<dockerHost>${env.DOCKER_HOST}</dockerHost>
+					<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
 					<images>
 						<image>
 							<name>hex-db</name>
 							<alias>hex-db</alias>
-							<external>
-								<type>compose</type>
-								<basedir>${project.build.directory}/classes</basedir>
-								<composeFile>docker-compose.yml</composeFile>
-								<mode>override</mode>
-							</external>
 				            <build>
 							  <from>postgres:${postgresdb.version}</from>
 				              <assembly>
@@ -515,6 +510,23 @@
 				              </assembly>
 				            </build>
 				            <run>
+								<envPropertyFile>${project.build.outputDirectory}/hex.properties</envPropertyFile>
+								<network>
+									<mode>custom</mode>
+									<name>hex-network</name>
+									<alias>hex-db</alias>
+								</network>
+							    <restartPolicy>
+									<name>always</name>
+								</restartPolicy>
+								<ports>
+									<port>5432:5432</port>
+								</ports>
+								<volumes>
+									<bind>
+										<volume>/var/lib/postgresql/data</volume>
+									</bind>
+								</volumes>
 								<wait>
 					              <log>(?s)database system is ready to accept connections.*database system is ready to accept connections</log>
 					              <time>20000</time>
@@ -554,6 +566,15 @@
 							  </assemblies>
 				            </build>
 				            <run>
+								<env>
+									<JPDA_OPTS>-agentlib:jdwp=transport=dt_socket,address=0.0.0.0:8000,server=y,suspend=n</JPDA_OPTS>
+								</env>
+								<cmd>/usr/local/tomcat/bin/catalina.sh jpda run</cmd>
+								<network>
+									<mode>custom</mode>
+									<name>hex-network</name>
+									<alias>hex-app</alias>
+								</network>
 								<dependsOn>
 									<container>hex-db</container>
 								</dependsOn>
@@ -561,6 +582,7 @@
 									<name>always</name>
 								</restartPolicy>
 								<ports>
+									<port>8000:8000</port>
 									<port>8080:8080</port>
 									<port>8443:8443</port>
 									<port>8005:8005</port>
