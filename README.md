@@ -23,7 +23,7 @@ dbname=hex
 dbuser=hex-user
 dbpassword=<some password>
 dbport=5432
-dbserver=hex-db
+dbserver=hex-db  # server name is required to be "hex-db" for docker deployment
 dburl=jdbc:postgresql://${dbserver}:${dbport}/${dbname}
 totpKey=<some generated key max 85 characters>
 rememberMeKey=<some generated key max 90 characters>
@@ -35,7 +35,7 @@ dbtestname=hex-test
 dbtestuser=hex-tester
 dbtestpassword=<some password>
 dbtestport=5432
-dbtestserver=hex-db
+dbtestserver=hex-db # server name is required to be "hex-db" for docker deployment
 dbtesturl=jdbc:postgresql://${dbtestserver}:${dbtestport}/${dbtestname}
 ```
 - To perform the initial build of the docker containers, the creation of the database, and the creation of the dev SSL certs, run the following:
