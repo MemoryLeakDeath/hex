@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="content">
+        <h2 th:text="#{settings.applications.text.manageapplications}"></h2>
+		<table class="table table-bordered table-hover">
+		   <thead>
+		       <tr>
+		           <th th:text="#{settings.applications.header.actions}"></th>
+		           <th th:text="#{settings.applications.header.applicationname}"></th>
+		           <th th:text="#{settings.applications.header.lastauthenticated}"></th>
+		       </tr>
+		   </thead>
+		   <tbody>
+		      <tr th:each="app : ${applications}">
+		         <td class="text-nowrap">
+					 <div class="btn-group" role="group">
+						 <button th:hx-post="@{/settings/applications/revoke}" class="btn btn-secondary btn-sm revokepermissionbutton" th:title="#{button.revokeaccess}" th:hx-vals="'{&quot;id&quot;:&quot;' + ${app.applicationId} + '&quot;}'" th:hx-confirm="#{settings.applications.text.confirmrevoke}"><i class="fas fa-trash"></i></button>
+					 </div>
+			     </td>
+		         <td th:text="${app.applicationName}"></td>
+		         <td><span th:text="${#calendars.format(app.lastUsed,'MM/dd/yyyy HH:mm:ss')}"></span></td>
+		      </tr>
+		   </tbody>
+		</table>
+	</div>
+</html>

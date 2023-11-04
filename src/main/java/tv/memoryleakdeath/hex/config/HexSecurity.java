@@ -15,6 +15,9 @@ import org.springframework.security.config.annotation.web.configurers.FormLoginC
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RememberMeConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -73,46 +76,47 @@ public class HexSecurity {
     }
     
     @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
     public SecurityContextLogoutHandler logoutHandler() {
         return new SecurityContextLogoutHandler();
     }
 
     @Bean
-    @Order(1)
-    public SecurityFilterChain apiFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-        http.cors(cors -> cors.disable()).securityMatcher("/api/**").authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("API")).httpBasic(Customizer.withDefaults())
-                .authenticationManager(authManager);
-        return http.build();
-    }
-
-    @Bean
-    @Order(2)
+    @Order(3)
     public SecurityFilterChain authenticatedFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-        http.headers(commonHeaders()).cors(cors -> cors.disable()).securityMatcher("/settings/**", "/dashboard/**")
+        http.headers(commonHeaders()).cors(cors -> cors.disable())
+                .securityMatcher("/settings/**", "/dashboard/**", "/developer/**")
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("USER"))
                 .authenticationManager(authManager)
+                .sessionManagement(sessionRegistryConfig())
                 .rememberMe(rememberMeConfig())
-                .formLogin(formLogin()).logout(formLogout());
-        return http.build();
-    }
-
-    @Bean
-    @Order(3)
-    public SecurityFilterChain adminFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-        http.headers(commonHeaders()).cors(cors -> cors.disable()).securityMatcher("/admin/**")
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"))
-                .authenticationManager(authManager)
                 .formLogin(formLogin()).logout(formLogout());
         return http.build();
     }
 
     @Bean
     @Order(4)
+    public SecurityFilterChain adminFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
+        http.headers(commonHeaders()).cors(cors -> cors.disable()).securityMatcher("/admin/**")
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().hasRole("ADMIN"))
+                .authenticationManager(authManager)
+                .sessionManagement(sessionRegistryConfig())
+                .formLogin(formLogin()).logout(formLogout());
+        return http.build();
+    }
+
+    @Bean
+    @Order(5)
     public SecurityFilterChain allAccessFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http.headers(commonHeaders()).cors(cors -> cors.disable()).securityMatcher("/**")
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .rememberMe(rememberMeConfig())
                 .authenticationManager(authManager)
+                .sessionManagement(sessionRegistryConfig())
                 .formLogin(formLogin()).logout(formLogout());
         return http.build();
     }
@@ -135,4 +139,7 @@ public class HexSecurity {
         return headers -> headers.frameOptions(frame -> frame.deny());
     }
 
+    private Customizer<SessionManagementConfigurer<HttpSecurity>> sessionRegistryConfig() {
+        return registry -> registry.sessionConcurrency(c -> c.sessionRegistry(sessionRegistry()));
+    }
 }

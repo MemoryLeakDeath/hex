@@ -31,6 +31,7 @@ public abstract class BaseFrontendController {
     public static final String LOGIN_ERROR_RETURN = "loginErrorReturn";
     public static final String NONCE = "nonce";
     public static final String PASSWORD_CHANGE_ATTEMPTS = "numPasswordChangeAttempts";
+    public static final String HTMX_CONFIG = "htmxConfig";
 
     @Autowired
     private MessageSource messageSource;

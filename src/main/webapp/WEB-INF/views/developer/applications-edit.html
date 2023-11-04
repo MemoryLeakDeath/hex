@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="content">
+        <h2 th:text="#{developer.text.editapplication}"></h2>
+        <form th:action="@{/developer/applications/update}" method="POST" th:object="${registeredClientModel}">
+		  <input type="hidden" th:field="*{id}">
+          <div class="mb-3">
+              <label for="clientName" class="form-label required" th:text="#{text.applicationname}"></label>
+              <input type="text" class="form-control" th:errorclass="is-invalid" id="clientName" th:field="*{clientName}" required="required" maxlength="200" aria-describedby="clientname-error"/>
+              <div id="clientname-error" class="invalid-feedback" th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}"></div>
+          </div>
+          <div class="mb-3">
+              <label for="clientAuthenticationMethods" class="form-label" th:text="#{text.clientauthenticationmethod}"></label>
+              <select class="form-select" th:field="*{clientAuthenticationMethods}" th:errorclass="is-invalid" aria-describedby="clientauthenticationmethods-error">
+				  <option th:each="method : ${clientAuthMethods}" th:value="${method.value}" th:text="#{${method.key}}"></option>
+			  </select>
+              <div id="clientauthenticationmethods-error" class="invalid-feedback" th:if="${#fields.hasErrors('clientAuthenticationMethods')}" th:errors="*{clientAuthenticationMethods}"></div>
+          </div>
+          <div class="mb-3">
+              <label for="authorizationGrantTypes" class="form-label" th:text="#{text.authorizationgranttypes}"></label>
+              <select class="form-select" th:field="*{authorizationGrantTypes}" th:errorclass="is-invalid" aria-describedby="authorizationgranttypes-error">
+				  <option th:each="method : ${clientAuthTypes}" th:value="${method.value}" th:text="#{${method.key}}"></option>
+			  </select>
+              <div id="authorizationgranttypes-error" class="invalid-feedback" th:if="${#fields.hasErrors('authorizationGrantTypes')}" th:errors="*{authorizationGrantTypes}"></div>
+          </div>
+          <div class="mb-3">
+              <label for="redirectUris" class="form-label required" th:text="#{text.redirecturi}"></label>
+              <input type="text" class="form-control" th:errorclass="is-invalid" id="clientName" th:field="*{redirectUris}" required="required" maxlength="1000" aria-describedby="redirecturis-error"/>
+              <div id="redirecturis-error" class="invalid-feedback" th:if="${#fields.hasErrors('redirectUris')}" th:errors="*{redirectUris}"></div>
+          </div>
+          <div class="mb-3">
+              <label for="postLogoutRedirectUris" class="form-label" th:text="#{text.logoutredirecturi}"></label>
+              <input type="text" class="form-control" th:errorclass="is-invalid" id="postLogoutRedirectUris" th:field="*{postLogoutRedirectUris}" maxlength="1000" aria-describedby="postlogoutredirecturis-error"/>
+              <div id="postlogoutredirecturis-error" class="invalid-feedback" th:if="${#fields.hasErrors('postLogoutRedirectUris')}" th:errors="*{postLogoutRedirectUris}"></div>
+          </div>
+          <div class="mb-3 form-check">
+			  <th:block th:each="scope : ${scopes}">
+				  <input class="form-check-input" th:errorclass="is-invalid" type="checkbox" th:id="${scope.name} + '-checkbox'" th:field="*{selectedScopes}" th:value="${scope.name}" aria-describedby="selectedscopes-error">
+				  <label th:for="${scope.name} + '-checkbox'" class="form-check-label" th:text="#{${scope.scopeNameLookup}}"></label>
+				  <p><small class="text-body-secondary" th:text="#{${scope.descriptionLookup}}"></small></p>
+			  </th:block>
+              <div id="selectedscopes-error" class="invalid-feedback" th:if="${#fields.hasErrors('selectedScopes')}" th:errors="*{selectedScopes}"></div>			  
+		  </div>
+		  <div>
+			  <button class="btn btn-primary" id="editapplicationbutton" type="submit" th:text="#{button.save}"></button>
+		  </div> 
+        </form>
+    </div>
+</html>

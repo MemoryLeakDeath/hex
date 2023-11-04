@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<div class="container" th:fragment="content">
+    <div class="row py-5">
+        <h1 class="text-center text-primary" th:text="#{oauth.consent.header}"></h1>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+			<p>
+                <div>
+		          <th:block th:with="avatarId = ${userAvatar}">
+			          <img id="userAvatar" th:src="${@GravatarService.getAvatarUrl(avatarId)}" alt="Avatar" width="40" height="40" />
+		          </th:block>
+				</div>
+                <div class="fw-bold" th:text="${userDisplayName}"></div>
+			</p>
+            <p>
+                [(#{oauth.consent.description.start})]
+                <span class="fw-bold text-primary" th:text="${clientName}"></span>
+                [(#{oauth.consent.description.middle})]
+            </p>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col text-center">
+            <p th:text="#{oauth.consent.permissions.description}"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <form name="consent_form" method="post" th:action="@{${authURI}}">
+                <input type="hidden" name="client_id" th:value="${clientId}">
+                <input type="hidden" name="state" th:value="${state}">
+                <th:block th:each="scope : ${requestedScopes}">
+					<input type="hidden" name="scope" th:value="${scope}">					
+				</th:block>
+                
+                <div th:each="scope: ${newScopes}" class="form-check py-1">
+					<ul>
+						<li class="text-primary" th:text="#{${scope}}"></li>
+					</ul>
+                </div>
+
+                <p th:if="${not #lists.isEmpty(previousScopes)}" th:text="#{oauth.consent.permissions.granted}"></p>
+                <div th:each="scope: ${previousScopes}" class="form-check py-1">
+					<ul>
+						<li class="text-primary" th:text="#{${scope}}"></li>
+					</ul>
+                </div>
+
+                <div class="pt-3">
+                    <button class="btn btn-primary btn-lg" type="submit" id="consentButton" th:text="#{button.allow}"></button>
+                </div>
+                <div class="pt-3">
+                    <a class="btn btn-outline-secondary" type="button" id="cancelButton" th:text="#{button.cancel}" th:href="@{/logoutonly}"></a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col text-center">
+            <p>
+                <small th:text="#{oauth.consent.footer}"></small>
+            </p>
+        </div>
+    </div>
+</div>	
+</html>

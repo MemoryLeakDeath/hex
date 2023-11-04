@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/html-header :: htmlhead}"></head>
+<body class="bg-body-color" data-bs-theme="dark">
+    <div th:replace="~{fragment/top-navigation :: topnav}"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <th:block th:replace="~{fragment/developer-navigation :: developer-nav}"></th:block>
+            <div class="col-10">
+                <div th:replace="~{fragment/messages :: messages}"></div>
+                <div class="ms-2 pt-3">
+                    <th:block th:replace="~{${view} :: content}"></th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

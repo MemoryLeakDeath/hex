@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="htmlhead">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="htmx-config" th:content="${htmxConfig}"/>
 	<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
 	<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>     
     <title th:text="#{site.title} + ' - ' + ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).PAGE_TITLE)}"></title>
@@ -18,6 +19,8 @@
     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>    
     <script type="text/javascript" th:src="@{/js/bootstrap.bundle.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/application.js}"></script>
+    <script type="text/javascript" th:src="@{/js/widgets/generate-password-field.js}"></script>
+    <script type="text/javascript" th:src="@{/js/htmx.min.js}"></script>
     <th:block th:with="scriptList = ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).JS_SCRIPTS)}">
         <script type="text/javascript" th:each="script : ${scriptList}" th:src="@{${script}}"></script>
     </th:block>    
