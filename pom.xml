@@ -33,7 +33,7 @@
         <bouncycastlepkix.version>1.76</bouncycastlepkix.version>
         <totp.version>1.7.1</totp.version>
         <faker.version>2.0.1</faker.version>
-        <greenmail.version>2.1.0-alpha-1</greenmail.version>
+        <greenmail.version>2.1.0-alpha-2</greenmail.version>
         <nanocaptcha.version>1.5</nanocaptcha.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
         <velocity.version>2.3</velocity.version>
