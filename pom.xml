@@ -39,7 +39,7 @@
         <velocity.version>2.3</velocity.version>
         <liquidbase.version>4.24.0</liquidbase.version>
         <nbvcxz.version>1.5.1</nbvcxz.version>
-        <jackson.version>2.15.2</jackson.version>
+        <jackson.version>2.15.3</jackson.version>
         <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
     </properties>
     <dependencyManagement>
