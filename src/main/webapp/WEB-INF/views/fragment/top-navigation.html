@@ -34,6 +34,10 @@
 			        </a>
 			        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 			          <a id="settingsbutton" class="dropdown-item settings" th:href="@{/settings/}" th:text="#{button.settings}"></a>
+			          <th:block th:if="${@ChannelHelperUtil.hasChannel(#authentication.principal.id)}">
+				          <a id="dashboardbutton" class="dropdown-item dashboard" th:href="@{/dashboard/}" th:text="#{button.dashboard}"></a>
+				          <a id="mychannelbutton" class="dropdown-item mychannel" th:with="channelName = ${@ChannelHelperUtil.getChannelName(#authentication.principal.id)}" th:href="@{/channel/{channelName}(channelName=${channelName})}" th:text="#{button.mychannel}"></a>
+					  </th:block>
 			          <a id="logoutbutton" class="dropdown-item logout" href="#" th:text="#{button.logout}"></a>
 			        </div>
 			      </li>

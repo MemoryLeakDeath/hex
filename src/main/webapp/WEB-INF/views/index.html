@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-</head>
-<body>
-    <div class="container" th:fragment="content">
-        <h1 th:text="${helloMsg}"/>
-        
+	<div class="container" th:fragment="content">
+	    <h1 th:text="${helloMsg}"/>
+	    
 	    <a th:href="@{/email/test}">Send Test Email</a>
 	    
 	    <table class="table table-bordered table-hover">
@@ -14,26 +11,25 @@
 	               <th>Col 1</th>
 	               <th>Col 2</th>
 	               <th>Col 3</th>
-               </tr>
-           </thead>
-           <tbody>
-              <tr>
-                 <td>test 1</td>
-                 <td>test 2</td>
-                 <td>test 3</td>
-              </tr>
-              <tr>
-                 <td>test 4</td>
-                 <td>test 5</td>
-                 <td>test 6</td>
-              </tr>
-              <tr>
-                 <td>test 7</td>
-                 <td>test 8</td>
-                 <td>test 9</td>
-              </tr>
-           </tbody>
+	           </tr>
+	       </thead>
+	       <tbody>
+	          <tr>
+	             <td>test 1</td>
+	             <td>test 2</td>
+	             <td>test 3</td>
+	          </tr>
+	          <tr>
+	             <td>test 4</td>
+	             <td>test 5</td>
+	             <td>test 6</td>
+	          </tr>
+	          <tr>
+	             <td>test 7</td>
+	             <td>test 8</td>
+	             <td>test 9</td>
+	          </tr>
+	       </tbody>
 	    </table>
-    </div>
-</body>
+	</div>
 </html>

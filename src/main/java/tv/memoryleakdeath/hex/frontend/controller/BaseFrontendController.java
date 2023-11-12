@@ -49,12 +49,20 @@ public abstract class BaseFrontendController {
         return localeResolver.resolveLocale(request);
     }
 
+    protected String getMessage(HttpServletRequest request, String msg, Object[] messageArgs) {
+        return messageSource.getMessage(msg, messageArgs, msg, getLocale(request));
+    }
+
     protected String getMessage(HttpServletRequest request, String msg) {
-        return messageSource.getMessage(msg, null, msg, getLocale(request));
+        return getMessage(request, msg, null);
+    }
+
+    protected void setPageTitle(HttpServletRequest request, Model model, String titleMsg, Object[] messageParams) {
+        model.addAttribute(PAGE_TITLE, getMessage(request, titleMsg, messageParams));
     }
 
     protected void setPageTitle(HttpServletRequest request, Model model, String titleMsg) {
-        model.addAttribute(PAGE_TITLE, getMessage(request, titleMsg));
+        setPageTitle(request, model, titleMsg, null);
     }
 
     protected void setLayout(Model model, String layoutRelativePath) {

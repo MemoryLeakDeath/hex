@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import tv.memoryleakdeath.hex.backend.dao.channel.ChannelsDao;
 import tv.memoryleakdeath.hex.backend.dao.security.OAuth2AuthorizationConsentDao;
 import tv.memoryleakdeath.hex.backend.dao.security.OAuth2AuthorizationDao;
 import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
@@ -67,6 +68,9 @@ public class UserSettingsController extends BaseFrontendController {
 
     @Autowired
     private SessionRegistry sessionRegistry;
+
+    @Autowired
+    private ChannelsDao channelsDao;
 
     @GetMapping("/")
     public String view(HttpServletRequest request, Model model) {
@@ -222,6 +226,43 @@ public class UserSettingsController extends BaseFrontendController {
         }
     }
 
+    @GetMapping("/channelsettings")
+    public String viewChannelSettings(HttpServletRequest request, Model model) {
+        String userId = getUserId(request);
+        try {
+            if (channelsDao.hasChannel(userId)) {
+                return "redirect:/dashboard/";
+            }
+            setPageTitle(request, model, "title.settings");
+            setLayout(model, "layout/settings");
+        } catch (Exception e) {
+            logger.error("Unable to view channel settings!", e);
+            addErrorMessage(request, "text.error.systemerror");
+        }
+        return "settings/createchannel";
+    }
+
+    @PostMapping("/createchannel")
+    public String createChannel(HttpServletRequest request, Model model) {
+        String userId = getUserId(request);
+        String displayName = getUser(request).getDisplayName();
+        try {
+            if (channelsDao.hasChannel(userId)) {
+                addErrorMessage(request, "text.error.channelalreadyexists");
+                return "redirect:/settings/";
+            }
+            if (!channelsDao.createBarebonesChannel(userId, displayName)) {
+                addErrorMessage(request, "text.error.channelalreadyexists");
+                return "redirect:/settings/";
+            }
+            addSuccessMessage(request, "text.success.channelcreated");
+        } catch (Exception e) {
+            logger.error("Unable to create a channel for user!", e);
+            addErrorMessage(request, "text.error.systemerror");
+            return "redirect:/settings/";
+        }
+        return "redirect:/dashboard/";
+    }
 
     private UserDetails populateBasicUserDetails(String email, String displayName, String userId) {
         UserDetails userDetails = new UserDetails();

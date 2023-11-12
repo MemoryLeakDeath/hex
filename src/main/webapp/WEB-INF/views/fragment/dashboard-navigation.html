@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:fragment="dashboard-nav">
+        <!-- Sidebar -->
+        <div class="col-2 d-flex flex-column bg-dark vh-100 w-200">
+            <a th:href="@{/dashboard/}" class="d-flex align-items-center justify-content-between p-3 link-light text-decoration-none border-bottom active">
+                <i class="fas fa-home fs-4 me-3"></i>
+                <span th:text="#{dashboard.nav.text.home}"></span>
+            </a>
+        </div>
+    </th:block>
+</html>

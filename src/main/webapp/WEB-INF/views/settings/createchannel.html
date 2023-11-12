@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="content">
+        <h2 th:text="#{settings.text.createchannel}"></h2>
+        <form id="createChannelForm" th:action="@{/settings/createchannel}" method="POST">
+          <div class="mb-2">
+			  <p th:text="#{settings.text.createchannel.explain}"></p>
+          </div>
+          <button type="submit" class="mt-4 btn btn-primary" th:text="#{button.createchannel}"></button>
+        </form>
+    </div>
+</html>
