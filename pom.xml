@@ -21,7 +21,7 @@
         <postgresdb.version>15.3</postgresdb.version>
         <tomcatapp.version>10.1.11</tomcatapp.version>
         <tomcatjdk.version>jdk17</tomcatjdk.version>
-        <hikari.version>5.0.1</hikari.version>
+        <hikari.version>5.1.0</hikari.version>
         <junit.version>5.10.1</junit.version>
         <mockito.version>5.4.0</mockito.version>
         <hamcrest.version>2.2</hamcrest.version>
