@@ -1,6 +1,7 @@
 package tv.memoryleakdeath.hex.fontend.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -21,6 +22,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ContextConfiguration;
 
 import tv.memoryleakdeath.hex.backend.dao.TestDao;
+import tv.memoryleakdeath.hex.backend.dao.channel.ChannelsDao;
 import tv.memoryleakdeath.hex.common.pojo.HexUser;
 import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
 
@@ -35,10 +37,19 @@ public class HomeControllerTest extends AbstractControllerTest {
         public TestDao getTestDao() {
             return Mockito.mock(TestDao.class);
         }
+
+        @Bean
+        @Primary
+        public ChannelsDao getChannelsDao() {
+            return Mockito.mock(ChannelsDao.class);
+        }
     }
 
     @Autowired
     private TestDao mockTestDao;
+
+    @Autowired
+    private ChannelsDao mockChannelsDao;
 
     @Autowired
     private UserDetailsService mockUserDetailsService;
@@ -69,6 +80,7 @@ public class HomeControllerTest extends AbstractControllerTest {
     @Test
     public void testUserHomepage() throws Exception {
         HexUser user = dummyNormalUser();
+        when(mockChannelsDao.hasChannel(any())).thenReturn(false);
         getMockMvc().perform(get("/").with(csrf()).with(user(user)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("layout/main"))
