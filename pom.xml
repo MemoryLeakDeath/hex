@@ -89,6 +89,14 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
         </dependency>     
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+        </dependency>     
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+        </dependency>     
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-oauth2-authorization-server</artifactId>
@@ -431,6 +439,11 @@
                                     <directory>${project.basedir}/node_modules/htmx.org/dist</directory>
                                     <include>htmx.min.js</include>
                                     <include>htmx.min.js.gz</include>
+                                </resource>
+                                <resource>
+                                    <directory>${project.basedir}/node_modules/@stomp/stompjs/bundles</directory>
+                                    <include>stomp.umd.min.js</include>
+                                    <include>stomp.umd.js.map</include>
                                 </resource>
                             </resources>
                         </configuration>

@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
 
 public class CSPHeaderInterceptor implements HandlerInterceptor {
-    private static final String CSP_POLICY = "default-src 'self' data:; script-src 'self' 'nonce-%s'; img-src 'self' data: www.gravatar.com;";
+    private static final String CSP_POLICY = "default-src 'self' data: ws:; script-src 'self' 'nonce-%s'; img-src 'self' data: www.gravatar.com;";
     private static final int NONCE_SIZE = 128;
     private static final String HTMX_CONFIG = "{\"inlineScriptNonce\":\"%s\", \"includeIndicatorStyles\":false}";
 

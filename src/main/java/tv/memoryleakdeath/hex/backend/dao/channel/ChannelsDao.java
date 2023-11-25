@@ -41,6 +41,15 @@ public class ChannelsDao {
         return results.get(0);
     }
 
+    public boolean channelNameExists(String name) {
+        if (StringUtils.isBlank(name)) {
+            return false;
+        }
+        String sql = "select count(*) from channels where name = ?";
+        int result = jdbcTemplate.queryForObject(sql, Integer.class, name);
+        return (result > 0);
+    }
+
     public boolean createBarebonesChannel(String userId, String displayName) {
         String sql = "insert into channels (userid, name, active, live, created, lastupdated) VALUES (?::uuid,?,false,false,NOW(),NOW())";
         String convertedDisplayName = ChannelUtils.convertToChannelName(displayName);

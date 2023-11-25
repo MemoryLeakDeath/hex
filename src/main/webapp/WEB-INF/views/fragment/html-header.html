@@ -21,6 +21,8 @@
     <script type="text/javascript" th:src="@{/js/application.js}"></script>
     <script type="text/javascript" th:src="@{/js/widgets/generate-password-field.js}"></script>
     <script type="text/javascript" th:src="@{/js/htmx.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/stomp.umd.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/chat/chatclient.js}"></script>
     <th:block th:with="scriptList = ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).JS_SCRIPTS)}">
         <script type="text/javascript" th:each="script : ${scriptList}" th:src="@{${script}}"></script>
     </th:block>    
