@@ -16,7 +16,8 @@ public class ChatController {
 
     @MessageMapping("/{channelName}/sendChatMessage")
     @SendTo("/topic/chat/{channelName}")
-    public ChatMessage sendChatMessage(IncomingChatMessage message, @DestinationVariable String channelName) {
+    public ChatMessage sendChatMessage(IncomingChatMessage message,
+            @DestinationVariable("channelName") String channelName) {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setChannelName(channelName);
         chatMessage.setMessage(message.getMessage());

@@ -1,3 +1,41 @@
+@font-face {
+	font-family: "Nunito Sans";
+	font-style: normal;
+	src: url("../webfonts/NunitoSans-VariableFont_YTLC\,opsz\,wdth\,wght.ttf");
+}
+
+@font-face {
+	font-family: "Nunito Sans";
+	font-style: italic;
+	src: url("../webfonts/NunitoSans-Italic-VariableFont_YTLC\,opsz\,wdth\,wght.ttf");
+}
+
+@font-face {
+	font-family: "OpenDyslexic";
+	font-style: normal;
+	src: url("../webfonts/OpenDyslexic-Regular.woff2"), url("../webfonts/OpenDyslexic-Regular.woff");
+}
+
+@font-face {
+	font-family: "OpenDyslexic";
+	font-style: normal;
+	font-weight: 700;
+	src: url("../webfonts/OpenDyslexic-Bold.woff2"), url("../webfonts/OpenDyslexic-Bold.woff");
+}
+
+@font-face {
+	font-family: "OpenDyslexic";
+	font-style: italic;
+	src: url("../webfonts/OpenDyslexic-Italic.woff2"), url("../webfonts/OpenDyslexic-Italic.woff");
+}
+
+@font-face {
+	font-family: "OpenDyslexic";
+	font-style: italic;
+	font-weight: 700;
+	src: url("../webfonts/OpenDyslexic-Bold-Italic.woff2"), url("../webfonts/OpenDyslexic-Bold-Italic.woff");
+}
+
 body[data-bs-theme="dark"] {
 	--bs-body-bg: var(--smokey-black);
 	--bs-primary: var(--hunter-green);
@@ -8,7 +46,8 @@ body[data-bs-theme="dark"] {
 	--hunter-green: #485f46ff;
 	--white-smoke: #f0f2efff;
 	--silver: #a69f98ff;
-	--rose-taupe: #8c6057ff;	
+	--rose-taupe: #8c6057ff;
+	font-family: "Nunito Sans";	
 }
 
 .table {
@@ -27,4 +66,32 @@ body[data-bs-theme="dark"] {
 .blur {
 	filter: blur(5px);
 	-webkit-filter: blur(5px);
+}
+
+#chatsection {
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+    width: 25%;
+    position: fixed;
+    right: 0;
+    border: 1px solid #dee2e6;
+}
+.chatheader {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+.chatbox {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+.chatform {
+    padding: 10px;
+    border-top: 1px solid #dee2e6;
+}
+
+.message {
+	font-family: "Nunito Sans";
+	font-size: 1em;
 }
