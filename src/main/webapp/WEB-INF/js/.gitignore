@@ -4,3 +4,5 @@
 /bootstrap.bundle.min.js.map
 /stomp.umd.js.map
 /stomp.umd.min.js
+/htmx.min.js
+/htmx.min.js.gz
