@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import tv.memoryleakdeath.hex.backend.dao.mapper.ChannelMapper;
+import tv.memoryleakdeath.hex.common.pojo.Channel;
 import tv.memoryleakdeath.hex.utils.ChannelUtils;
 
 @Repository
@@ -39,6 +41,18 @@ public class ChannelsDao {
             return null;
         }
         return results.get(0);
+    }
+
+    private static final String GET_CHANNEL_BY_NAME = """
+            select %s from channels where name = ?
+            """.formatted(StringUtils.join(COLUMNS, ","));
+
+    public Channel getChannelByName(String channelName) {
+        List<Channel> results = jdbcTemplate.query(GET_CHANNEL_BY_NAME, new ChannelMapper(), channelName);
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+        return null;
     }
 
     public boolean channelNameExists(String name) {

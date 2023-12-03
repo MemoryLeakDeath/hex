@@ -29,6 +29,7 @@
         <commonslang.version>3.13.0</commonslang.version>
         <commonstext.version>1.10.0</commonstext.version>
         <commonscodec.version>1.16.0</commonscodec.version>
+        <commonsio.version>2.15.1</commonsio.version>
         <commonsvalidator.version>1.7</commonsvalidator.version>
         <bouncycastlepkix.version>1.76</bouncycastlepkix.version>
         <totp.version>1.7.1</totp.version>
@@ -140,6 +141,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commonslang.version}</version>
         </dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>${commonsio.version}</version>
+		</dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk18on</artifactId>
