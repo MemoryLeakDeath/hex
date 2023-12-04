@@ -27,7 +27,7 @@
         <hamcrest.version>2.2</hamcrest.version>
         <jsonpath.version>2.8.0</jsonpath.version>
         <commonslang.version>3.13.0</commonslang.version>
-        <commonstext.version>1.10.0</commonstext.version>
+        <commonstext.version>1.11.0</commonstext.version>
         <commonscodec.version>1.16.0</commonscodec.version>
         <commonsio.version>2.15.1</commonsio.version>
         <commonsvalidator.version>1.7</commonsvalidator.version>
