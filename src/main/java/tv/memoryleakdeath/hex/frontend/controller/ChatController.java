@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.servlet.http.HttpServletRequest;
 import tv.memoryleakdeath.hex.backend.dao.channel.ChannelsDao;
@@ -60,10 +61,12 @@ public class ChatController extends BaseFrontendController {
         return null;
     }
 
-    @GetMapping("/{channelName}/chat")
-    public String testMethod(HttpServletRequest request, Model model) {
-        setLayout(model, "layout/main");
-        return "test";
+    @GetMapping("/channel/{channelName}/chat")
+    public String view(HttpServletRequest request, Model model, @PathVariable("channelName") String channelName) {
+        setLayout(model, "layout/minimal");
+        addPageCSS(model, "/css/chat.css");
+        model.addAttribute("channelName", channelName);
+        return "chat/chat";
     }
 
 }

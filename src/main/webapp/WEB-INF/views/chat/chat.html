@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <th:block th:fragment="chat(channelName)">
+    <th:block th:fragment="content">
 		<div id="chatsection" class="container">
+			<link rel="stylesheet" th:href="@{/css/chat.css}"/>
 			<div class="chatheader" th:data-channelname="${channelName}">
 				<p th:text="'Channel:' + ${channelName}"></p>
 			</div>

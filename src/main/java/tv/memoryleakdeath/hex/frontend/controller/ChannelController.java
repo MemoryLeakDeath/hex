@@ -25,7 +25,6 @@ public class ChannelController extends BaseFrontendController {
             @PathVariable(name = "channelName", required = true) String channelName) {
         setPageTitle(request, model, "title.channel", new String[] { channelName });
         setLayout(model, "layout/main");
-        addPageCSS(model, "/css/chat.css");
         model.addAttribute("channelPageName", channelName);
         try {
             boolean channelExists = channelsDao.channelNameExists(channelName);

@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<div class="container" th:fragment="content">
 	    <h1 th:text="${channelPageName}"/>
-        <th:block th:replace="~{fragment/chat :: chat(${channelPageName})}"></th:block>
+	    <div id="chat-pannel" 
+	         th:hx-get="@{/channel/{ch}/chat(ch=${channelPageName})}" 
+	         hx-trigger="load">
+	    </div>
 	</div>
 </html>

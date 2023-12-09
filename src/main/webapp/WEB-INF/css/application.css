@@ -67,3 +67,7 @@ body[data-bs-theme="dark"] {
 	filter: blur(5px);
 	-webkit-filter: blur(5px);
 }
+
+.dropdown-toggle::after {
+	content: none;
+}

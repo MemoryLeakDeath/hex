@@ -32,7 +32,7 @@
 				          <img id="userAvatar" th:src="${@GravatarService.getAvatarUrl(avatarId)}" alt="Avatar" />
 			          </th:block>
 			        </a>
-			        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+			        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
 			          <a id="settingsbutton" class="dropdown-item settings" th:href="@{/settings/}" th:text="#{button.settings}"></a>
 			          <th:block th:if="${@ChannelHelperUtil.hasChannel(#authentication.principal.id)}">
 				          <a id="dashboardbutton" class="dropdown-item dashboard" th:href="@{/dashboard/}" th:text="#{button.dashboard}"></a>
