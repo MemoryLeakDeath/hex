@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,9 +25,6 @@ public class ChatMessageDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private static final String INSERT_MESSAGE_SQL = """
             insert into chatmessages (%s) values(?::uuid, ?::uuid, ?::uuid, NOW(), NOW(), ?, ?, ?::jsonb)

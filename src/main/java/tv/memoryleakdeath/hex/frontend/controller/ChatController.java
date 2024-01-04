@@ -17,12 +17,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import tv.memoryleakdeath.hex.backend.dao.channel.ChannelsDao;
 import tv.memoryleakdeath.hex.backend.dao.chat.ChatMessageDao;
 import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
-import tv.memoryleakdeath.hex.backend.security.HexRememberMeToken;
-import tv.memoryleakdeath.hex.common.pojo.Auth;
 import tv.memoryleakdeath.hex.common.pojo.Channel;
 import tv.memoryleakdeath.hex.common.pojo.ChatMessage;
+import tv.memoryleakdeath.hex.common.pojo.ChatMessageDetails;
 import tv.memoryleakdeath.hex.common.pojo.HexUser;
 import tv.memoryleakdeath.hex.common.pojo.IncomingChatMessage;
+import tv.memoryleakdeath.hex.frontend.utils.UserUtils;
 
 @Controller
 public class ChatController extends BaseFrontendController {
@@ -41,24 +41,27 @@ public class ChatController extends BaseFrontendController {
     @SendTo("/topic/chat/{channelName}")
     public ChatMessage sendChatMessage(Principal principal, IncomingChatMessage message,
             @DestinationVariable("channelName") String channelName) {
-        Auth auth = getUser(principal);
+        HexUser user = getUser(principal);
+        if (user == null) {
+            logger.error("User is not found and cannot chat on channelName: {}", channelName);
+            return null;
+        }
         Channel channel = channelDao.getChannelByName(channelName);
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setChannelName(channelName);
         chatMessage.setMessage(message.getMessage());
         chatMessage.setChannelId(channel.getUserId());
-        chatMessage.setSenderId(auth.getId());
+        chatMessage.setSenderId(user.getId());
         chatMessage.setVisible(Boolean.TRUE);
+        ChatMessageDetails messageDetails = new ChatMessageDetails();
+        messageDetails.setSenderDisplayName(user.getDisplayName());
+        chatMessage.setDetails(messageDetails);
         ChatMessage savedMessage = messageDao.createChatMessage(chatMessage);
         return savedMessage;
     }
 
-    private Auth getUser(Principal principal) {
-        if (principal instanceof HexRememberMeToken) {
-            HexUser token = (HexUser) ((HexRememberMeToken) principal).getPrincipal();
-            return authDao.getUserByUsername(token.getUsername());
-        }
-        return null;
+    private HexUser getUser(Principal principal) {
+        return UserUtils.getUserFromSpringPrincipal(principal, authDao);
     }
 
     @GetMapping("/channel/{channelName}/chat")

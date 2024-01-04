@@ -1,9 +1,14 @@
 package tv.memoryleakdeath.hex.frontend.utils;
 
+import java.security.Principal;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import jakarta.servlet.http.HttpServletRequest;
+import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
 import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
+import tv.memoryleakdeath.hex.backend.security.HexRememberMeToken;
 import tv.memoryleakdeath.hex.common.pojo.HexUser;
 import tv.memoryleakdeath.hex.common.pojo.UserDetails;
 
@@ -45,5 +50,15 @@ public final class UserUtils {
         UserDetails details = userDetailsDao.findById(user.getId());
         user.setDisplayName(details.getDisplayName());
         user.setGravatarId(details.getGravatarId());
+    }
+
+    public static HexUser getUserFromSpringPrincipal(Principal principal, AuthenticationDao authDao) {
+        HexUser token = null;
+        if (principal instanceof HexRememberMeToken) {
+            token = (HexUser) ((HexRememberMeToken) principal).getPrincipal();
+        } else if (principal instanceof UsernamePasswordAuthenticationToken) {
+            token = (HexUser) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        }
+        return token;
     }
 }

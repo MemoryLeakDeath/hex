@@ -15,7 +15,10 @@ function sendMessage() {
 function receiveMessage(messageObject) {
 	var message = messageObject.message;
 	var channelName = messageObject.channelName;
-	var htmlMessage = `<p class="message" data-channelname="${channelName}">${message}</p>`;
+	var displayName = messageObject.details.senderDisplayName;
+	var htmlMessage = `<div class="message" data-channelname="${channelName}">
+	                   <span class="displayname"><strong>${displayName}:</strong></span><span>&nbsp;&nbsp;${message}</span>
+	                   </div>`;
 	$('.chatbox').append(htmlMessage);
 }
 
