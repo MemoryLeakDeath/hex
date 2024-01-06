@@ -7,6 +7,8 @@ $(document).ready(function() {
 	$('#sendchatmessagebutton').on('click', sendMessage);	
 });
 
+$(window).on('beforeunload', disconnectChat);
+
 function sendMessage() {
 	var chatMessage = $('#chatmessageinput').val();
 	chatWidget.send(chatMessage);	
@@ -20,5 +22,9 @@ function receiveMessage(messageObject) {
 	                   <span class="displayname"><strong>${displayName}:</strong></span><span>&nbsp;&nbsp;${message}</span>
 	                   </div>`;
 	$('.chatbox').append(htmlMessage);
+}
+
+function disconnectChat() {
+	chatWidget.disconnect();
 }
 

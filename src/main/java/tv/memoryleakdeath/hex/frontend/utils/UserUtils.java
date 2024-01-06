@@ -6,7 +6,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 
 import jakarta.servlet.http.HttpServletRequest;
-import tv.memoryleakdeath.hex.backend.dao.security.AuthenticationDao;
 import tv.memoryleakdeath.hex.backend.dao.user.UserDetailsDao;
 import tv.memoryleakdeath.hex.backend.security.HexRememberMeToken;
 import tv.memoryleakdeath.hex.common.pojo.HexUser;
@@ -52,7 +51,7 @@ public final class UserUtils {
         user.setGravatarId(details.getGravatarId());
     }
 
-    public static HexUser getUserFromSpringPrincipal(Principal principal, AuthenticationDao authDao) {
+    public static HexUser getUserFromSpringPrincipal(Principal principal) {
         HexUser token = null;
         if (principal instanceof HexRememberMeToken) {
             token = (HexUser) ((HexRememberMeToken) principal).getPrincipal();

@@ -13,12 +13,18 @@ class ChatClient {
 	
 	connect() {		
 		this.wsClient.onConnect = () => {
-			this.wsClient.subscribe(`/topic/chat/${this.channelName}`, (message) => {
+			this.subscription = this.wsClient.subscribe(`/topic/chat/${this.channelName}`, (message) => {
 				this.messageCallback(JSON.parse(message.body));
 			});
 			console.log(`Subscribed to chat: ${this.channelName}`);
 		};
 		this.wsClient.activate();
+	}
+	
+	disconnect() {
+		this.subscription.unsubscribe();
+		this.wsClient.deactivate();
+		console.log(`Unsubscribed and disconnected from chat: ${this.channelName}`);
 	}
 	
 	#logErrors() {
