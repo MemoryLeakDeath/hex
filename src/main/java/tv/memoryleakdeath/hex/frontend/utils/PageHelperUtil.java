@@ -3,6 +3,7 @@ package tv.memoryleakdeath.hex.frontend.utils;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -27,6 +28,10 @@ public class PageHelperUtil {
 
     public String jsEscape(String js) {
         return StringEscapeUtils.escapeEcmaScript(js);
+    }
+
+    public String generateUUID() {
+        return UUID.randomUUID().toString();
     }
 
 }

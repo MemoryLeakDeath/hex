@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <div id="pagescripts">
+	    <th:block th:with="cssList = ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).CSS_SCRIPTS)}">
+	        <link th:id="'css-' + ${@PageHelperUtil.generateUUID()}" rel="stylesheet" th:each="css : ${cssList}" th:href="@{${css}}"/>
+	    </th:block>    
+	    <th:block th:with="scriptList = ${#ctx.getVariable(T(tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController).JS_SCRIPTS)}">
+	        <script th:id="'js-' + ${@PageHelperUtil.generateUUID()}" type="text/javascript" th:each="script : ${scriptList}" th:src="@{${script}}"></script>
+	    </th:block>    
+	</div>
+    <div th:replace="~{${view} :: content}" class="text-primary"></div>
+</html>

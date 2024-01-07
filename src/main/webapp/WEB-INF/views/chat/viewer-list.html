@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:fragment="content">
+		<h4 th:text="#{text.chat.viewerlist}"></h4>
+		<hr>
+		<div id="viewerssection" class="container">
+			<div th:each="viewer : ${chatters}" th:text="${viewer.user.displayName}"></div>
+		</div>
+	</th:block>
+</html>

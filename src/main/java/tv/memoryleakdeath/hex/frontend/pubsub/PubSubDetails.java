@@ -1,6 +1,7 @@
 package tv.memoryleakdeath.hex.frontend.pubsub;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 import tv.memoryleakdeath.hex.common.pojo.HexUser;
 
@@ -10,6 +11,7 @@ public class PubSubDetails implements Serializable {
     private String sessionId;
     private String destinationTopic;
     private HexUser user;
+    private Instant lastActivity;
 
     public String getDestinationTopic() {
         return destinationTopic;
@@ -33,5 +35,13 @@ public class PubSubDetails implements Serializable {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public Instant getLastActivity() {
+        return lastActivity;
+    }
+
+    public void setLastActivity(Instant lastActivity) {
+        this.lastActivity = lastActivity;
     }
 }
