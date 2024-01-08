@@ -33,7 +33,7 @@
         <commonsvalidator.version>1.8.0</commonsvalidator.version>
         <bouncycastlepkix.version>1.77</bouncycastlepkix.version>
         <totp.version>1.7.1</totp.version>
-        <faker.version>2.0.2</faker.version>
+        <faker.version>2.1.0</faker.version>
         <greenmail.version>2.1.0-alpha-3</greenmail.version>
         <nanocaptcha.version>1.5</nanocaptcha.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
