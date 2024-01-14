@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import tv.memoryleakdeath.hex.backend.dao.TestDao;
@@ -28,5 +31,15 @@ public class HomeController extends BaseFrontendController {
         boolean testDatabaseResult = testDao.testDatabase();
         model.addAttribute("testResults", testDatabaseResult);
         return "test";
+    }
+
+    @PostMapping("/testupload")
+    public String testUpload(HttpServletRequest request, Model model,
+            @RequestParam(name = "file", required = true) MultipartFile file) {
+        setLayout(model, "layout/minimal");
+        model.addAttribute("fileName", file.getOriginalFilename());
+        model.addAttribute("contentType", file.getContentType());
+        model.addAttribute("size", file.getSize());
+        return "uploadtest";
     }
 }

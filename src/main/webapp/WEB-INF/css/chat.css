@@ -25,3 +25,11 @@
 	font-family: "Nunito Sans";
 	font-size: 1em;
 }
+
+.event {
+	font-family: "Nunito Sans";
+	font-size: 1em;
+	font-weight: bold;
+	background-color: coral;
+	color: white;	
+}

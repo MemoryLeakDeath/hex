@@ -6,6 +6,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
@@ -13,6 +14,10 @@ import tv.memoryleakdeath.hex.frontend.controller.api.interceptors.JwtTokenBlack
 import tv.memoryleakdeath.hex.frontend.controller.interceptors.CorsHeaderFilter;
 
 public class HexInit implements WebApplicationInitializer {
+    private static final long MAX_UPLOAD_FILE_SIZE = 10L * 1024 * 1024; // 10MB
+    private static final long MAX_UPLOAD_REQUEST_SIZE = 5L * MAX_UPLOAD_FILE_SIZE; // 50 MB
+    private static final int FILE_SIZE_THRESHOLD = 50 * 1024; // 50 KB
+    private static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir");
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -34,6 +39,9 @@ public class HexInit implements WebApplicationInitializer {
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
+        dispatcher.setMultipartConfig(
+                new MultipartConfigElement(TEMP_FOLDER, MAX_UPLOAD_FILE_SIZE,
+                MAX_UPLOAD_REQUEST_SIZE, FILE_SIZE_THRESHOLD));
     }
 
 }

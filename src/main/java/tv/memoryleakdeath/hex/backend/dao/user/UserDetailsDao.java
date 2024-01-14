@@ -10,8 +10,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import tv.memoryleakdeath.hex.backend.dao.mapper.UserDetailsDisplayMapper;
 import tv.memoryleakdeath.hex.backend.dao.mapper.UserDetailsMapper;
 import tv.memoryleakdeath.hex.common.pojo.UserDetails;
+import tv.memoryleakdeath.hex.common.pojo.UserDetailsDisplay;
 
 @Repository
 public class UserDetailsDao {
@@ -78,6 +80,15 @@ public class UserDetailsDao {
     public String getUserEmail(String userId) {
         String sql = "select email from userdetails where userid = ?::uuid";
         List<String> results = jdbcTemplate.queryForList(sql, String.class, userId);
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
+    }
+
+    public UserDetailsDisplay getDisplayUserDetails(String userId) {
+        String sql = "select displayname, gravatarid from userdetails where userid = ?::uuid";
+        List<UserDetailsDisplay> results = jdbcTemplate.query(sql, new UserDetailsDisplayMapper(), userId);
         if (results.isEmpty()) {
             return null;
         }

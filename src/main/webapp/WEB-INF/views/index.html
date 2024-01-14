@@ -5,6 +5,13 @@
 	    
 	    <a th:href="@{/email/test}">Send Test Email</a>
 	    
+	    <form>
+			<input type="file" name="file">
+			<button class="btn btn-primary" th:text="|Upload file test|" th:hx-post="@{/testupload}" hx-encoding="multipart/form-data" hx-target="#testFileDetails"></button>
+		</form>
+		
+		<div id="testFileDetails"></div>
+	    
 	    <table class="table table-bordered table-hover">
 	       <thead>
 	           <tr>
