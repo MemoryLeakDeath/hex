@@ -27,10 +27,12 @@ import tv.memoryleakdeath.hex.common.pojo.HexUser;
 import tv.memoryleakdeath.hex.config.HexApplicationConfig;
 import tv.memoryleakdeath.hex.config.HexSecurity;
 import tv.memoryleakdeath.hex.config.HexWebConfig;
+import tv.memoryleakdeath.hex.config.HexWebSocketConfig;
 import tv.memoryleakdeath.hex.test.config.MockDBConfig;
 
 @ExtendWith(MockitoExtension.class)
-@SpringJUnitWebConfig({ HexWebConfig.class, MockDBConfig.class, HexApplicationConfig.class, HexSecurity.class })
+@SpringJUnitWebConfig({ HexWebConfig.class, MockDBConfig.class, HexApplicationConfig.class, HexSecurity.class,
+        HexWebSocketConfig.class })
 @Tag("unit-test")
 public abstract class AbstractControllerTest {
     private MockMvc mockMvc;
