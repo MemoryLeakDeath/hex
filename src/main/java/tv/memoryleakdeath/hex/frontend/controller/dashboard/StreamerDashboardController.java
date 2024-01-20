@@ -21,4 +21,11 @@ public class StreamerDashboardController extends BaseFrontendController {
         setLayout(model, "layout/dashboard");
         return "dashboard/landingpage";
     }
+
+    @GetMapping("/manageemotes")
+    public String manageEmotes(HttpServletRequest request, Model model) {
+        setPageTitle(request, model, "title.dashboard");
+        setLayout(model, "layout/dashboard");
+        return "dashboard/manageemotes";
+    }
 }
