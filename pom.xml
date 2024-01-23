@@ -35,7 +35,7 @@
         <totp.version>1.7.1</totp.version>
         <faker.version>2.1.0</faker.version>
         <greenmail.version>2.1.0-alpha-3</greenmail.version>
-        <nanocaptcha.version>1.5</nanocaptcha.version>
+        <nanocaptcha.version>2.1</nanocaptcha.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
         <velocity.version>2.3</velocity.version>
         <liquidbase.version>4.25.1</liquidbase.version>
