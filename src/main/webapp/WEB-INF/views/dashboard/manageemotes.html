@@ -2,5 +2,69 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <div th:fragment="content">
         <h2 th:text="#{dashboard.text.manageemotes}"></h2>
+	    <form th:action="@{/dashboard/updateEmotePrefix}" method="POST">
+			<div class="mb-2 row">
+				<div class="col-3">
+				    <label for="prefix" class="form-label required" th:text="#{text.emote.prefix}"></label>
+				    <input type="text" class="form-control" th:errorclass="is-invalid" id="prefix" th:field="${emotePrefix}" autocomplete="none" required="required" maxlength="5" aria-describedby="prefix-error"/>
+				    <div id="prefix-error" class="invalid-feedback" th:if="${#fields.hasErrors('emotePrefix')}" th:errors="${emotePrefix}"></div>
+				</div>
+				<div class="col-auto d-flex align-self-end">
+					<button class="btn btn-primary" th:text="#{button.emote.saveprefix}"></button>					
+				</div>
+			</div>
+	    </form>
+	    <div class="card card-body">
+			<div class="card-title h3" th:text="#{text.emote.addnewemote}"></div>
+		    <form th:action="@{/dashboard/addEmote}" method="POST" th:object="${emoteModel}" enctype="multipart/form-data">
+				<div class="mb-2">
+				    <label for="tag" class="form-label required" th:text="#{text.emote.tag}"></label>
+				    <input type="text" class="form-control" th:errorclass="is-invalid" id="tag" th:field="*{tag}" autocomplete="none" required="required" maxlength="25" aria-describedby="tag-error"/>
+				    <div id="tag-error" class="invalid-feedback" th:if="${#fields.hasErrors('tag')}" th:errors="*{tag}"></div>
+				</div>
+				<div class="mb-2">
+				    <label for="name" class="form-label required" th:text="#{text.emote.name}"></label>
+				    <input type="text" class="form-control" th:errorclass="is-invalid" id="name" th:field="*{name}" autocomplete="none" required="required" maxlength="50" aria-describedby="name-error"/>
+				    <div id="name-error" class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+				</div>
+				<div class="form-check form-switch mb-4">
+				    <label for="subscriberOnly" class="form-check-label" th:text="#{text.emote.subscriberonly}"></label>
+				    <input type="checkbox" class="form-check-input" id="subscriberOnly" th:field="*{subscriberOnly}" value="false">
+				</div>
+				<div class="form-check form-switch mb-4">
+				    <label for="global" class="form-check-label" th:text="#{text.emote.global}"></label>
+				    <input type="checkbox" class="form-check-input" id="global" th:field="*{global}" value="false">
+				</div>
+				<div class="input-group mb-2">
+					<label class="input-group-text" for="smallimage" th:text="#{text.emote.smallimage}"></label>				
+					<input type="file" th:field="*{smallImage}" id="smallimage" class="form-control" accept="image/jpeg,image/gif,image/png,image/svg+xml">
+				</div>						
+				<div class="input-group mb-2">
+					<label class="input-group-text" for="largeimage" th:text="#{text.emote.largeimage}"></label>				
+					<input type="file" th:field="*{largeImage}" id="largeimage" class="form-control" accept="image/jpeg,image/gif,image/png">
+				</div>						
+				<button class="btn btn-primary" th:text="#{button.emote.savenew}"></button>
+			</form>		
+		</div>
+		<table class="table table-bordered table-hover mt-4">
+		   <thead>
+		       <tr>
+		           <th th:text="#{dashboard.emotes.header.actions}"></th>
+		           <th ></th>
+		           <th ></th>
+		       </tr>
+		   </thead>
+		   <tbody>
+		      <tr th:each="app : ${applications}">
+		         <td class="text-nowrap">
+					 <div class="btn-group" role="group">
+						 <button th:hx-post="@{/settings/applications/revoke}" class="btn btn-secondary btn-sm revokepermissionbutton" th:title="#{button.revokeaccess}" th:hx-vals="'{&quot;id&quot;:&quot;' + ${app.applicationId} + '&quot;}'" th:hx-confirm="#{settings.applications.text.confirmrevoke}"><i class="fas fa-trash"></i></button>
+					 </div>
+			     </td>
+		         <td th:text="${app.applicationName}"></td>
+		         <td><span th:text="${#calendars.format(app.lastUsed,'MM/dd/yyyy HH:mm:ss')}"></span></td>
+		      </tr>
+		   </tbody>
+		</table>
 	</div>
 </html>

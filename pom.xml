@@ -30,6 +30,7 @@
         <commonstext.version>1.11.0</commonstext.version>
         <commonscodec.version>1.16.0</commonscodec.version>
         <commonsio.version>2.15.1</commonsio.version>
+        <commonsimaging.version>1.0-alpha3</commonsimaging.version>
         <commonsvalidator.version>1.8.0</commonsvalidator.version>
         <bouncycastlepkix.version>1.77</bouncycastlepkix.version>
         <totp.version>1.7.1</totp.version>
@@ -146,6 +147,11 @@
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
 		    <version>${commonsio.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-imaging</artifactId>
+		    <version>${commonsimaging.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
