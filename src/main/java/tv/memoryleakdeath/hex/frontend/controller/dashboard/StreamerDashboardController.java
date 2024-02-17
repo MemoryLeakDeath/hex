@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +26,7 @@ import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
 @RequestMapping("/dashboard")
 public class StreamerDashboardController extends BaseFrontendController {
     private static final Logger logger = LoggerFactory.getLogger(StreamerDashboardController.class);
-    private static final String EMOTE_UPLOAD_DIR = "/uploads/cust/emotes/";
+    private static final String EMOTE_UPLOAD_PHYSICAL_DIR_OFFSET = "/cust/emotes/";
     private static final String EMOTE_BASE_URL = "/cust/emotes/";
 
     @Autowired
@@ -33,6 +34,10 @@ public class StreamerDashboardController extends BaseFrontendController {
 
     @Autowired
     private EmoteValidator<EmoteModel> emoteModelValidator;
+
+    @Autowired
+    @Qualifier("uploadsBaseDir")
+    private String uploadsBaseDir;
 
     @GetMapping("/")
     public String view(HttpServletRequest request, Model model) {
@@ -96,12 +101,12 @@ public class StreamerDashboardController extends BaseFrontendController {
         emote.setApprovalStatus(null);
         emote.setSmallImageFilename(generateEmoteFilenameWithExtension(emoteModel.getSmallImage().getContentType()));
         emote.setSmallImageType(getImageTypeEnum(emoteModel.getSmallImage().getContentType()));
-        emote.setSmallImageUrl(EMOTE_BASE_URL + "/" + userId + "/");
+        emote.setSmallImageUrl(EMOTE_BASE_URL + userId + "/");
         if (emoteModel.getLargeImage() != null) {
             emote.setLargeImageFilename(
                     generateEmoteFilenameWithExtension(emoteModel.getLargeImage().getContentType()));
             emote.setLargeImageType(getImageTypeEnum(emoteModel.getLargeImage().getContentType()));
-            emote.setLargeImageUrl(EMOTE_BASE_URL + "/" + userId + "/");
+            emote.setLargeImageUrl(EMOTE_BASE_URL + userId + "/");
         }
         emote.setName(emoteModel.getName());
         emote.setPrefix(prefix);
@@ -144,8 +149,8 @@ public class StreamerDashboardController extends BaseFrontendController {
     }
 
     private boolean copyEmoteToFilesystem(HttpServletRequest request, MultipartFile smallEmote, MultipartFile largeEmote, ChannelEmote emote) {
-        ensureUserBucketDirectoryExists(request, emote.getUserId());
-        String realPath = request.getServletContext().getRealPath(EMOTE_UPLOAD_DIR);
+        ensureUserBucketDirectoryExists(emote.getUserId());
+        String realPath = uploadsBaseDir + EMOTE_UPLOAD_PHYSICAL_DIR_OFFSET;
         String smallEmoteFullFilePath = "%s%s/%s".formatted(realPath, emote.getUserId(),
                 emote.getSmallImageFilename());
         try {
@@ -162,8 +167,8 @@ public class StreamerDashboardController extends BaseFrontendController {
         return true;
     }
 
-    private void ensureUserBucketDirectoryExists(HttpServletRequest request, String userId) {
-        String realPath = request.getServletContext().getRealPath(EMOTE_UPLOAD_DIR);
+    private void ensureUserBucketDirectoryExists(String userId) {
+        String realPath = uploadsBaseDir + EMOTE_UPLOAD_PHYSICAL_DIR_OFFSET;
         String userBucket = "%s%s/".formatted(realPath, userId);
         if (!new File(userBucket).exists()) {
             new File(userBucket).mkdirs();

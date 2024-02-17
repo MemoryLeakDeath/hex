@@ -628,6 +628,11 @@
 					                  </files>
 					                </inline>
 					              </assembly>								  
+					              <assembly>
+									<name>uploads-directory</name>
+					                <mode>dir</mode>
+					                <targetDir>/app/hex/uploads</targetDir>
+					              </assembly>								  
 							  </assemblies>
 				            </build>
 				            <run>
@@ -659,6 +664,7 @@
 										<volume>${project.build.outputDirectory}:/usr/local/tomcat/webapps/hex/WEB-INF/classes</volume>
 										<volume>${project.build.directory}/${finalname}/WEB-INF/lib:/usr/local/tomcat/webapps/hex/WEB-INF/lib</volume>
 										<volume>${project.basedir}/logs:/usr/local/tomcat/logs</volume>
+										<volume>${project.basedir}/uploads:/app/hex/uploads</volume>
 									</bind>
 								</volumes>
 							</run>

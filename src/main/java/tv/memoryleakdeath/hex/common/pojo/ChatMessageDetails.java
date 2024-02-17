@@ -1,6 +1,7 @@
 package tv.memoryleakdeath.hex.common.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import tv.memoryleakdeath.hex.common.ChannelEventType;
 
@@ -10,6 +11,7 @@ public class ChatMessageDetails implements Serializable, Cloneable {
 
     private String senderDisplayName;
     private transient ChannelEventType eventType;
+    private List<String> emoteList;
 
     public String getSenderDisplayName() {
         return senderDisplayName;
@@ -30,5 +32,13 @@ public class ChatMessageDetails implements Serializable, Cloneable {
 
     public void setEventType(ChannelEventType eventType) {
         this.eventType = eventType;
+    }
+
+    public List<String> getEmoteList() {
+        return emoteList;
+    }
+
+    public void setEmoteList(List<String> emoteList) {
+        this.emoteList = emoteList;
     }
 }

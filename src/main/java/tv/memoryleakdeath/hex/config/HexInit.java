@@ -3,6 +3,7 @@ package tv.memoryleakdeath.hex.config;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -32,6 +33,8 @@ public class HexInit implements WebApplicationInitializer {
         servletContext.addFilter("corsFilter", new CorsHeaderFilter()).addMappingForUrlPatterns(null, true, "/*");
         servletContext.addFilter("jwtTokenBlacklistFilter", new JwtTokenBlacklistCheckerFilter())
                 .addMappingForUrlPatterns(null, true, "/api/*");
+        servletContext.addFilter("characterEncodingFilter", new CharacterEncodingFilter("UTF-8", true))
+                .addMappingForUrlPatterns(null, true, "/*");
         // servletContext.addFilter("cspFilter", new
         // CSPHeaderFilter()).addMappingForUrlPatterns(null, true, "/*");
 

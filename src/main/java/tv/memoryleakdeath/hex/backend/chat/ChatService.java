@@ -43,6 +43,9 @@ public class ChatService {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
+    @Autowired
+    private ChatMessageProcessingService chatMessageProcessingService;
+
     public void updateUserPresence(StompHeaderAccessor headerAccessor, String userId) {
         String sessionId = presenceHandler.getUniqueSessionId(headerAccessor, userId);
         presenceHandler.updateLastAccessed(sessionId);
@@ -59,6 +62,7 @@ public class ChatService {
         ChatMessageDetails messageDetails = new ChatMessageDetails();
         messageDetails.setSenderDisplayName(sendingUser.getDisplayName());
         chatMessage.setDetails(messageDetails);
+        chatMessageProcessingService.process(chatMessage);
         ChatMessage savedMessage = messageDao.createChatMessage(chatMessage);
         return savedMessage;
     }

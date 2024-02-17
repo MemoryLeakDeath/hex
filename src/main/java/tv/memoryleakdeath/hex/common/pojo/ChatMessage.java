@@ -15,7 +15,7 @@ public class ChatMessage implements Serializable, Cloneable {
     private Boolean visible;
     private String message;
     private String channelName;
-    private ChatMessageDetails details;
+    private ChatMessageDetails details = new ChatMessageDetails();
 
     public ChatMessageDetails getDetails() {
         return details;

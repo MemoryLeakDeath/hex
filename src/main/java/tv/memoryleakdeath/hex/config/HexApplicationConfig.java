@@ -2,11 +2,12 @@ package tv.memoryleakdeath.hex.config;
 
 import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 
 import jakarta.mail.Session;
 
@@ -15,46 +16,36 @@ import jakarta.mail.Session;
 @PropertySource("classpath:hex.properties")
 public class HexApplicationConfig {
 
-    @Value("${totpKey}")
-    private String totpKey;
-
-    @Value("${rememberMeKey}")
-    private String rememberMeKey;
-
-    @Value("${emailHost}")
-    private String emailHost;
-
-    @Value("${emailPort}")
-    private String emailPort;
-
-    @Value("${emailTLS}")
-    private String emailTLS;
-
-    @Value("${emailFrom}")
-    private String emailFrom;
+    @Autowired
+    private Environment env;
 
     @Bean
     public String totpKey() {
-        return totpKey;
+        return env.getProperty("totpKey");
     }
 
     @Bean
     public String rememberMeKey() {
-        return rememberMeKey;
+        return env.getProperty("rememberMeKey");
     }
 
     @Bean
     public String defaultEmailFrom() {
-        return emailFrom;
+        return env.getProperty("emailFrom");
     }
 
     @Bean
     public Session emailSession() {
         Properties mailProps = new Properties();
-        mailProps.setProperty("mail.host", emailHost);
-        mailProps.setProperty("mail.smtp.port", emailPort);
-        mailProps.setProperty("mail.smtp.starttls.enable", emailTLS);
+        mailProps.setProperty("mail.host", env.getProperty("emailHost", "SETME"));
+        mailProps.setProperty("mail.smtp.port", env.getProperty("emailPort", "SETME"));
+        mailProps.setProperty("mail.smtp.starttls.enable", env.getProperty("emailTLS", "SETME"));
         return Session.getDefaultInstance(mailProps);
+    }
+
+    @Bean
+    public String uploadsBaseDir() {
+        return env.getProperty("uploadsdir");
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,6 +38,10 @@ public class HexWebConfig implements WebMvcConfigurer {
     @Autowired
     private ApplicationContext ac;
 
+    @Autowired
+    @Qualifier("uploadsBaseDir")
+    private String uploadsBaseDir;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/js/").resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
@@ -45,8 +50,9 @@ public class HexWebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**").addResourceLocations("/WEB-INF/images/").resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
         registry.addResourceHandler("/favicon.ico").addResourceLocations("/WEB-INF/images/favicon.ico").resourceChain(true).addResolver(new EncodedResourceResolver())
                 .addResolver(new PathResourceResolver());
-        registry.addResourceHandler("/cust/emotes/**").addResourceLocations("/uploads/cust/emotes/").resourceChain(true)
-                .addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
+        registry.addResourceHandler("/cust/emotes/**")
+                .addResourceLocations("file:///" + uploadsBaseDir + "/cust/emotes/")
+                .resourceChain(true).addResolver(new EncodedResourceResolver()).addResolver(new PathResourceResolver());
     }
 
     @Bean
