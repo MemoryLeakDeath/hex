@@ -28,7 +28,7 @@
         <jsonpath.version>2.9.0</jsonpath.version>
         <commonslang.version>3.14.0</commonslang.version>
         <commonstext.version>1.11.0</commonstext.version>
-        <commonscodec.version>1.16.0</commonscodec.version>
+        <commonscodec.version>1.16.1</commonscodec.version>
         <commonsio.version>2.15.1</commonsio.version>
         <commonsimaging.version>1.0-alpha3</commonsimaging.version>
         <commonsvalidator.version>1.8.0</commonsvalidator.version>
