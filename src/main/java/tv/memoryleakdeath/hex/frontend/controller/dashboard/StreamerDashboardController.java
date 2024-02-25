@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import tv.memoryleakdeath.hex.backend.dao.emote.ChannelEmotesDao;
+import tv.memoryleakdeath.hex.common.EmoteImageTypeConstants;
 import tv.memoryleakdeath.hex.common.pojo.ChannelEmote;
 import tv.memoryleakdeath.hex.frontend.controller.BaseFrontendController;
 
@@ -118,32 +119,22 @@ public class StreamerDashboardController extends BaseFrontendController {
 
     private String generateEmoteFilenameWithExtension(String contentType) {
         String fileName = UUID.randomUUID().toString();
-        String extension = "";
-        switch (contentType) {
-        case "image/jpeg":
-            extension = ".jpg";
-            break;
-        case "image/gif":
-            extension = ".gif";
-            break;
-        case "image/png":
-            extension = ".png";
-            break;
-        case "image/svg+xml":
-            extension = ".svg";
-            break;
-        default:
-            break;
-        }
+        String extension = switch (contentType) {
+        case EmoteImageTypeConstants.JPEG_CONTENT_TYPE -> ".jpg";
+        case EmoteImageTypeConstants.GIF_CONTENT_TYPE -> ".gif";
+        case EmoteImageTypeConstants.PNG_CONTENT_TYPE -> ".png";
+        case EmoteImageTypeConstants.SVG_CONTENT_TYPE -> ".svg";
+        default -> "";
+        };
         return (fileName + extension);
     }
 
     private String getImageTypeEnum(String contentType) {
         return switch (contentType) {
-        case "image/jpeg" -> "jpeg";
-        case "image/gif" -> "gif";
-        case "image/png" -> "png";
-        case "image/svg+xml" -> "svg";
+        case EmoteImageTypeConstants.JPEG_CONTENT_TYPE -> EmoteImageTypeConstants.JPEG_EMOTE_TYPE;
+        case EmoteImageTypeConstants.GIF_CONTENT_TYPE -> EmoteImageTypeConstants.GIF_EMOTE_TYPE;
+        case EmoteImageTypeConstants.PNG_CONTENT_TYPE -> EmoteImageTypeConstants.PNG_EMOTE_TYPE;
+        case EmoteImageTypeConstants.SVG_CONTENT_TYPE -> EmoteImageTypeConstants.SVG_EMOTE_TYPE;
         default -> null;
         };
     }

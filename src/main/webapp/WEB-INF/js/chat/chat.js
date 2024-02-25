@@ -16,6 +16,7 @@ function sendMessage() {
 
 function receiveMessage(messageObject) {
 	var message = messageObject.message;
+	var processedMessage = new DOMParser().parseFromString(messageObject.details.processedMessage, "text/html").documentElement.textContent;
 	var channelName = messageObject.channelName;
 	var displayName = messageObject.details.senderDisplayName;
 	var eventType = messageObject.details.eventType;
@@ -26,7 +27,7 @@ function receiveMessage(messageObject) {
 	                   </div>`;
 	} else {
 		htmlMessage = `<div class="message" data-channelname="${channelName}">
-	                   <span class="displayname"><strong>${displayName}:</strong></span><span>&nbsp;&nbsp;${message}</span>
+	                   <span class="displayname"><strong>${displayName}:</strong></span><span>&nbsp;${processedMessage}</span>
 	                   </div>`;		
 	}
 	$('.chatbox').append(htmlMessage);
