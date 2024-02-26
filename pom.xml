@@ -22,7 +22,7 @@
         <tomcatapp.version>10.1.11</tomcatapp.version>
         <tomcatjdk.version>jdk17</tomcatjdk.version>
         <hikari.version>5.1.0</hikari.version>
-        <junit.version>5.10.1</junit.version>
+        <junit.version>5.10.2</junit.version>
         <mockito.version>5.10.0</mockito.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jsonpath.version>2.9.0</jsonpath.version>
