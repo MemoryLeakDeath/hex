@@ -3,6 +3,8 @@ package tv.memoryleakdeath.hex.config;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -117,6 +119,11 @@ public class HexWebConfig implements WebMvcConfigurer {
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
         interceptor.setParamName("language");
         return interceptor;
+    }
+
+    @Bean
+    public PolicyFactory htmlSanitizerFactory() {
+        return new HtmlPolicyBuilder().toFactory();
     }
 
 }

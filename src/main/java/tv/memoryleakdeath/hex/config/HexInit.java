@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
 import tv.memoryleakdeath.hex.frontend.controller.api.interceptors.JwtTokenBlacklistCheckerFilter;
 import tv.memoryleakdeath.hex.frontend.controller.interceptors.CorsHeaderFilter;
+import tv.memoryleakdeath.hex.frontend.controller.interceptors.HtmlSanitizerFilter;
 
 public class HexInit implements WebApplicationInitializer {
     private static final long MAX_UPLOAD_FILE_SIZE = 10L * 1024 * 1024; // 10MB
@@ -35,8 +36,8 @@ public class HexInit implements WebApplicationInitializer {
                 .addMappingForUrlPatterns(null, true, "/api/*");
         servletContext.addFilter("characterEncodingFilter", new CharacterEncodingFilter("UTF-8", true))
                 .addMappingForUrlPatterns(null, true, "/*");
-        // servletContext.addFilter("cspFilter", new
-        // CSPHeaderFilter()).addMappingForUrlPatterns(null, true, "/*");
+        servletContext.addFilter("htmlSanitizerFilter", new HtmlSanitizerFilter()).addMappingForUrlPatterns(null, true,
+                "/*");
 
         // Register and map the dispatcher servlet
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(rootContext));

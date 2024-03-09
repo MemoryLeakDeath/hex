@@ -9,12 +9,15 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.text.StringTokenizer;
+import org.owasp.html.PolicyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import tv.memoryleakdeath.hex.common.ChatTokenType;
+import tv.memoryleakdeath.hex.common.HtmlSanitizationListener;
 import tv.memoryleakdeath.hex.common.pojo.ChatMessage;
 import tv.memoryleakdeath.hex.common.pojo.ChatToken;
 
@@ -24,18 +27,33 @@ public class ChatMessageProcessingService {
     private static final String EMOTE_DELIM = ":";
 
     @Autowired
+    @Qualifier("htmlSanitizerFactory")
+    private PolicyFactory rejectPolicyFactory;
+
+    @Autowired
     private ChatMessageEmoteProcessingService emoteProcessingService;
 
     public void process(ChatMessage message) {
-        List<String> tokenizedMessage = tokenizeMessage(message);
+        String sanitizedMessage = sanitizeMessage(message.getMessage());
+        List<String> tokenizedMessage = tokenizeMessage(sanitizedMessage);
         identifyChatTokens(tokenizedMessage, message);
         emoteProcessingService.parseEmotes(message);
         String htmlMessage = convertMessageToHtml(message);
         message.getDetails().setProcessedMessage(StringEscapeUtils.escapeHtml4(htmlMessage));
     }
 
-    private List<String> tokenizeMessage(ChatMessage message) {
-        StringTokenizer tokenizer = new StringTokenizer(message.getMessage());
+    private String sanitizeMessage(String rawMessage) {
+        HtmlSanitizationListener listener = new HtmlSanitizationListener("chatMessage");
+        String sanitizedString = rejectPolicyFactory.sanitize(rawMessage, listener, null);
+        if (listener.hasSanitizied()) {
+            logger.debug("[HTML SANITIZER] Returning sanitized chat message!");
+            return sanitizedString;
+        }
+        return rawMessage;
+    }
+
+    private List<String> tokenizeMessage(String message) {
+        StringTokenizer tokenizer = new StringTokenizer(message);
         return tokenizer.getTokenList();
     }
 
