@@ -9,7 +9,7 @@
 	    <div id="test-event-buttons">
 			<form>
 				<input type="hidden" name="channelName" th:value="${channelPageName}">
-				<button id="test-follow-button" class="btn btn-primary" th:text="#{button.test.followtest}" th:hx-post="@{/event/sendFollowEvent}" hx-swap="none"></button>
+				<div th:replace="~{fragment/follow-button :: content}"></div>
 				<button id="test-subscribe-button" class="btn btn-primary" th:text="#{button.test.subscribetest}" th:hx-post="@{/event/sendSubscribeEvent}" hx-swap="none"></button>
 				<button id="test-gift-button" class="btn btn-primary" th:text="#{button.test.gifttest}" th:hx-post="@{/event/sendGiftEvent}" hx-swap="none"></button>
 			</form>

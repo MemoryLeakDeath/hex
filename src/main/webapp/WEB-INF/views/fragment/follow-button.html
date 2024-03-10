@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <th:block th:fragment="content">
+		<button id="follow-button" th:if="${showFollowButton}" class="btn btn-primary" th:text="#{button.follow}" th:hx-post="@{/channel/{ch}/follow(ch=${channelPageName})}" hx-swap="outerHTML"></button>
+		<button id="follow-button" th:if="${showUnFollowButton}" class="btn btn-primary" th:text="#{button.unfollow}" th:hx-post="@{/channel/{ch}/unfollow(ch=${channelPageName})}" hx-swap="outerHTML"></button>
+    </th:block>
+</html>

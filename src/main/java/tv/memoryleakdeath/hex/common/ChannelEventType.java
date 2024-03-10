@@ -1,5 +1,5 @@
 package tv.memoryleakdeath.hex.common;
 
 public enum ChannelEventType {
-    FOLLOW, SUBSCRIBE, GIFT;
+    FOLLOW, UNFOLLOW, SUBSCRIBE, UNSUBSCRIBE, GIFT;
 }

@@ -49,10 +49,13 @@ public class ChannelsDao {
 
     public Channel getChannelByName(String channelName) {
         List<Channel> results = jdbcTemplate.query(GET_CHANNEL_BY_NAME, new ChannelMapper(), channelName);
-        if (!results.isEmpty()) {
-            return results.get(0);
-        }
-        return null;
+        return results.stream().findFirst().orElse(null);
+    }
+
+    public String getChannelIdForName(String channelName) {
+        String sql = "select userid from channels where name = ?";
+        List<String> results = jdbcTemplate.queryForList(sql, String.class, channelName);
+        return results.stream().findFirst().orElse(null);
     }
 
     public boolean channelNameExists(String name) {
