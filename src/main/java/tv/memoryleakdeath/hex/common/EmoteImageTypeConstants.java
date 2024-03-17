@@ -1,6 +1,6 @@
 package tv.memoryleakdeath.hex.common;
 
-public class EmoteImageTypeConstants {
+public final class EmoteImageTypeConstants {
     private EmoteImageTypeConstants() {
     }
     public static final String JPEG_CONTENT_TYPE = "image/jpeg";
