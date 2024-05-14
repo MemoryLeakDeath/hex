@@ -32,7 +32,7 @@
         <commonsio.version>2.15.1</commonsio.version>
         <commonsimaging.version>1.0-alpha3</commonsimaging.version>
         <commonsvalidator.version>1.8.0</commonsvalidator.version>
-        <bouncycastlepkix.version>1.77</bouncycastlepkix.version>
+        <bouncycastlepkix.version>1.78</bouncycastlepkix.version>
         <totp.version>1.7.1</totp.version>
         <faker.version>2.1.0</faker.version>
         <greenmail.version>2.1.0-alpha-4</greenmail.version>
